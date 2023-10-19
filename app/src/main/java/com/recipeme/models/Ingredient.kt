@@ -1,4 +1,10 @@
 package com.recipeme.models
 
-class Ingredient {
-}
+data class Ingredient(
+    var id: Int,
+    var aisle: String,
+    var amount: Double,
+    var image: String,
+    var name: String,
+    var unit: String
+)

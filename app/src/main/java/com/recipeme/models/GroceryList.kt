@@ -1,4 +1,8 @@
 package com.recipeme.models
 
-class GroceryList {
-}
+
+data class GroceryList (
+    val name: String,
+    val timeCreated: String,
+    val items: List<Ingredient>
+        )
