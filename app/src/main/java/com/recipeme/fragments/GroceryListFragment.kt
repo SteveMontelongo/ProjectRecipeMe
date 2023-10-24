@@ -88,9 +88,17 @@ class GroceryListFragment : Fragment(), View.OnClickListener, GroceryListOnItemC
     }
 
     var resultEditLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+        Log.d("Result Code", result.resultCode.toString())
         if(result.resultCode == Activity.RESULT_OK){
             val data:Intent? = result.data
-//            val dataListName = data?.getStringExtra("ListName")
+            val dataNewListName = data?.getStringExtra("ListName")
+            val dataNewListPosition = data?.getIntExtra("Position", 0)
+            Log.d("New List Name", dataNewListName.toString())
+            Log.d("New List Position", dataNewListPosition.toString())
+            if (dataNewListPosition != null) {
+                grocerylists[dataNewListPosition].name = dataNewListName.toString()
+            }
+            recyclerView.adapter?.notifyDataSetChanged()
         }
     }
 
