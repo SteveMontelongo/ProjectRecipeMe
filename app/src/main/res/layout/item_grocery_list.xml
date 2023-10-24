@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/tvGroceryList"
+        android:id="@+id/tvIngredientNameGroceryList"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_margin="16dp"
@@ -15,44 +15,65 @@
         android:text="Ingredient"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/ibDeleteGroceryList"
+        app:layout_constraintEnd_toStartOf="@+id/ibDecrementGroceryList"
         app:layout_constraintStart_toEndOf="@+id/ivIngredientItem"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/ibDeleteGroceryList"
+        android:id="@+id/ibDecrementGroceryList"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_margin="4dp"
-        android:background="@drawable/roundstyle"
-        android:backgroundTint="@color/dark_red"
-        app:layout_constraintBottom_toBottomOf="@+id/tvGroceryList"
-        app:layout_constraintEnd_toStartOf="@+id/ibEditGroceryList"
-        app:layout_constraintTop_toTopOf="@+id/tvGroceryList"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/ic_delete" />
+        app:layout_constraintBottom_toBottomOf="@+id/tvIngredientNameGroceryList"
+        app:layout_constraintEnd_toStartOf="@+id/tvIngredientQuantityItemGroceryList"
+        app:layout_constraintTop_toTopOf="@+id/tvIngredientNameGroceryList"
+        app:layout_constraintVertical_bias="0.6"
+        app:srcCompat="@drawable/ic_decrement" />
+
+    <TextView
+        android:id="@+id/tvIngredientQuantityItemGroceryList"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="4dp"
+        android:gravity="center"
+        android:text="0"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/ibDecrementGroceryList"
+        app:layout_constraintEnd_toStartOf="@+id/tvIngredientUnitItemGroceryList"
+        app:layout_constraintTop_toTopOf="@+id/ibDecrementGroceryList" />
+
+    <TextView
+        android:id="@+id/tvIngredientUnitItemGroceryList"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:gravity="center"
+        android:text="Tbs"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvIngredientQuantityItemGroceryList"
+        app:layout_constraintEnd_toStartOf="@+id/ibIncrementGroceryList"
+        app:layout_constraintTop_toTopOf="@+id/tvIngredientQuantityItemGroceryList" />
 
     <ImageButton
-        android:id="@+id/ibEditGroceryList"
+        android:id="@+id/ibIncrementGroceryList"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_margin="4dp"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/roundstyle"
-        android:backgroundTint="@color/yellow"
-        app:layout_constraintBottom_toBottomOf="@+id/tvGroceryList"
+        app:layout_constraintBottom_toBottomOf="@+id/tvIngredientNameGroceryList"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvGroceryList"
+        app:layout_constraintTop_toTopOf="@+id/tvIngredientNameGroceryList"
         app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/ic_edit" />
+        app:srcCompat="@drawable/ic_increment" />
 
     <ImageView
         android:id="@+id/ivIngredientItem"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        app:layout_constraintBottom_toBottomOf="@+id/tvGroceryList"
+        app:layout_constraintBottom_toBottomOf="@+id/tvIngredientNameGroceryList"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvGroceryList"
+        app:layout_constraintTop_toTopOf="@+id/tvIngredientNameGroceryList"
         tools:srcCompat="@tools:sample/avatars" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

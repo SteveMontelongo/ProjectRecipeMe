@@ -13,14 +13,16 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.recipeme.R
+import com.recipeme.activities.GroceryListEditActivity
 import com.recipeme.activities.PopupGroceryListsList
 import com.recipeme.adapters.GroceryListsListAdapter
+import com.recipeme.interfaces.GroceryListOnItemClick
 import com.recipeme.models.GroceryList
 import com.recipeme.models.Ingredient
 import java.text.DateFormat
 import java.util.Date
 
-class GroceryListFragment : Fragment(), View.OnClickListener{
+class GroceryListFragment : Fragment(), View.OnClickListener, GroceryListOnItemClick{
     lateinit var grocerylists: MutableList<GroceryList>
     lateinit var recyclerView: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +34,7 @@ class GroceryListFragment : Fragment(), View.OnClickListener{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         grocerylists = emptyList<GroceryList>().toMutableList()
-        val groceryListsListAdapter = GroceryListsListAdapter(grocerylists)
+        val groceryListsListAdapter = GroceryListsListAdapter(grocerylists, this)
         recyclerView=
             view.findViewById<RecyclerView>(R.id.rvGroceryListsList)
         recyclerView.adapter = groceryListsListAdapter
@@ -46,6 +48,7 @@ class GroceryListFragment : Fragment(), View.OnClickListener{
         // Inflate the layout for this fragment
         val view: View = inflater.inflate(R.layout.fragment_grocery_list, container, false)
         val addNewListButton = view.findViewById<Button>(R.id.btnAddNewList)
+
         addNewListButton?.setOnClickListener(this)
         return view
     }
@@ -82,6 +85,27 @@ class GroceryListFragment : Fragment(), View.OnClickListener{
             recyclerView.adapter?.notifyItemInserted(indexInsert)
             //recyclerView.adapter?.notifyDataSetChanged()
         }
+    }
+
+    var resultEditLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+        if(result.resultCode == Activity.RESULT_OK){
+            val data:Intent? = result.data
+//            val dataListName = data?.getStringExtra("ListName")
+        }
+    }
+
+    override fun onClickDelete(position: Int) {
+        Log.d("Delete", position.toString())
+        grocerylists.removeAt(position)
+        recyclerView.adapter?.notifyItemRemoved(position)
+    }
+
+    override fun onClickEdit(position: Int, name: String) {
+        Log.d("Edit", position.toString() + " : " + name)
+        val intent = Intent(this.context, GroceryListEditActivity::class.java)
+        intent.putExtra("ListName", name)
+        intent.putExtra("Position", position)
+        resultEditLauncher.launch(intent)
     }
 }
 

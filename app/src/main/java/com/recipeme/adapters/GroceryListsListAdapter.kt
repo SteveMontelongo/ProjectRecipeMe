@@ -1,5 +1,6 @@
 package com.recipeme.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,9 +8,10 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.recipeme.R
+import com.recipeme.interfaces.GroceryListOnItemClick
 import com.recipeme.models.GroceryList
 
-class GroceryListsListAdapter(private var groceryLists: List<GroceryList>) : RecyclerView.Adapter<GroceryListsListAdapter.GroceryListsListViewHolder>(){
+class GroceryListsListAdapter(private var groceryLists: List<GroceryList>, private var clickListener: GroceryListOnItemClick) : RecyclerView.Adapter<GroceryListsListAdapter.GroceryListsListViewHolder>(){
 
     inner class GroceryListsListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val nameTextView = itemView.findViewById<TextView>(R.id.tvGroceryListsList)
@@ -26,11 +28,16 @@ class GroceryListsListAdapter(private var groceryLists: List<GroceryList>) : Rec
     }
 
     override fun onBindViewHolder(holder: GroceryListsListViewHolder, position: Int) {
-        val groceryList: GroceryList = groceryLists.get(position)
+        val groceryList: GroceryList = groceryLists.get(holder.absoluteAdapterPosition)
         holder.nameTextView.text = groceryList.name
         holder.dateTextView.text = groceryList.timeCreated
-        val delete = holder.deleteButton
-        val edit = holder.editButton
+        holder.deleteButton.setOnClickListener{
+
+            this.clickListener.onClickDelete(holder.absoluteAdapterPosition)
+        }
+        holder.editButton.setOnClickListener{
+            this.clickListener.onClickEdit(holder.absoluteAdapterPosition, groceryList.name)
+        }
     }
 
     override fun getItemCount(): Int {
