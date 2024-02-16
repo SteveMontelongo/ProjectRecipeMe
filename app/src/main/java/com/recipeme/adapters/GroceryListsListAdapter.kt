@@ -31,6 +31,9 @@ class GroceryListsListAdapter(private var groceryLists: List<GroceryList>, priva
         val groceryList: GroceryList = groceryLists.get(holder.absoluteAdapterPosition)
         holder.nameTextView.text = groceryList.name
         holder.dateTextView.text = groceryList.timeCreated
+        holder.nameTextView.setOnClickListener{
+            this.clickListener.onClickItem(holder.absoluteAdapterPosition, groceryList.name)
+        }
         holder.deleteButton.setOnClickListener{
 
             this.clickListener.onClickDelete(holder.absoluteAdapterPosition)

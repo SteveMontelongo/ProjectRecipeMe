@@ -1,33 +1,67 @@
 package com.recipeme.fragments
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
+import androidx.room.Database
+import androidx.room.Room
 import com.recipeme.R
+import com.recipeme.adapters.FridgeAdapter
+import com.recipeme.daos.FridgeDao
+import com.recipeme.daos.GroceryListDao
+import com.recipeme.databases.AppDatabase
+import com.recipeme.interfaces.FridgeOnItemClick
+import com.recipeme.models.GroceryList
+import com.recipeme.models.Ingredient
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [FridgeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class FridgeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class FridgeFragment : Fragment(), View.OnClickListener, FridgeOnItemClick{
+    lateinit var db : AppDatabase
+    lateinit var fridgeDao: FridgeDao
+    lateinit var ingredients: MutableList<Ingredient>
+    lateinit var recyclerview: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
         }
+
+        db = Room.databaseBuilder(
+            requireContext(),
+            AppDatabase::class.java, "recipe-me-database"
+        ).build()
+        fridgeDao = db.fridgeDao()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?){
+
+        recyclerview = view.findViewById<RecyclerView>(R.id.rvFridgeIngredients)
+        ingredients = emptyList<Ingredient>().toMutableList()
+        //set adapter
+        recyclerview.adapter = FridgeAdapter(ingredients, this, requireContext())
+        recyclerview.setLayoutManager(LinearLayoutManager(this.context))
+        view.findViewById<ImageButton>(R.id.iBtnRefreshFridge).setOnClickListener(this)
+        GlobalScope.launch {
+            var ingredientsToUpdate: MutableList<Ingredient> = emptyList<Ingredient>().toMutableList()
+            ingredientsToUpdate.addAll(fridgeDao.getAll())
+            Handler(Looper.getMainLooper()).post{
+                Log.d("Fridge Loading", ingredientsToUpdate.toString())
+                ingredients.addAll(ingredientsToUpdate)
+                recyclerview.adapter?.notifyDataSetChanged()
+            }
+        }
+
+
     }
 
     override fun onCreateView(
@@ -35,26 +69,45 @@ class FridgeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        //view?.findViewById<ImageButton>(R.id.ibDeleteFridge)?.setOnClickListener(this)
+
         return inflater.inflate(R.layout.fragment_fridge, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FridgeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FridgeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onClick(v: View?) {
+        if(v !=null){
+            when(v.id){
+                //nothing for now
+                R.id.iBtnRefreshFridge->{
+                    GlobalScope.launch{
+                        var ingredientsToUpdate: MutableList<Ingredient>
+                        ingredientsToUpdate = emptyList<Ingredient>().toMutableList()
+                        ingredientsToUpdate.addAll(fridgeDao.getAll())
+
+                        Handler(Looper.getMainLooper()).post(){
+                            ingredients.clear()
+                            ingredients.addAll(ingredientsToUpdate)
+                            Log.d("Fridge Refreshing", ingredientsToUpdate.toString())
+                            recyclerview.adapter?.notifyDataSetChanged()
+                        }
+                    }
+
                 }
             }
+        }
     }
+
+    override fun onDelete(position: Int) {
+        GlobalScope.launch {
+            var ingredient = ingredients[position]
+            GlobalScope.launch {
+                fridgeDao.deleteIngredient(ingredient)
+                Handler(Looper.getMainLooper()).post{
+                    ingredients.remove(ingredient)
+                    recyclerview.adapter?.notifyDataSetChanged()
+                }
+            }
+        }
+    }
+
 }

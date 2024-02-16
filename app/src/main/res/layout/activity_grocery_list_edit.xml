@@ -1,113 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.GroceryListEditActivity"
-    android:orientation="vertical">
+    android:padding="8dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="end"
-        >
-        <EditText
-            android:id="@+id/etGListNameGroceryListEdit"
-            android:layout_width="220dp"
-            android:layout_height="wrap_content"
-            android:text="List Name"
-            android:textSize="20sp"
-            android:layout_margin="4dp"
-            android:gravity="center"
-            android:autofillHints="name"
-            android:hint="Enter list name"
-            android:inputType="textPersonName"/>
-    <Button
-        android:id="@+id/btnCancelGroceryListEdit"
-        android:layout_width="wrap_content"
+
+    <EditText
+        android:id="@+id/etGListNameGroceryListEdit"
+        android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:backgroundTint="@color/dark_red"
-        android:text="Cancel"
-
-        />
-
-        <Button
-            android:id="@+id/btnSaveGroceryListEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_margin="4dp"
-            android:text="Save" />
-    </LinearLayout>
+        android:autofillHints="name"
+        android:gravity="center"
+        android:hint="Enter list name"
+        android:inputType="textPersonName"
+        android:text="List Name"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvListNameWarning"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="ListName Warning"
+        android:textColor="@color/dark_red"
         android:textSize="12sp"
-        android:textColor="@color/dark_red"/>
+        app:layout_constraintTop_toBottomOf="@+id/etGListNameGroceryListEdit"
+        tools:layout_editor_absoluteX="-28dp" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/etIngredientGroceryListEdit"
+        app:layout_constraintStart_toEndOf="@+id/etIngredientGroceryListEdit"
+        app:layout_constraintTop_toTopOf="@+id/etIngredientGroceryListEdit">
 
-        <EditText
-            android:id="@+id/etIngredientGroceryListEdit"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:layout_margin="4dp"
-            android:gravity="center"
-            android:autofillHints="name"
-            android:hint="Ingredient"
-            android:inputType="textPersonName"/>
         <EditText
             android:id="@+id/etIngredientUnitsGroceryListEdit"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
             android:layout_margin="4dp"
             android:gravity="center"
             android:hint="0"
-            android:inputType="number"/>
+            android:inputType="number"
+            android:textSize="20sp" />
+
         <TextView
             android:id="@+id/etIngredientUnitLabelGroceryListEdit"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:gravity="center"
             android:text="Tbs"
-            android:textSize="16sp"
-            android:layout_margin="4dp"
-            android:gravity="center" />
+            android:textSize="16sp" />
 
-        <Button
-            android:id="@+id/btnAddIngredientGroceryListEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:text="Add"
-
-            />
     </LinearLayout>
-
 
     <TextView
         android:id="@+id/tvIngredientWarning"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Ingredient Warning"
+        android:textColor="@color/dark_red"
         android:textSize="12sp"
-        android:textColor="@color/dark_red"/>
+        app:layout_constraintTop_toBottomOf="@+id/etIngredientGroceryListEdit"
+        tools:layout_editor_absoluteX="0dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvGroceryListsList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toTopOf="@+id/btnCancelGroceryListEdit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvIngredientWarning"
+        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_chainStyle="packed">
 
     </androidx.recyclerview.widget.RecyclerView>
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/tvIngredientWarning"
+        tools:layout_editor_absoluteX="26dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="end"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/tvIngredientWarning"
+            tools:layout_editor_absoluteX="26dp">
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/etIngredientGroceryListEdit"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:autofillHints="name"
+        android:gravity="center"
+        android:hint="Ingredient"
+        android:inputType="textPersonName"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvListNameWarning" />
+
+    <Button
+        android:id="@+id/btnCancelGroceryListEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:backgroundTint="@color/dark_red"
+
+        android:text="Cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnSaveGroceryListEdit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rvGroceryListsList"
+        />
+
+    <Button
+        android:id="@+id/btnSaveGroceryListEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_margin="4dp"
+        android:text="Save"
+        app:layout_constraintBottom_toBottomOf="@+id/btnCancelGroceryListEdit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnCancelGroceryListEdit"
+        app:layout_constraintTop_toTopOf="@+id/btnCancelGroceryListEdit" />
+
+    <Button
+        android:id="@+id/btnAddIngredientGroceryListEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:text="Add"
+
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

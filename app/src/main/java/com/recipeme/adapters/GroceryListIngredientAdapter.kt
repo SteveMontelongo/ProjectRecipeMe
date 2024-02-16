@@ -18,6 +18,7 @@ class GroceryListIngredientAdapter(private var ingredients: List<Ingredient>, pr
         val unitLabelTextView = itemView.findViewById<TextView>(R.id.tvIngredientUnitItemGroceryList)
         val decrementButton = itemView.findViewById<ImageButton>(R.id.ibDecrementGroceryList)
         val incrementButton = itemView.findViewById<ImageButton>(R.id.ibIncrementGroceryList)
+        //val obtainedButton = itemView.findViewById
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroceryListIngredientAdapter.GroceryListIngredientViewHolder {

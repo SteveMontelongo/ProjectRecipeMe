@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/ivIngredientFridge"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvIngredientNameFridge"
+        app:layout_constraintEnd_toStartOf="@+id/tvIngredientNameFridge"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_launcher_background" />
+
+    <TextView
+        android:id="@+id/tvIngredientNameFridge"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:gravity="start|center_vertical"
+        android:maxLength="27"
+        android:maxLines="1"
+
+        android:text="Item Name"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tvItemQuantityFridge"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@+id/ivIngredientFridge"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+
+
+    <TextView
+        android:id="@+id/tvItemQuantityFridge"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:ellipsize="end"
+        android:gravity="start|center_vertical"
+        android:maxLength="27"
+        android:maxLines="1"
+        android:text="999"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/tvIngredientNameFridge"
+        app:layout_constraintEnd_toStartOf="@+id/tvItemLabelQuantityFridge"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tvIngredientNameFridge"
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/tvItemLabelQuantityFridge"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:ellipsize="end"
+        android:gravity="start|center_vertical"
+        android:maxLength="27"
+        android:maxLines="1"
+        android:text="UNIT"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/tvItemQuantityFridge"
+        app:layout_constraintEnd_toStartOf="@+id/ibDeleteFridge"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tvItemQuantityFridge"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+
+    <ImageButton
+        android:id="@+id/ibDeleteFridge"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/roundstyle"
+        android:backgroundTint="@color/dark_red"
+        app:layout_constraintBottom_toBottomOf="@+id/tvItemLabelQuantityFridge"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvItemLabelQuantityFridge"
+        app:layout_constraintTop_toTopOf="@+id/tvItemLabelQuantityFridge"
+        app:layout_constraintVertical_bias=".5"
+        app:srcCompat="@drawable/ic_delete" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
