@@ -52,7 +52,6 @@ class GroceryListContentActivity : AppCompatActivity(), GroceryContentOnItemClic
                 //    ingredients.set()
                     ingredients.add(ingredient)
                 }
-
                 ingredientsRecyclerView.adapter?.notifyDataSetChanged()
             }
         }
