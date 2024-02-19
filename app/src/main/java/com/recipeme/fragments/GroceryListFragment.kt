@@ -73,7 +73,7 @@ class GroceryListFragment : Fragment(), View.OnClickListener, GroceryListOnItemC
         recyclerView=
             view.findViewById<RecyclerView>(R.id.rvGroceryListsList)
         recyclerView.adapter = groceryListsListAdapter
-        recyclerView.setLayoutManager(LinearLayoutManager(this.context))
+        recyclerView.layoutManager = LinearLayoutManager(this.context)
 //        Log.d("Pre : ", grocerylists.toString())
 //        grocerylists.add(GroceryList("1", "20", emptyList<Ingredient>().toMutableList()))
 //        Log.d("TEST : ", grocerylists.toString())

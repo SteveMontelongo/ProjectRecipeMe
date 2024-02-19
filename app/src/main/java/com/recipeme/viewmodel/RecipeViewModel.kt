@@ -16,6 +16,9 @@ class RecipeViewModel : ViewModel() {
     private val _recipeData = MutableLiveData<List<RecipeResponse>>()
     val recipeData: MutableLiveData<List<RecipeResponse>> get() = _recipeData
 
+    private val _recipeDataById = MutableLiveData<RecipeResponse>()
+    val recipeDataById: MutableLiveData<RecipeResponse> get() = _recipeDataById
+
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
 
@@ -61,6 +64,40 @@ class RecipeViewModel : ViewModel() {
             }
 
             override fun onFailure(call: Call<List<RecipeResponse>>, t: Throwable) {
+                onError(t.message)
+                t.printStackTrace()
+            }
+        })
+    }
+
+    fun getRecipeDataById(id: Int){
+
+        _isLoading.value = true
+        _isError.value = false
+
+        Log.d("Get ID" , id.toString())
+
+        val client = ApiConfig.getApiService().getRecipeById(searchById = id.toString())
+
+        //Send API request using RETROFIT
+        client.enqueue(object : Callback<RecipeResponse> {
+            override fun onResponse(
+                call: Call<RecipeResponse>,
+                response: Response<RecipeResponse>
+            ){
+                val responseBody = response.body()
+                if(!response.isSuccessful || responseBody == null){
+                    onError("Data Processing Error")
+                    return
+                }
+
+                _isLoading.value = false
+                Log.d("Inside onResponse BY ID", responseBody.toString())
+
+                _recipeDataById.postValue(responseBody!!) //assertion may be editted
+            }
+
+            override fun onFailure(call: Call<RecipeResponse>, t: Throwable) {
                 onError(t.message)
                 t.printStackTrace()
             }

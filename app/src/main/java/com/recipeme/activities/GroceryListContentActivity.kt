@@ -18,6 +18,7 @@ import com.recipeme.databases.AppDatabase
 import com.recipeme.interfaces.GroceryContentOnItemClick
 import com.recipeme.models.GroceryList
 import com.recipeme.models.Ingredient
+import com.recipeme.utils.IngredientsData
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.text.DateFormat
@@ -32,7 +33,8 @@ class GroceryListContentActivity : AppCompatActivity(), GroceryContentOnItemClic
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_grocery_list_content)
-
+        var data = IngredientsData
+        Log.d("data", data.map.keys.toString())
         var listNameTextView = findViewById<TextView>(R.id.tvGroceryListContentName)
         var imageButtonRefresh = findViewById<ImageButton>(R.id.iBRefreshGroceryContent )
         var db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "recipe-me-database").build()

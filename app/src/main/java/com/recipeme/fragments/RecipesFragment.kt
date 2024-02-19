@@ -1,6 +1,8 @@
 
 package com.recipeme.fragments
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,14 +10,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.navigation.NavType
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
+import com.google.gson.annotations.SerializedName
 import com.recipeme.R
+import com.recipeme.activities.PopupGroceryListsList
+import com.recipeme.activities.RecipeDetailActivity
+import com.recipeme.adapters.RecipesAdapter
+import com.recipeme.interfaces.RecipeOnClickItem
+import com.recipeme.models.GroceryList
 import com.recipeme.models.Ingredient
 import com.recipeme.models.RecipeResponse
 import com.recipeme.viewmodel.RecipeViewModel
 
-class RecipesFragment : Fragment(), View.OnClickListener {
+class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem {
 
     lateinit var recipeViewModel: RecipeViewModel
+    lateinit var recyclerView: RecyclerView
+    lateinit var recipes: MutableList<RecipeResponse>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -27,8 +42,11 @@ class RecipesFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
+        recipes = emptyList<RecipeResponse>().toMutableList()
         view.findViewById<ImageButton>(R.id.iBtnRefreshRecipes).setOnClickListener(this)
+        recyclerView = view.findViewById<RecyclerView>(R.id.rvRecipes)
+        recyclerView.adapter = RecipesAdapter(recipes, this, requireContext())
+        recyclerView.layoutManager= LinearLayoutManager(this.context)
     }
 
     override fun onCreateView(
@@ -50,6 +68,8 @@ class RecipesFragment : Fragment(), View.OnClickListener {
                     testList.add(apple)
                     testList.add(banana)
                     recipeViewModel.getRecipeData(testList)
+                    recyclerView.adapter?.notifyDataSetChanged()
+                    Log.d("Recipes list", recipes.toString())
 
                 }
             }
@@ -71,9 +91,11 @@ class RecipesFragment : Fragment(), View.OnClickListener {
     }
 
     private fun setResultText(recipeData: List<RecipeResponse>) {
-        val resultText = StringBuilder("Result:\n")
+        //val resultText = StringBuilder("Result:\n")
         Log.d("Response", "Response Received")
-
+        for(recipe in recipeData){
+            recipes.add(recipe)
+        }
 //        recipeData.location.let { location ->
 //            resultText.append("Name: ${location?.name}\n")
 //            resultText.append("Region: ${location?.region}\n")
@@ -91,5 +113,33 @@ class RecipesFragment : Fragment(), View.OnClickListener {
 //        }
         Log.d("Response", recipeData[0].title.toString())
 //        tvResult.text = resultText
+        recyclerView.adapter?.notifyDataSetChanged()
+        Log.d("Recipes list 2", recipes.toString())
+    }
+
+    override fun onClickItem(position: Int) {
+        Log.d("Recipe clicked", recipes[position].toString())
+        val intent = Intent(this.context, RecipeDetailActivity::class.java)
+
+        intent.putExtra("recipeId", recipes[position].id)
+
+        resultLauncher.launch(intent)
+    }
+
+    var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+        if(result.resultCode == Activity.RESULT_OK){
+//            val data: Intent? = result.data
+//            val dataListName = data?.getStringExtra("ListName")
+//            val dataListDate = data?.getStringExtra("ListDate")
+//            Log.d("Test", dataListName.toString())
+//            Log.d("Date" , dataListDate.toString())
+//            grocerylists.add(
+//                GroceryList(dataListName.toString(), dataListDate.toString(),
+//                emptyList<Ingredient>().toMutableList())
+//            )
+//            val indexInsert = grocerylists.size
+//            recyclerView.adapter?.notifyItemInserted(indexInsert)
+            //recyclerView.adapter?.notifyDataSetChanged()
+        }
     }
 }
