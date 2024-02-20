@@ -4,6 +4,8 @@ package com.recipeme.fragments
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,31 +16,47 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.NavType
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.recipeme.R
 import com.recipeme.activities.PopupGroceryListsList
 import com.recipeme.activities.RecipeDetailActivity
 import com.recipeme.adapters.RecipesAdapter
+import com.recipeme.daos.FridgeDao
+import com.recipeme.databases.AppDatabase
 import com.recipeme.interfaces.RecipeOnClickItem
 import com.recipeme.models.GroceryList
 import com.recipeme.models.Ingredient
 import com.recipeme.models.RecipeResponse
 import com.recipeme.viewmodel.RecipeViewModel
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem {
 
     lateinit var recipeViewModel: RecipeViewModel
     lateinit var recyclerView: RecyclerView
     lateinit var recipes: MutableList<RecipeResponse>
+    lateinit var fridgeDao: FridgeDao
+    lateinit var ingredients: MutableList<Ingredient>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
         }
+        var db : AppDatabase
+        db = Room.databaseBuilder(
+            requireContext(),
+            AppDatabase::class.java, "recipe-me-database"
+        ).build()
+        fridgeDao = db.fridgeDao()
+        ingredients = emptyList<Ingredient>().toMutableList()
 
         recipeViewModel = RecipeViewModel()
         subscribe()
         Log.d("Subscribe", "Subscribed")
+
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,6 +65,16 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem {
         recyclerView = view.findViewById<RecyclerView>(R.id.rvRecipes)
         recyclerView.adapter = RecipesAdapter(recipes, this, requireContext())
         recyclerView.layoutManager= LinearLayoutManager(this.context)
+
+        GlobalScope.launch {
+            var ingredientsToUpdate: MutableList<Ingredient> = emptyList<Ingredient>().toMutableList()
+            ingredientsToUpdate.addAll(fridgeDao.getAll())
+            Handler(Looper.getMainLooper()).post{
+                Log.d("Fridge Loading", ingredientsToUpdate.toString())
+                ingredients.addAll(ingredientsToUpdate)
+                Log.d("All Ingredients", "All ingredients " + ingredients.toString())
+            }
+        }
     }
 
     override fun onCreateView(
@@ -62,12 +90,12 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem {
             when(v.id){
                 R.id.iBtnRefreshRecipes ->{
                     Log.d("Testing Click", "RECIPES REFRESHED")
-                    var testList: MutableList<Ingredient> = emptyList<Ingredient>().toMutableList()
-                    val apple: Ingredient = Ingredient("0", 0.0, "", "apples", "tbs", true)
-                    val banana: Ingredient = Ingredient("0", 0.0, "", "bananas", "tbs", true)
-                    testList.add(apple)
-                    testList.add(banana)
-                    recipeViewModel.getRecipeData(testList)
+//                    var testList: MutableList<Ingredient> = emptyList<Ingredient>().toMutableList()
+//                    val apple: Ingredient = Ingredient(0,"", 0.0, "", "apples", "QTY", true)
+//                    val banana: Ingredient = Ingredient(0,"", 0.0,"", "bananas", "QTY", true)
+//                    testList.add(apple)
+//                    testList.add(banana)
+                    recipeViewModel.getRecipeData(ingredients)
                     recyclerView.adapter?.notifyDataSetChanged()
                     Log.d("Recipes list", recipes.toString())
 

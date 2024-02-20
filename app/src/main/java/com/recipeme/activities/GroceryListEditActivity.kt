@@ -6,6 +6,8 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -20,6 +22,7 @@ import com.recipeme.databases.AppDatabase
 import com.recipeme.interfaces.GroceryIngredientOnQuantityClick
 import com.recipeme.models.GroceryList
 import com.recipeme.models.Ingredient
+import com.recipeme.utils.IngredientsData
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.text.DateFormat
@@ -37,9 +40,18 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
     lateinit var groceryListDao: GroceryListDao
     lateinit var listOfNames: MutableList<String>
     lateinit var oldList: GroceryList
+    lateinit var arrayIngredientNames: MutableList<String>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_grocery_list_edit)
+        arrayIngredientNames = emptyList<String>().toMutableList()
+        for(ingredient in IngredientsData.map){
+            arrayIngredientNames.add(ingredient.value)
+        }
+        var arrayAdapter = ArrayAdapter<String>(this, android.R.layout.select_dialog_singlechoice, arrayIngredientNames)
+        var autoCompleteIngredientName = findViewById<AutoCompleteTextView>(R.id.etIngredientGroceryListEdit)
+        autoCompleteIngredientName.threshold = 1
+        autoCompleteIngredientName.setAdapter(arrayAdapter)
         listName = intent.getStringExtra("ListName").toString()
         var listNameText = findViewById<TextView>(R.id.etGListNameGroceryListEdit)
         listNameText.setText(listName)
@@ -140,6 +152,8 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
                             ingredientWarningString.text = "Please enter valid ingredient."
                         }else if(ingredientName.length > 20){
                             ingredientWarningString.text = "Limit name under 21 characters."
+                        }else if(!arrayIngredientNames.contains(ingredientName)){
+                            ingredientWarningString.text = "Please make a selection from the available ingredients."
                         }else if(duplicatePosition !=-1){
                             if(isQuantityLabelSame(ingredientUnitLabel, duplicatePosition)){
 
@@ -147,11 +161,20 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
                             ingredients[duplicatePosition].amount += ingredientQuantity.toDouble()
                             recyclerView.adapter?.notifyDataSetChanged()
                         }else{
-                            ingredients.add(Ingredient("NULL", ingredientQuantity.toDouble(), "NULL", ingredientName, ingredientUnitLabel, false))
+                            var key = 0
+                            for(ingredient in IngredientsData.map){
+                                if(ingredient.value.compareTo(ingredientName) != 0 ){
+                                    continue;
+                                }else{
+                                    key = ingredient.key
+                                    Log.d("Key/Val", "Key " + key + "Val: " + ingredient.value)
+                                }
+                            }
+                            ingredients.add(Ingredient(key,"NULL", ingredientQuantity.toDouble(), "NULL", ingredientName, ingredientUnitLabel, false))
                             recyclerView.adapter?.notifyItemInserted(ingredients.size-1)
                         }
                     }
-                    Log.e("Added", "Lis t: " + ingredients)
+                    Log.e("Added", "List: " + ingredients)
 
                 }
             }
