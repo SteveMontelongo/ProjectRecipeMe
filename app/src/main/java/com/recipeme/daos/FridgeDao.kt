@@ -17,4 +17,7 @@ interface FridgeDao {
     @Delete
     fun deleteIngredient(ingredient: Ingredient)
 
+    @Query("DELETE FROM Ingredient WHERE id = :id")
+    fun deleteById(id: Int)
+
 }

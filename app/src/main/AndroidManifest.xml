@@ -15,6 +15,13 @@
         android:theme="@style/Theme.RecipeMe"
         tools:targetApi="31">
         <activity
+            android:name=".activities.RecipeConfirmationActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".activities.RecipeDetailActivity"
             android:exported="false">
             <meta-data

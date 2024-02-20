@@ -30,39 +30,32 @@
         android:id="@+id/svRecipeDetail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/ivRecipeImageRecipeDetail">
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivRecipeImageRecipeDetail"
+        app:layout_constraintVertical_bias="0.0">
 
         <TextView
             android:id="@+id/tvRecipeIngredientsUsedRecipeDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ingredients Used"
             android:layout_marginTop="8dp"
             android:isScrollContainer="true"
+            android:text="Ingredients Used"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
 
             />
     </ScrollView>
 
-        <TextView
-            android:id="@+id/tvRecipeMissingIngredientsLabelRecipeDetail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ingredients Missing"
-            android:textColor="@color/dark_red"
-            android:layout_marginTop="40dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/svRecipeDetail" />
+    <Button
+        android:id="@+id/btnConfirmRecipeDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Let's make it!"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:id="@+id/tvRecipeMissingIngredientsRecipeDetail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ingredients missing list"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvRecipeMissingIngredientsLabelRecipeDetail" />
-            />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

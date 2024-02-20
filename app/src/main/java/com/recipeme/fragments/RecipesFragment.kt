@@ -40,6 +40,7 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem {
     lateinit var recipes: MutableList<RecipeResponse>
     lateinit var fridgeDao: FridgeDao
     lateinit var ingredients: MutableList<Ingredient>
+    lateinit var ids: IntArray
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -69,9 +70,15 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem {
         GlobalScope.launch {
             var ingredientsToUpdate: MutableList<Ingredient> = emptyList<Ingredient>().toMutableList()
             ingredientsToUpdate.addAll(fridgeDao.getAll())
+            ids = IntArray(ingredientsToUpdate.size)
             Handler(Looper.getMainLooper()).post{
                 Log.d("Fridge Loading", ingredientsToUpdate.toString())
                 ingredients.addAll(ingredientsToUpdate)
+                var i = 0;
+                for(ingredient in ingredients){
+                    ids[i] = ingredient.id
+                    i++
+                }
                 Log.d("All Ingredients", "All ingredients " + ingredients.toString())
             }
         }
@@ -150,6 +157,7 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem {
         val intent = Intent(this.context, RecipeDetailActivity::class.java)
 
         intent.putExtra("recipeId", recipes[position].id)
+        intent.putExtra("ingredientsUsedIds", ids)
 
         resultLauncher.launch(intent)
     }
