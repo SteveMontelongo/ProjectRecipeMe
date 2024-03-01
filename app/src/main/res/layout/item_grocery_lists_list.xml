@@ -1,64 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:padding="4dp">
 
-    <TextView
-        android:id="@+id/tvGroceryListsListDate"
+    <LinearLayout
+        android:id="@+id/layoutHorizontalGroceryListsList"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:gravity="start|center"
-        android:maxLength="27"
-        android:text="1:11PM 1/1/2011"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@+id/tvGroceryListsList"
-        app:layout_constraintStart_toStartOf="@+id/tvGroceryListsList"
-        app:layout_constraintTop_toBottomOf="@+id/tvGroceryListsList" />
-
-    <TextView
-        android:id="@+id/tvGroceryListsList"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="8dp"
-        android:ellipsize="end"
-        android:gravity="start|center_vertical"
-        android:maxLength="27"
-        android:maxLines="1"
-        android:text="GroceryList"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@+id/ibDeleteGroceryListsList"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
-        android:id="@+id/ibDeleteGroceryListsList"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="32dp"
-        android:background="@drawable/roundstyle"
-        android:backgroundTint="@color/dark_red"
-        app:layout_constraintBottom_toBottomOf="@+id/tvGroceryListsList"
-        app:layout_constraintEnd_toStartOf="@+id/ibEditGroceryListsList"
-        app:layout_constraintTop_toTopOf="@+id/tvGroceryListsList"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/ic_delete" />
-
-    <ImageButton
-        android:id="@+id/ibEditGroceryListsList"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-
-        android:layout_marginEnd="12dp"
-        android:background="@drawable/roundstyle"
-        android:backgroundTint="@color/yellow"
-        app:layout_constraintBottom_toBottomOf="@+id/tvGroceryListsList"
+        android:background="@drawable/list_item_shape"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvGroceryListsList"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/ic_edit" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:weightSum="10">
+
+        <LinearLayout
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="8"
+            android:orientation="vertical"
+            tools:layout_editor_absoluteX="1dp"
+            tools:layout_editor_absoluteY="77dp">
+
+            <TextView
+                android:id="@+id/tvGroceryListsList"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="end"
+                android:gravity="start|center_vertical"
+                android:maxLength="27"
+                android:maxLines="1"
+                android:text="GroceryList"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tvGroceryListsListDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="start|center"
+                android:maxLength="27"
+                android:text="1:11PM 1/1/2011"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/ibDeleteGroceryListsList"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_weight=".1"
+            android:layout_marginEnd="36dp"
+            android:layout_marginStart="12dp"
+            android:layout_gravity="center"
+            android:background="@drawable/small_delete_button_shape"
+            app:srcCompat="@drawable/ic_delete" />
+
+        <ImageButton
+            android:id="@+id/ibEditGroceryListsList"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_weight=".1"
+            android:layout_marginEnd="12dp"
+            android:layout_gravity="center"
+            android:background="@drawable/small_edit_button_shape"
+            app:srcCompat="@drawable/ic_edit" />
+
+    </LinearLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

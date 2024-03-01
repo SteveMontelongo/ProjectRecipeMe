@@ -19,7 +19,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintVertical_bias="0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewPager"
         >
 <!--        android:background="@color/tabBackG"-->
 
@@ -45,17 +45,65 @@
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
-        android:padding="8dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="12dp"
+        android:padding="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/tabLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tabLayout"
-        android:layout_margin="20dp">
-<!--        android:background="@drawable/roundstyle"-->
-<!--        android:backgroundTint="@color/white"-->
+        app:layout_constraintTop_toBottomOf="@+id/ibMoreMain">
+        <!--        android:background="@drawable/roundstyle"-->
+        <!--        android:backgroundTint="@color/white"-->
 
     </androidx.viewpager2.widget.ViewPager2>
+    <ImageButton
+        android:id="@+id/ibMoreMain"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/small_item_button_shape"
+        app:srcCompat="@drawable/ic_more"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="8dp"/>
+
+    <ImageButton
+        android:id="@+id/ibOneMain"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/small_item_button_shape"
+        app:layout_constraintEnd_toStartOf="@+id/ibMoreMain"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_refresh" />
+
+    <ImageButton
+        android:id="@+id/ibTwoMain"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/small_item_button_shape"
+        app:layout_constraintEnd_toStartOf="@+id/ibOneMain"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_increment" />
+
+    <TextView
+        android:id="@+id/tvLabelMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Main Page"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/ibTwoMain"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

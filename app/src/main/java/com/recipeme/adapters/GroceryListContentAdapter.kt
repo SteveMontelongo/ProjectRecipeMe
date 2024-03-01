@@ -13,10 +13,9 @@ import com.recipeme.models.Ingredient
 class GroceryListContentAdapter(private var ingredients: MutableList<Ingredient>, private var listener: GroceryContentOnItemClick) : RecyclerView.Adapter<GroceryListContentAdapter.GroceryListContentIngredientViewHolder>(){
 
     inner class GroceryListContentIngredientViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val nameTextView = itemView.findViewById<TextView>(R.id.tvItemGroceryListContentIngredientName)
-        val quantityTextView = itemView.findViewById<TextView>(R.id.etItemGroceryListContentIngredientQuantity)
-        //val unitLabelTextView = itemView.findViewById<TextView>(R.id.tvIngredientUnitItemGroceryList)
-        val statusButton = itemView.findViewById<ImageButton>(R.id.ibItemGroceryListContentStatus)
+        val nameTextView: TextView = itemView.findViewById<TextView>(R.id.tvItemGroceryListContentIngredientName)
+        val quantityTextView: TextView = itemView.findViewById<TextView>(R.id.etItemGroceryListContentIngredientQuantity)
+        val statusButton: ImageButton = itemView.findViewById<ImageButton>(R.id.ibItemGroceryListContentStatus)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroceryListContentAdapter.GroceryListContentIngredientViewHolder {
@@ -30,9 +29,22 @@ class GroceryListContentAdapter(private var ingredients: MutableList<Ingredient>
         val ingredient: Ingredient = ingredients.get(holder.absoluteAdapterPosition)
         holder.nameTextView.text = ingredient.name
         holder.quantityTextView.text = ingredient.amount.toString()
-        //holder.unitLabelTextView.text = ingredient.unit
         holder.statusButton.setImageResource(
-            if(ingredients[holder.absoluteAdapterPosition].obtained) R.drawable.ic_confirm_checked else R.drawable.ic_confirm_unchecked)
+            if(ingredients[holder.absoluteAdapterPosition].obtained){
+                R.drawable.ic_cart
+            }
+            else{
+                R.drawable.ic_add_cart_item
+            }
+        )
+
+        if(ingredients[holder.absoluteAdapterPosition].obtained){
+            holder.statusButton.setBackgroundResource(R.drawable.checkout_item_confirm_shape)
+        }else{
+            holder.statusButton.setBackgroundResource(R.drawable.checkout_item_shape)
+        }
+
+
         holder.statusButton.setOnClickListener{
             this.listener.onClickStatus(holder.absoluteAdapterPosition)
         }

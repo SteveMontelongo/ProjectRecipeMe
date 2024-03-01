@@ -19,14 +19,10 @@ import java.security.AccessController.getContext
 
 class FridgeAdapter(var ingredients: MutableList<Ingredient>, private var listener: FridgeOnItemClick, private var context: Context) : RecyclerView.Adapter<FridgeAdapter.FridgeIngredientViewHolder>(){
 
-
     inner class FridgeIngredientViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val itemImageView = itemView.findViewById<ImageView>(R.id.ivIngredientFridge)
-        val nameTextView = itemView.findViewById<TextView>(R.id.tvIngredientNameFridge)
-//        val labelQuantityTextView = itemView.findViewById<TextView>(R.id.tvItemLabelQuantityFridge)
-//        val quantityTextView = itemView.findViewById<TextView>(R.id.tvItemQuantityFridge)
-        //val unitLabelTextView = itemView.findViewById<TextView>(R.id.tvIngredientUnitItemGroceryList)
-        val deleteButton = itemView.findViewById<ImageButton>(R.id.ibDeleteFridge)
+        val itemImageView: ImageView = itemView.findViewById<ImageView>(R.id.ivIngredientFridge)
+        val nameTextView: TextView = itemView.findViewById<TextView>(R.id.tvIngredientNameFridge)
+        val deleteButton: ImageButton = itemView.findViewById<ImageButton>(R.id.ibDeleteFridge)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FridgeAdapter.FridgeIngredientViewHolder {
@@ -42,11 +38,7 @@ class FridgeAdapter(var ingredients: MutableList<Ingredient>, private var listen
             RequestOptions()
             .placeholder(R.drawable.ic_launcher_background)
             .error(R.drawable.ic_launcher_background)).load(ingredient.image).into(holder.itemImageView)
-//        holder.itemImageView.setImage = ingredient.name
         holder.nameTextView.text = ingredient.name
-//        holder.labelQuantityTextView.text= ingredient.unit
-//        holder.quantityTextView.text = ingredient.amount.toString()
-        //holder.unitLabelTextView.text = ingredient.unit
         holder.deleteButton.setOnClickListener{
             this.listener.onDelete(holder.absoluteAdapterPosition)
         }

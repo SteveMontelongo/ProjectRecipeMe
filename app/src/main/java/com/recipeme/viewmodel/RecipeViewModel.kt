@@ -92,8 +92,6 @@ class RecipeViewModel : ViewModel() {
                 }
 
                 _isLoading.value = false
-                Log.d("Inside onResponse BY ID", responseBody.toString())
-
                 _recipeDataById.postValue(responseBody!!) //assertion may be editted
             }
 

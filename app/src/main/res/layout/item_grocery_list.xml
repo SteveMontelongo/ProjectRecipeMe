@@ -4,77 +4,85 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:padding="4dp">
 
-    <TextView
-        android:id="@+id/tvIngredientNameGroceryList"
+    <LinearLayout
+        android:id="@+id/layoutGroceryList"
         android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_margin="16dp"
-        android:gravity="start|center"
-        android:text="Ingredient"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/ibDecrementGroceryList"
-        app:layout_constraintStart_toEndOf="@+id/ivIngredientItem"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
-        android:id="@+id/ibDecrementGroceryList"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_margin="4dp"
-        app:layout_constraintBottom_toBottomOf="@+id/tvIngredientNameGroceryList"
-        app:layout_constraintEnd_toStartOf="@+id/tvIngredientQuantityItemGroceryList"
-        app:layout_constraintTop_toTopOf="@+id/tvIngredientNameGroceryList"
-        app:layout_constraintVertical_bias="0.6"
-        app:srcCompat="@drawable/ic_decrement" />
-
-    <TextView
-        android:id="@+id/tvIngredientQuantityItemGroceryList"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_margin="4dp"
-        android:gravity="center"
-        android:text="0"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/ibDecrementGroceryList"
-        app:layout_constraintEnd_toStartOf="@+id/tvIngredientUnitItemGroceryList"
-        app:layout_constraintTop_toTopOf="@+id/ibDecrementGroceryList" />
-
-    <TextView
-        android:id="@+id/tvIngredientUnitItemGroceryList"
-        android:layout_width="40dp"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:gravity="center"
-        android:text="QTY."
-        android:textSize="16sp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/tvIngredientQuantityItemGroceryList"
-        app:layout_constraintEnd_toStartOf="@+id/ibIncrementGroceryList"
-        app:layout_constraintTop_toTopOf="@+id/tvIngredientQuantityItemGroceryList" />
-
-    <ImageButton
-        android:id="@+id/ibIncrementGroceryList"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_margin="4dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/tvIngredientNameGroceryList"
+        android:background="@drawable/list_item_shape"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvIngredientNameGroceryList"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/ic_increment" />
-
-    <ImageView
-        android:id="@+id/ivIngredientItem"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        app:layout_constraintBottom_toBottomOf="@+id/tvIngredientNameGroceryList"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvIngredientNameGroceryList"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvIngredientNameGroceryList"
+            android:layout_width="20dp"
+            android:layout_height="50dp"
+            android:layout_margin="12dp"
+            android:layout_weight="@integer/material_motion_duration_long_1"
+            android:ellipsize="end"
+            android:gravity="start|center"
+            android:hint="Ingredient"
+            android:textSize="16sp"
+            android:textStyle="bold"
+/>
+
+        <ImageButton
+            android:id="@+id/ibDecrementGroceryList"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_margin="4dp"
+            android:background="@drawable/small_item_button_shape"
+
+            app:layout_constraintVertical_bias="0.6"
+            app:srcCompat="@drawable/ic_decrement" />
+
+        <TextView
+            android:id="@+id/tvIngredientQuantityItemGroceryList"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_margin="4dp"
+            android:layout_marginRight="4dp"
+            android:gravity="center"
+            android:text="0"
+            android:textSize="24sp"
+            android:textStyle="bold"
+/>
+
+        <TextView
+            android:id="@+id/tvIngredientUnitItemGroceryList"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_margin="4dp"
+            android:gravity="center"
+            android:text="QTY."
+            android:textSize="16sp"
+ />
+
+        <ImageButton
+            android:id="@+id/ibIncrementGroceryList"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_margin="4dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/small_item_button_shape"
+
+            app:srcCompat="@drawable/ic_increment" />
+
+    </LinearLayout>
+
+    <!--    <ImageView-->
+<!--        android:id="@+id/ivIngredientItem"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/tvIngredientNameGroceryList"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/tvIngredientNameGroceryList"-->
+<!--        tools:srcCompat="@tools:sample/avatars" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

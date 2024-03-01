@@ -5,48 +5,62 @@
     android:layout_height="wrap_content"
     android:padding="16dp">
 
-    <TextView
-        android:id="@+id/tvItemGroceryListContentIngredientName"
+    <LinearLayout
+        android:id="@+id/layoutGroceryList"
         android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="40dp"
-        android:ellipsize="end"
-        android:gravity="start|center_vertical"
-        android:maxLength="27"
-        android:maxLines="1"
-        android:text="Name"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@+id/etItemGroceryListContentIngredientQuantity"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/etItemGroceryListContentIngredientQuantity"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="20dp"
-        android:ellipsize="end"
-        android:gravity="start|center_vertical"
-        android:maxLength="27"
-        android:maxLines="1"
-        android:text="QTY. 999"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/tvItemGroceryListContentIngredientName"
-        app:layout_constraintEnd_toStartOf="@+id/ibItemGroceryListContentStatus"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
-        android:id="@+id/ibItemGroceryListContentStatus"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="12dp"
-        android:background="@drawable/ic_confirm_unchecked"
-        app:layout_constraintBottom_toBottomOf="@+id/etItemGroceryListContentIngredientQuantity"
+        android:layout_height="wrap_content"
+        android:background="@drawable/list_item_shape"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/etItemGroceryListContentIngredientQuantity"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/ic_confirm_unchecked" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:weightSum="10">
+
+        <TextView
+            android:id="@+id/tvItemGroceryListContentIngredientName"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="7"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="40dp"
+            android:ellipsize="end"
+            android:gravity="start|center_vertical"
+            android:maxLength="27"
+            android:maxLines="1"
+            android:text="Name"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@+id/etItemGroceryListContentIngredientQuantity"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/etItemGroceryListContentIngredientQuantity"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="4"
+            android:layout_marginEnd="20dp"
+            android:ellipsize="end"
+            android:gravity="start|center_vertical"
+            android:maxLength="27"
+            android:maxLines="1"
+            android:text="QTY. 999"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvItemGroceryListContentIngredientName"
+            app:layout_constraintEnd_toStartOf="@+id/ibItemGroceryListContentStatus"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/ibItemGroceryListContentStatus"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_weight=".1"
+            android:layout_gravity="center"
+            android:layout_marginEnd="24dp"
+            android:background="@drawable/checkout_item_shape"
+            app:layout_constraintBottom_toBottomOf="@+id/etItemGroceryListContentIngredientQuantity"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/etItemGroceryListContentIngredientQuantity"
+            app:srcCompat="@drawable/ic_add_cart_item" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

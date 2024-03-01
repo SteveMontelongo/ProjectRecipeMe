@@ -25,78 +25,65 @@ import java.text.DateFormat
 import java.util.*
 
 class GroceryListContentActivity : AppCompatActivity(), GroceryContentOnItemClick, View.OnClickListener {
-    lateinit var ingredients: MutableList<Ingredient>
-    lateinit var groceryListDao: GroceryListDao
-    lateinit var fridgeDao: FridgeDao
-    lateinit var groceryList: GroceryList
-    lateinit var ingredientsRecyclerView: RecyclerView
+    private lateinit var _ingredients: MutableList<Ingredient>
+    private lateinit var _groceryListDao: GroceryListDao
+    private lateinit var _fridgeDao: FridgeDao
+    private lateinit var _groceryList: GroceryList
+    private lateinit var _ingredientsRecyclerView: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_grocery_list_content)
-        var data = IngredientsData
-        Log.d("data", data.map.keys.toString())
         var listNameTextView = findViewById<TextView>(R.id.tvGroceryListContentName)
-        var imageButtonRefresh = findViewById<ImageButton>(R.id.iBRefreshGroceryContent )
         var db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "recipe-me-database").build()
         var listName = intent.getStringExtra("ListName").toString()
         listNameTextView.text = listName
-        ingredients = emptyList<Ingredient>().toMutableList()
-        groceryListDao = db.groceryListDao()
-        fridgeDao = db.fridgeDao()
+        _ingredients = emptyList<Ingredient>().toMutableList()
+        _groceryListDao = db.groceryListDao()
+        _fridgeDao = db.fridgeDao()
         findViewById<Button>(R.id.btnUpdateGroceryListContent).setOnClickListener(this)
         findViewById<Button>(R.id.btnCancelGroceryListContent).setOnClickListener(this)
         GlobalScope.launch{
             this?.let {
-                groceryList = groceryListDao.getListFromName(listName)
+                _groceryList = _groceryListDao.getListFromName(listName)
             }
             Handler(Looper.getMainLooper()).post{
-                for(ingredient in groceryList.items){
-                //    ingredients.set()
-                    ingredients.add(ingredient)
+                for(ingredient in _groceryList.items){
+                    _ingredients.add(ingredient)
                 }
-                ingredientsRecyclerView.adapter?.notifyDataSetChanged()
+                _ingredientsRecyclerView.adapter?.notifyDataSetChanged()
             }
         }
-
-
-        ingredientsRecyclerView = findViewById<RecyclerView>(R.id.rvGroceryListContentItems)
-        ingredientsRecyclerView.adapter = GroceryListContentAdapter(ingredients, this)
-        ingredientsRecyclerView.layoutManager = LinearLayoutManager(this)
+        _ingredientsRecyclerView = findViewById(R.id.rvGroceryListContentItems)
+        _ingredientsRecyclerView.adapter = GroceryListContentAdapter(_ingredients, this)
+        _ingredientsRecyclerView.layoutManager = LinearLayoutManager(this)
 
     }
 
     override fun onClick(v: View?) {
         if(v != null) {
-            Log.d("Test", "View ID " + v.id.toString())
             when (v.id) {
-
                 R.id.btnCancelGroceryListContent -> {
                     finish()
                 }
                 R.id.btnUpdateGroceryListContent -> {
-                    Log.d("Update Clicked", "Update Clicked")
                     var ingredientsToUpdate = emptyList<Ingredient>().toMutableList()
-                    var updateIds = emptyList<Int>().toMutableList()
-                    for(ingredient in ingredients){
+                    for(ingredient in _ingredients){
                         if(ingredient.obtained){
                             ingredientsToUpdate.add(ingredient)
-                            groceryList.items.remove(ingredient)
-                            //updateIds.add(ingredient.id)
+                            _groceryList.items.remove(ingredient)
                         }
                     }
                     GlobalScope.launch {
                         this?.let {
-                            //edit
-                            fridgeDao.insertAll(ingredientsToUpdate)
+                            _fridgeDao.insertAll(ingredientsToUpdate)
 
-                            groceryListDao.update(groceryList)
+                            _groceryListDao.update(_groceryList)
                             Handler(Looper.getMainLooper()).post{
-                                Log.d("updating",  ingredientsToUpdate.toString())
                                 for(ingredient in ingredientsToUpdate){
-                                    ingredients.remove(ingredient)
+                                    _ingredients.remove(ingredient)
                                 }
-                                ingredientsRecyclerView.adapter?.notifyDataSetChanged()
-                                intent.putExtra("ListName", groceryList.name)
+                                _ingredientsRecyclerView.adapter?.notifyDataSetChanged()
+                                intent.putExtra("ListName", _groceryList.name)
                             }
 
                         }
@@ -109,8 +96,7 @@ class GroceryListContentActivity : AppCompatActivity(), GroceryContentOnItemClic
     }
 
     override fun onClickStatus(position: Int) {
-        ingredients[position].obtained = !ingredients[position].obtained
-        Log.d("Status Test", "Ingredient: " + ingredients[position].name + " Status: " + ingredients[position].obtained + ingredients[position].toString())
-        ingredientsRecyclerView.adapter?.notifyDataSetChanged()
+        _ingredients[position].obtained = !_ingredients[position].obtained
+        _ingredientsRecyclerView.adapter?.notifyDataSetChanged()
     }
 }

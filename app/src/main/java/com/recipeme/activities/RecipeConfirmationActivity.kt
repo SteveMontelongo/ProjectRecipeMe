@@ -25,80 +25,71 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class RecipeConfirmationActivity : AppCompatActivity(), GroceryContentOnItemClick, View.OnClickListener {
-    lateinit var ingredients: MutableList<Ingredient>
-    lateinit var fridgeDao: FridgeDao
-    lateinit var ingredientsRecyclerView: RecyclerView
-    lateinit var ids: IntArray
-    lateinit var fridgeItems: MutableList<Ingredient>
+    private lateinit var _ingredients: MutableList<Ingredient>
+    private lateinit var _fridgeDao: FridgeDao
+    private lateinit var _ingredientsRecyclerView: RecyclerView
+    private lateinit var _ids: IntArray
+    private lateinit var _fridgeItems: MutableList<Ingredient>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipe_confirmation)
-        ingredients = emptyList<Ingredient>().toMutableList()
+        _ingredients = emptyList<Ingredient>().toMutableList()
         var db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "recipe-me-database").build()
-        fridgeDao = db.fridgeDao()
-        ingredientsRecyclerView = findViewById<RecyclerView>(R.id.rvRecipeConfirmation)
-        ingredientsRecyclerView.adapter = RecipeConfirmationAdapter(ingredients, this)
-        ingredientsRecyclerView.layoutManager = LinearLayoutManager(this)
-        ids = intent.getIntArrayExtra("ingredientsUsedIds")!!
+        _fridgeDao = db.fridgeDao()
+        _ingredientsRecyclerView = findViewById<RecyclerView>(R.id.rvRecipeConfirmation)
+        _ingredientsRecyclerView.adapter = RecipeConfirmationAdapter(_ingredients, this)
+        _ingredientsRecyclerView.layoutManager = LinearLayoutManager(this)
+        _ids = intent.getIntArrayExtra("ingredientsUsedIds")!!
 
         findViewById<Button>(R.id.btnCancelRecipeConfirmation).setOnClickListener(this)
         findViewById<Button>(R.id.btnUpdateRecipeConfirmation).setOnClickListener(this)
 
         GlobalScope.launch{
             this?.let {
-                fridgeItems = fridgeDao.getAll()
+                _fridgeItems = _fridgeDao.getAll()
             }
             Handler(Looper.getMainLooper()).post{
-                var fridgeIds = IntArray(fridgeItems.size)
-                var j =0
-                for(ingredient in fridgeItems){
+                var fridgeIds = IntArray(_fridgeItems.size)
+                for((j, ingredient) in _fridgeItems.withIndex()){
                     fridgeIds[j] = ingredient.id
-                    j++
                 }
-                for(id in ids){
+                for(id in _ids){
                     if(fridgeIds.contains(id)){
-                        ingredients.add(Ingredient(id, "null", 0.0, "null", IngredientsData.map.get(id)!!, "", false))
-                        Log.d("ingredients", ingredients.toString())
+                        _ingredients.add(Ingredient(id, "null", 0.0, "null", IngredientsData.map.get(id)!!, "", false))
                     }
                 }
-                ingredientsRecyclerView.adapter?.notifyDataSetChanged()
+                _ingredientsRecyclerView.adapter?.notifyDataSetChanged()
             }
         }
 
     }
 
     override fun onClickStatus(position: Int) {
-        ingredients[position].obtained = !ingredients[position].obtained
-        Log.d("Status Test", "Ingredient: " + ingredients[position].name + " Status: " + ingredients[position].obtained + ingredients[position].toString())
-        ingredientsRecyclerView.adapter?.notifyDataSetChanged()
+        _ingredients[position].obtained = !_ingredients[position].obtained
+        _ingredientsRecyclerView.adapter?.notifyDataSetChanged()
     }
 
     override fun onClick(v: View?) {
         if(v != null){
             when(v.id){
                 R.id.btnUpdateRecipeConfirmation ->{
-//                    val intent = Intent(this, RecipeConfirmationActivity::class.java)
-//                    intent.putExtra("ingredientsUsedIds", filteredIds)
                     GlobalScope.launch{
                         this?.let {
-                            for(ingredient in ingredients){
+                            for(ingredient in _ingredients){
                                 if(ingredient.obtained){
-                                    fridgeDao.deleteById(ingredient.id)
+                                    _fridgeDao.deleteById(ingredient.id)
                                 }
                             }
-
                         }
                         Handler(Looper.getMainLooper()).post{
                             finish()
                         }
                     }
-
                 }
 
                 R.id.btnCancelRecipeConfirmation->{
                     finish()
                 }
-
             }
         }
     }

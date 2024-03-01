@@ -28,67 +28,62 @@ import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.util.*
 
-
-//need to map items
 class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, GroceryIngredientOnQuantityClick {
-    lateinit var listName: String
-    //lateinit var ingredients: MutableList<Ingredient>
-    lateinit var ingredients: MutableList<Ingredient>
-    lateinit var recyclerView: RecyclerView
-    lateinit var listNameWarningString: TextView
-    lateinit var ingredientWarningString: TextView
-    lateinit var groceryListDao: GroceryListDao
-    lateinit var listOfNames: MutableList<String>
-    lateinit var oldList: GroceryList
-    lateinit var arrayIngredientNames: MutableList<String>
+    private lateinit var _listName: String
+    private lateinit var _ingredients: MutableList<Ingredient>
+    private lateinit var _recyclerView: RecyclerView
+    private lateinit var _listNameWarningString: TextView
+    private lateinit var _ingredientWarningString: TextView
+    private lateinit var _groceryListDao: GroceryListDao
+    private lateinit var _listOfNames: MutableList<String>
+    private lateinit var _oldList: GroceryList
+    private lateinit var _arrayIngredientNames: MutableList<String>
+    private lateinit var _autoCompleteIngredientName: AutoCompleteTextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_grocery_list_edit)
-        arrayIngredientNames = emptyList<String>().toMutableList()
+        _arrayIngredientNames = emptyList<String>().toMutableList()
+        _ingredients = emptyList<Ingredient>().toMutableList()
+        _listOfNames = emptyList<String>().toMutableList()
         for(ingredient in IngredientsData.map){
-            arrayIngredientNames.add(ingredient.value)
+            _arrayIngredientNames.add(ingredient.value)
         }
-        var arrayAdapter = ArrayAdapter<String>(this, android.R.layout.select_dialog_singlechoice, arrayIngredientNames)
-        var autoCompleteIngredientName = findViewById<AutoCompleteTextView>(R.id.etIngredientGroceryListEdit)
-        autoCompleteIngredientName.threshold = 1
-        autoCompleteIngredientName.setAdapter(arrayAdapter)
-        listName = intent.getStringExtra("ListName").toString()
+        val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.select_dialog_singlechoice, _arrayIngredientNames)
+        _autoCompleteIngredientName = findViewById<AutoCompleteTextView>(R.id.etIngredientGroceryListEdit)
+        _autoCompleteIngredientName.threshold = 1
+        _autoCompleteIngredientName.setAdapter(arrayAdapter)
+        _listName = intent.getStringExtra("ListName").toString()
         var listNameText = findViewById<TextView>(R.id.etGListNameGroceryListEdit)
-        listNameText.setText(listName)
-        listNameWarningString = findViewById<TextView>(R.id.tvListNameWarning)
-        ingredientWarningString = findViewById<TextView>(R.id.tvIngredientWarning)
-        listNameWarningString.text = ""
-        ingredientWarningString.text = ""
-        val cancelButton = findViewById<Button>(R.id.btnCancelGroceryListEdit).setOnClickListener(this)
-        val saveButton = findViewById<Button>(R.id.btnSaveGroceryListEdit).setOnClickListener(this)
-        // ingredients = mutableMapOf<Ingredient, Boolean>()
-        ingredients = emptyList<Ingredient>().toMutableList()
-        val addButton = findViewById<Button>(R.id.btnAddIngredientGroceryListEdit).setOnClickListener(this)
+        _listNameWarningString = findViewById<TextView>(R.id.tvListNameWarning)
+        _ingredientWarningString = findViewById<TextView>(R.id.tvIngredientWarning)
+        _listNameWarningString.text = ""
+        _ingredientWarningString.text = ""
+        listNameText.setText(_listName)
+
+        findViewById<Button>(R.id.btnCancelGroceryListEdit).setOnClickListener(this)
+        findViewById<Button>(R.id.btnSaveGroceryListEdit).setOnClickListener(this)
+        findViewById<Button>(R.id.btnAddIngredientGroceryListEdit).setOnClickListener(this)
 
         val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "recipe-me-database").build()
-        groceryListDao = db.groceryListDao()
+        _groceryListDao = db.groceryListDao()
 
-        val groceryListIngredientAdapter = GroceryListIngredientAdapter(ingredients, this)
-        recyclerView= findViewById<RecyclerView>(R.id.rvGroceryListsList)
-        recyclerView.adapter = groceryListIngredientAdapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        val groceryListIngredientAdapter = GroceryListIngredientAdapter(_ingredients, this)
+        _recyclerView= findViewById(R.id.rvGroceryListsList)
+        _recyclerView.adapter = groceryListIngredientAdapter
+        _recyclerView.layoutManager = LinearLayoutManager(this)
 
-        listOfNames = emptyList<String>().toMutableList()
         GlobalScope.launch {
             this?.let {
-                listOfNames.addAll(groceryListDao.getAllNames())
-                oldList = groceryListDao.getListFromName(listName)
-                listOfNames.remove(listName)
+                _listOfNames.addAll(_groceryListDao.getAllNames())
+                _oldList = _groceryListDao.getListFromName(_listName)
+                _listOfNames.remove(_listName)
 
                 Handler(Looper.getMainLooper()).post{
-                    ingredients.addAll(oldList.items)
-                    Log.d(" checking", listName + " - " + oldList.items.toString())
-                    recyclerView.adapter?.notifyDataSetChanged()
+                    _ingredients.addAll(_oldList.items)
+                    _recyclerView.adapter?.notifyDataSetChanged()
                 }
-
             }
         }
-
     }
 
     override fun onClick(v: View?) {
@@ -101,65 +96,64 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
                     var newListName = findViewById<EditText>(R.id.etGListNameGroceryListEdit).text.toString()
                     var position = intent.getIntExtra("Position", 0)
                     if(newListName.length < 1) {
-                        listNameWarningString.text = "Please enter a valid list name."
+                        _listNameWarningString.text = "Please enter a valid list name."
                     }else if(newListName.length > 20){
-                        listNameWarningString.text = "Limit list name under 21 characters."
-                    }else if(nameIsDuplicate(newListName, listOfNames)){
+                        _listNameWarningString.text = "Limit list name under 21 characters."
+                    }else if(nameIsDuplicate(newListName, _listOfNames)){
                         Toast.makeText(this, " A list of that name already exists!", Toast.LENGTH_SHORT).show()
-                        Log.d("duplicate checking", listName + " - " + listOfNames)
                     }else{
+                        _listNameWarningString.text = ""
                         val currentDate = DateFormat.getDateInstance().format(Date())
-                        if(listName.compareTo(newListName) == 0){
+                        if(_listName.compareTo(newListName) == 0){
                             GlobalScope.launch{
                                 this?.let{
-                                    oldList.timeCreated = currentDate
-                                    oldList.items.clear()
-                                    oldList.items.addAll(ingredients)
-                                    groceryListDao.update(oldList)
+                                    _oldList.timeCreated = currentDate
+                                    _oldList.items.clear()
+                                    _oldList.items.addAll(_ingredients)
+                                    _groceryListDao.update(_oldList)
                                 }
-                                Log.e("TAG", "List name not changed, ingredients changed: " + groceryListDao.getAll())
                             }
                         }else {
                             //edit for ingredients
                             GlobalScope.launch{
                                 this?.let{
-                                    groceryListDao.delete(oldList)
-                                    //ToDo EDIT ID FIELD -----------------v
-                                    groceryListDao.insertAll(GroceryList(newListName, currentDate, ingredients))
-                                    Log.d("Testing updating new list", "Old: " + oldList.toString() + " \nNew: " + GroceryList(newListName, currentDate, ingredients).toString())
+                                    _groceryListDao.delete(_oldList)
+                                    _groceryListDao.insertAll(GroceryList(newListName, currentDate, _ingredients))
                                 }
-                                Log.e("TAG", "onViewCreated: " + groceryListDao.getAll())
                             }
                             intent.putExtra("Position", position)
                             intent.putExtra("ListName", newListName)
                         }
+
                         setResult(RESULT_OK, intent)
                         finish()
                     }
                 }
                 R.id.btnAddIngredientGroceryListEdit->{
-                    var ingredientName = findViewById<EditText>(R.id.etIngredientGroceryListEdit).text.toString()
-                    var ingredientQuantity = findViewById<EditText>(R.id.etIngredientUnitsGroceryListEdit).text.toString()
-                    var ingredientUnitLabel = findViewById<TextView>(R.id.etIngredientUnitLabelGroceryListEdit).text.toString()
-                    var duplicatePosition = isIngredientDuplicate(ingredientName)
-                    Log.e("Adding", "Adding: " + ingredientName)
-                    if(ingredientQuantity.length < 1){
-                        ingredientWarningString.text = "Please enter valid quantity."
-                    }else if(ingredientQuantity.toDouble() > 99){
-                        ingredientWarningString.text = "Max quantity exceeded."
+
+                    val ingredientName = findViewById<EditText>(R.id.etIngredientGroceryListEdit).text.toString()
+                    var ingredientQuantity = findViewById<EditText>(R.id.etIngredientUnitsGroceryListEdit)
+                    val ingredientUnitLabel = findViewById<TextView>(R.id.etIngredientUnitLabelGroceryListEdit).text.toString()
+                    val duplicatePosition = isIngredientDuplicate(ingredientName)
+                    if(ingredientQuantity.text.length < 1){
+                        _ingredientWarningString.text = "Please enter valid quantity."
+                    }else if(ingredientQuantity.text.toString().toDouble() > 99){
+                        _ingredientWarningString.text = "Max quantity exceeded."
                     }else{
-                        if(ingredientName.length < 1){
-                            ingredientWarningString.text = "Please enter valid ingredient."
-                        }else if(ingredientName.length > 20){
-                            ingredientWarningString.text = "Limit name under 21 characters."
-                        }else if(!arrayIngredientNames.contains(ingredientName)){
-                            ingredientWarningString.text = "Please make a selection from the available ingredients."
+//                        if(ingredientName.length < 1){
+//                            _ingredientWarningString.text = "Please enter valid ingredient."
+//                        }else if(ingredientName.length > 20){
+//                            _ingredientWarningString.text = "Limit name under 21 characters."
+//                        }else
+                        if(!_arrayIngredientNames.contains(ingredientName)){
+                            _ingredientWarningString.text = "Please make a selection from the available ingredients."
                         }else if(duplicatePosition !=-1){
                             if(isQuantityLabelSame(ingredientUnitLabel, duplicatePosition)){
 
                             }
-                            ingredients[duplicatePosition].amount += ingredientQuantity.toDouble()
-                            recyclerView.adapter?.notifyDataSetChanged()
+                            _ingredientWarningString.text = ""
+                            _ingredients[duplicatePosition].amount += ingredientQuantity.text.toString().toDouble()
+                            _recyclerView.adapter?.notifyDataSetChanged()
                         }else{
                             var key = 0
                             for(ingredient in IngredientsData.map){
@@ -167,50 +161,50 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
                                     continue;
                                 }else{
                                     key = ingredient.key
-                                    Log.d("Key/Val", "Key " + key + "Val: " + ingredient.value)
                                 }
                             }
-                            ingredients.add(Ingredient(key,"NULL", ingredientQuantity.toDouble(), "NULL", ingredientName, ingredientUnitLabel, false))
-                            recyclerView.adapter?.notifyItemInserted(ingredients.size-1)
-                        }
-                    }
-                    Log.e("Added", "List: " + ingredients)
+                            _ingredientWarningString.text = ""
+                            _ingredients.add(Ingredient(key,"NULL", ingredientQuantity.text.toString().toDouble(), "NULL", ingredientName, ingredientUnitLabel, false))
+                            _recyclerView.adapter?.notifyItemInserted(_ingredients.size-1)
 
+                        }
+                        _autoCompleteIngredientName.text.clear()
+                        ingredientQuantity.setText("1")
+                    }
                 }
             }
         }
     }
 
     fun isIngredientDuplicate(name: String): Int{
-        var position = 0
-        for(ingredient: Ingredient in ingredients) {
+        for((position, ingredient: Ingredient) in _ingredients.withIndex()) {
             if (name.compareTo(ingredient.name) == 0) {
                 return position
             }
-            position++
         }
         return -1
     }
-    fun isQuantityLabelSame(label: String, position: Int):Boolean{
-        //TODO <Must implement unit conversion>
+
+    fun isQuantityLabelSame(label: String, position: Int):Boolean {
+        //quantity check function not used.
         return true
     }
 
     override fun onClickDecrement(position: Int) {
-        ingredients[position].amount--
-        if(ingredients.get(position).amount < 1){
-            ingredients.removeAt(position)
-            recyclerView.adapter?.notifyItemRemoved(position)
+        _ingredients[position].amount--
+        if(_ingredients[position].amount < 1){
+            _ingredients.removeAt(position)
+            _recyclerView.adapter?.notifyItemRemoved(position)
         }else{
-            recyclerView.adapter?.notifyItemChanged(position)
+            _recyclerView.adapter?.notifyItemChanged(position)
         }
     }
 
     override fun onClickIncrement(position: Int) {
-        ingredients[position].amount++
-        recyclerView.adapter?.notifyItemChanged(position)
+        _ingredients[position].amount++
+        _recyclerView.adapter?.notifyItemChanged(position)
     }
-    fun nameIsDuplicate(name: String, list: MutableList<String>):Boolean{
+    private fun nameIsDuplicate(name: String, list: MutableList<String>):Boolean{
         return list.contains(name)
     }
 }

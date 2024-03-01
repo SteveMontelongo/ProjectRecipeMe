@@ -13,8 +13,8 @@ import com.recipeme.models.Ingredient
 class RecipeConfirmationAdapter(private var ingredients: MutableList<Ingredient>, private var listener: GroceryContentOnItemClick) : RecyclerView.Adapter<RecipeConfirmationAdapter.RecipeConfirmationViewHolder>(){
 
     inner class RecipeConfirmationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val nameTextView = itemView.findViewById<TextView>(R.id.tvItemRecipeConfirmation)
-        val statusButton = itemView.findViewById<ImageButton>(R.id.ibItemRecipeConfirmationStatus)
+        val nameTextView: TextView = itemView.findViewById<TextView>(R.id.tvItemRecipeConfirmation)
+        val statusButton: ImageButton = itemView.findViewById<ImageButton>(R.id.ibItemRecipeConfirmationStatus)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeConfirmationAdapter.RecipeConfirmationViewHolder {

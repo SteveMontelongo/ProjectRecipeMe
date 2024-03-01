@@ -1,7 +1,5 @@
 package com.recipeme.models
 
-import android.os.Parcel
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 data class RecipeResponse(
@@ -16,7 +14,7 @@ data class RecipeResponse(
 	val missedIngredients: List<MissedIngredientsItem?>? = null,
 
 	@field:SerializedName("extendedIngredients")
-	val extenedIngredients: List<UsedIngredientsItem?>? = null,
+	val extendedIngredients: List<UsedIngredientsItem?>? = null,
 
 //	@field:SerializedName("missedIngredientCount")
 //	val missedIngredientCount: Int? = null,
@@ -30,7 +28,7 @@ data class RecipeResponse(
 	@field:SerializedName("title")
 	val title: String? = null,
 
-)
+	)
 
 
 data class UsedIngredientsItem(

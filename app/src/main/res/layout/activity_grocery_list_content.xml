@@ -41,6 +41,7 @@
         android:text="GROCERY"
         android:textAlignment="center"
         android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -72,15 +73,6 @@
         app:layout_constraintStart_toEndOf="@+id/btnCancelGroceryListContent"
         app:layout_constraintTop_toTopOf="@+id/btnCancelGroceryListContent" />
 
-    <ImageButton
-        android:id="@+id/iBRefreshGroceryContent"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        app:layout_constraintBottom_toTopOf="@+id/rvGroceryListContentItems"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tvGroceryListContentName"
-        app:layout_constraintTop_toTopOf="@+id/tvGroceryListContentName"
-        app:srcCompat="@drawable/ic_refresh" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

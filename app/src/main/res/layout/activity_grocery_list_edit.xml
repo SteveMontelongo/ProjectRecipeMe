@@ -39,17 +39,9 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="@+id/etIngredientGroceryListEdit"
         app:layout_constraintStart_toEndOf="@+id/etIngredientGroceryListEdit"
-        app:layout_constraintTop_toTopOf="@+id/etIngredientGroceryListEdit">
+        app:layout_constraintTop_toTopOf="@+id/etIngredientGroceryListEdit"
+        app:layout_constraintEnd_toStartOf="@+id/btnAddIngredientGroceryListEdit">
 
-        <EditText
-            android:id="@+id/etIngredientUnitsGroceryListEdit"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:gravity="center"
-            android:hint="0"
-            android:inputType="number"
-            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/etIngredientUnitLabelGroceryListEdit"
@@ -60,6 +52,19 @@
             android:text="QTY."
 
             android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/etIngredientUnitsGroceryListEdit"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:gravity="center"
+            android:hint="1"
+            android:text="1"
+            android:inputType="number"
+            android:textSize="20sp" />
+
+
 
     </LinearLayout>
 
@@ -114,6 +119,7 @@
         android:autofillHints="name"
         android:gravity="center"
         android:hint="Ingredient"
+        android:text=""
         android:inputType="textAutoComplete"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
