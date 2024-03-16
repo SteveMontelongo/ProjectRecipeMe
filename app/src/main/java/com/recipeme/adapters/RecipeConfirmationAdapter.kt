@@ -28,7 +28,7 @@ class RecipeConfirmationAdapter(private var ingredients: MutableList<Ingredient>
         val ingredient: Ingredient = ingredients.get(holder.absoluteAdapterPosition)
         holder.nameTextView.text = ingredient.name
         holder.statusButton.setImageResource(
-            if(ingredients[holder.absoluteAdapterPosition].obtained) R.drawable.ic_confirm_checked else R.drawable.ic_confirm_unchecked)
+            if(ingredients[holder.absoluteAdapterPosition].obtained) R.drawable.ic_confirm_checked else R.drawable.roundstyle)
         holder.statusButton.setOnClickListener{
             this.listener.onClickStatus(holder.absoluteAdapterPosition)
         }

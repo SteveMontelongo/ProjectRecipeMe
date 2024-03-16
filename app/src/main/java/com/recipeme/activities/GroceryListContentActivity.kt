@@ -67,6 +67,7 @@ class GroceryListContentActivity : AppCompatActivity(), GroceryContentOnItemClic
                 }
                 R.id.btnUpdateGroceryListContent -> {
                     var ingredientsToUpdate = emptyList<Ingredient>().toMutableList()
+                    var ingredientIdsFromFridge: List<Int>
                     for(ingredient in _ingredients){
                         if(ingredient.obtained){
                             ingredientsToUpdate.add(ingredient)
@@ -75,8 +76,19 @@ class GroceryListContentActivity : AppCompatActivity(), GroceryContentOnItemClic
                     }
                     GlobalScope.launch {
                         this?.let {
-                            _fridgeDao.insertAll(ingredientsToUpdate)
-
+                            ingredientIdsFromFridge = _fridgeDao.getAllIds()
+                            //clears up duplicates
+                            Log.d("GroceryList", "Fridge " + ingredientIdsFromFridge.toString())
+                            Log.d("GroceryList", "Updating " + ingredientsToUpdate.toString())
+                            for(ingredient in ingredientsToUpdate){
+                                if(ingredientIdsFromFridge.contains(ingredient.id)){
+                                    ingredientsToUpdate.remove(ingredient)
+                                    Log.d("GroceryList", "Removed ${{ingredient}}")
+                                }
+                            }
+                            if(ingredientsToUpdate.isNotEmpty()){
+                                _fridgeDao.insertAll(ingredientsToUpdate)
+                            }
                             _groceryListDao.update(_groceryList)
                             Handler(Looper.getMainLooper()).post{
                                 for(ingredient in ingredientsToUpdate){

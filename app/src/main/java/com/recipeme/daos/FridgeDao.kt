@@ -8,6 +8,9 @@ interface FridgeDao {
     @Query("SELECT * FROM Ingredient")
     fun getAll(): MutableList<Ingredient>
 
+    @Query("SELECT id FROM Ingredient")
+    fun getAllIds(): MutableList<Int>
+
     @Insert
     fun insertAll(ingredients: MutableList<Ingredient>)
 
