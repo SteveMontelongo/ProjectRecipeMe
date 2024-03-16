@@ -41,7 +41,7 @@ class GroceryListContentActivity : AppCompatActivity(), GroceryContentOnItemClic
         _groceryListDao = db.groceryListDao()
         _fridgeDao = db.fridgeDao()
         findViewById<Button>(R.id.btnUpdateGroceryListContent).setOnClickListener(this)
-        findViewById<Button>(R.id.btnCancelGroceryListContent).setOnClickListener(this)
+        findViewById<ImageButton>(R.id.btnCancelGroceryListContent).setOnClickListener(this)
         GlobalScope.launch{
             this?.let {
                 _groceryList = _groceryListDao.getListFromName(listName)

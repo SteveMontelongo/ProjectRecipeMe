@@ -32,12 +32,13 @@ class RecipesAdapter(private var recipes: List<Recipe>, private var listener: Re
     }
 
     override fun onBindViewHolder(holder: RecipesViewHolder, position: Int) {
-        val recipe: Recipe = recipes.get(holder.absoluteAdapterPosition)
+        val recipe: Recipe = recipes[holder.absoluteAdapterPosition]
         holder.nameTextView.text = recipe.name
         Glide.with(context).applyDefaultRequestOptions(
             RequestOptions()
                 .placeholder(R.drawable.ic_launcher_background)
                 .error(R.drawable.ic_launcher_background)).load(recipe.image).into(holder.imageView)
+
         holder.imageView.setOnClickListener{
             this.listener.onClickItem(holder.absoluteAdapterPosition)
         }

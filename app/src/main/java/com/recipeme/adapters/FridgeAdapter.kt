@@ -36,8 +36,8 @@ class FridgeAdapter(var ingredients: MutableList<Ingredient>, private var listen
         val ingredient: Ingredient = ingredients.get(holder.absoluteAdapterPosition)
         Glide.with(context).applyDefaultRequestOptions(
             RequestOptions()
-            .placeholder(R.drawable.ic_launcher_background)
-            .error(R.drawable.ic_launcher_background)).load(ingredient.image).into(holder.itemImageView)
+            .placeholder(R.mipmap.ic_fruit)
+            .error(R.mipmap.ic_fruit)).load(ingredient.image).into(holder.itemImageView)
         holder.nameTextView.text = ingredient.name
         holder.deleteButton.setOnClickListener{
             this.listener.onDelete(holder.absoluteAdapterPosition)

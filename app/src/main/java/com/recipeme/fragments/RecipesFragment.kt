@@ -27,6 +27,7 @@ import com.recipeme.databases.AppDatabase
 import com.recipeme.interfaces.MainFragmentInteraction
 import com.recipeme.interfaces.RecipeOnClickItem
 import com.recipeme.models.*
+import com.recipeme.utils.RecipeCache
 import com.recipeme.viewmodel.RecipeViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -53,27 +54,28 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
         _ingredients = emptyList<Ingredient>().toMutableList()
         _recipeViewModel = RecipeViewModel()
         subscribe()
+
+        _recipes = emptyList<Recipe>().toMutableList()
+
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         Log.d("RecipeFragment", "OnAttached")
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        _recipes = emptyList<Recipe>().toMutableList()
         _recyclerView = view.findViewById<RecyclerView>(R.id.rvRecipes)
         _recyclerView.adapter = RecipesAdapter(_recipes, this, requireContext())
-        _recyclerView.layoutManager= LinearLayoutManager(this.context)
-
-        loadRecipeData()
+        _recyclerView.layoutManager= LinearLayoutManager(requireContext())
+        loadRecipeData(false)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         return inflater.inflate(R.layout.fragment_recipes, container, false)
     }
 
@@ -95,12 +97,40 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
     }
 
     private fun setResultText(recipeData: List<RecipeResponse>) {
+        _recipes.clear()
         for(recipe in recipeData){
-            Log.d("Test", recipe.extendedIngredients.toString())
-            _recipes.add(Recipe(recipe.id!!,
-                recipe.extendedIngredients, recipe.title!!, recipe.image!!, Instructions(
-                    emptyList(), emptyList()
-                ), false))
+            if(recipe.usedIngredients != null){
+                var recipeItem = Recipe(recipe.id!!,
+                    recipe.usedIngredients as List<UsedIngredientsItem>, recipe.title!!, recipe.image!!, mutableListOf<Instructions>() as
+                    MutableList<Instructions>, false)
+//                _recipes.add(recipeItem)
+//                if(!RecipeCache.recipeCache.contains(recipeItem)){
+//                    RecipeCache.recipeCache.add(recipeItem)
+//                }
+                _recipes.add(recipeItem)
+
+            }
+
+        }
+        GlobalScope.launch {
+            var insertRecipes : MutableList<Recipe> = mutableListOf()
+            var updateRecipes: MutableList<Recipe> = mutableListOf()
+            var allIds: MutableList<Int> = mutableListOf()
+            allIds.addAll(_recipesDao.getIdsFromCache())
+            for(recipe in _recipes){
+                if(allIds.contains(recipe.id)){
+                    updateRecipes.add(recipe)
+                }else{
+                    insertRecipes.add(recipe)
+                }
+            }
+            _recipesDao.insertAll(insertRecipes)
+            _recipesDao.updateRecipes(updateRecipes)
+            Handler(Looper.getMainLooper()).post{
+                for(recipe in _recipes){
+                    Log.d("Recipe", "Recipe" +  recipe.id.toString() + "-" + recipe.name + " updated to database.")
+                }
+            }
         }
         Log.d("Recipe", "Data pulled from api.")
         _recyclerView.adapter?.notifyDataSetChanged()
@@ -121,7 +151,7 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
     }
 
     override fun refreshClickFragment(data: String) {
-        loadRecipeData()
+        loadRecipeData(true)
     }
 
     override fun addClickFragment(data: String) {
@@ -138,32 +168,52 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
         }
     }
 
-    private fun loadRecipeData(){
-        GlobalScope.launch {
-            var ingredientsToUpdate: MutableList<Ingredient> = emptyList<Ingredient>().toMutableList()
-            var recipesToUpdate: MutableList<Recipe> = emptyList<Recipe>().toMutableList()
-            ingredientsToUpdate.clear()
-            ingredientsToUpdate.addAll(_fridgeDao.getAll())
-            recipesToUpdate.addAll(_recipesDao.getFromCache())
-            _ids = IntArray(ingredientsToUpdate.size)
-            Handler(Looper.getMainLooper()).post{
-                _ingredients.clear()
-                _ingredients.addAll(ingredientsToUpdate)
-                for((i, ingredient) in _ingredients.withIndex()){
-                    _ids[i] =  ingredient.id
-                }
-                if(recipesToUpdate.isNotEmpty()){
-                    Log.d("Recipe", "Data pulled from cache.")
-                    _recipes.addAll(recipesToUpdate)
-                }else{
-                    if(ingredientsToUpdate.isNotEmpty()){
+    private fun loadRecipeData(refresh: Boolean){
+        var ingredientsFromFridge: MutableList<Ingredient> = emptyList<Ingredient>().toMutableList()
+        var recipesToUpdate: MutableList<Recipe> = emptyList<Recipe>().toMutableList()
+        ingredientsFromFridge.clear()
+        _ingredients.clear()
+        if(refresh) {
+            GlobalScope.launch {
+                ingredientsFromFridge.addAll(_fridgeDao.getAll())
+                Handler(Looper.getMainLooper()).post{
+                    _ids = IntArray(ingredientsFromFridge.size)
+                    _ingredients.addAll(ingredientsFromFridge)
+                    for((i, ingredient) in _ingredients.withIndex()){
+                        _ids[i] =  ingredient.id
+                    }
+                    if (ingredientsFromFridge.isNotEmpty()) {
                         isFridgeEmptyMsg(false)
-                        _recipeViewModel.getRecipeData(ingredientsToUpdate)
-                    }else{
+                        _recipeViewModel.getRecipeData(ingredientsFromFridge)
+                    } else {
                         isFridgeEmptyMsg(true)
                         Log.d("Recipe", "No ingredients found in the fridge.")
                     }
-
+                }
+            }
+        }else {
+            GlobalScope.launch {
+                ingredientsFromFridge.addAll(_fridgeDao.getAll())
+                recipesToUpdate.addAll(_recipesDao.getFromCache())
+                Handler(Looper.getMainLooper()).post{
+                    _ids = IntArray(ingredientsFromFridge.size)
+                    _ingredients.addAll(ingredientsFromFridge)
+                    for((i, ingredient) in _ingredients.withIndex()){
+                        _ids[i] =  ingredient.id
+                    }
+                    if (recipesToUpdate.isNotEmpty()) {
+                        Log.d("Recipe", "Data pulled from cache.")
+                        _recipes.addAll(recipesToUpdate)
+                        _recyclerView.adapter?.notifyDataSetChanged()
+                    } else {
+                        if (ingredientsFromFridge.isNotEmpty()) {
+                            isFridgeEmptyMsg(false)
+                            _recipeViewModel.getRecipeData(ingredientsFromFridge)
+                        } else {
+                            isFridgeEmptyMsg(true)
+                            Log.d("Recipe", "No ingredients found in the fridge.")
+                        }
+                    }
                 }
             }
         }

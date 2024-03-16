@@ -150,7 +150,22 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
     }
 
     override fun onTabReselected(tab: TabLayout.Tab?) {
-
+        when(tab?.position) {
+            0 -> {
+                //ToDo - Make the refresh automatic
+                val f = supportFragmentManager.findFragmentByTag("f0") as FridgeFragment
+                if (f != null) {
+                    // Check if the fragment is properly initialized and attached to the activity
+                    f.refreshClickFragment("Refresh")
+                } else {
+                    // Handle the case where the fragment or _fridgeDao is not properly initialized
+                    Log.e(
+                        "MainActivity",
+                        "Fragment is not properly initialized"
+                    )
+                }
+            }
+        }
     }
 
     override fun onClick(v: View?) {

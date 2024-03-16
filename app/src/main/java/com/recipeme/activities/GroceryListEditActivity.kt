@@ -6,12 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
@@ -58,11 +53,11 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
         _ingredientWarningString = findViewById<TextView>(R.id.tvIngredientWarning)
         _listNameWarningString.text = ""
         _ingredientWarningString.text = ""
-        listNameText.setText(_listName)
+        listNameText.text = _listName
 
-        findViewById<Button>(R.id.btnCancelGroceryListEdit).setOnClickListener(this)
+        findViewById<ImageButton>(R.id.btnCancelGroceryListEdit).setOnClickListener(this)
         findViewById<Button>(R.id.btnSaveGroceryListEdit).setOnClickListener(this)
-        findViewById<Button>(R.id.btnAddIngredientGroceryListEdit).setOnClickListener(this)
+        findViewById<ImageButton>(R.id.btnAddIngredientGroceryListEdit).setOnClickListener(this)
 
         val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "recipe-me-database").build()
         _groceryListDao = db.groceryListDao()

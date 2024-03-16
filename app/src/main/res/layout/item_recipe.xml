@@ -2,37 +2,37 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/ivRecipeItem"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:scaleType="fitXY"
-        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_launcher_background" />
+        android:layout_marginTop="10dp"
+        android:background="@drawable/small_item_button_shape">
+
+        <ImageView
+            android:id="@+id/ivRecipeItem"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="10dp"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/ic_launcher_background"/>
 
 
-    <TextView
-        android:id="@+id/tvRecipeNameItem"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:ellipsize="end"
-        android:gravity="start|center_vertical|center_horizontal"
-        android:textAlignment="center"
-        android:maxLength="27"
-        android:maxLines="1"
-        android:text="Item Name"
-        android:textSize="20sp"
-        android:background="#85FFFFFF"
-        app:layout_constraintBottom_toBottomOf="@+id/ivRecipeItem"
-        app:layout_constraintEnd_toEndOf="@+id/ivRecipeItem"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="@+id/ivRecipeItem"
-        app:layout_constraintTop_toTopOf="@+id/ivRecipeItem" />
+        <TextView
+            android:id="@+id/tvRecipeNameItem"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#85FFFFFF"
+            android:ellipsize="end"
+            android:gravity="start|center_vertical|center_horizontal"
+            android:text="Item Name"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

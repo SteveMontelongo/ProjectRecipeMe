@@ -11,7 +11,6 @@
         android:id="@+id/etGListNameGroceryListEdit"
         android:layout_width="220dp"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
         android:autofillHints="name"
         android:gravity="center"
         android:hint="Enter list name"
@@ -83,7 +82,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constrainedHeight="true"
-        app:layout_constraintBottom_toTopOf="@+id/btnCancelGroceryListEdit"
+        app:layout_constraintBottom_toTopOf="@+id/btnSaveGroceryListEdit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvIngredientWarning"
         app:layout_constraintVertical_bias="1.0"
@@ -115,7 +114,8 @@
         android:id="@+id/etIngredientGroceryListEdit"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
         android:autofillHints="name"
         android:gravity="center"
         android:hint="Ingredient"
@@ -125,40 +125,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvListNameWarning" />
 
-    <Button
+    <ImageButton
         android:id="@+id/btnCancelGroceryListEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:backgroundTint="@color/dark_red"
-
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:background="@drawable/small_item_button_shape"
         android:text="Cancel"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnSaveGroceryListEdit"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rvGroceryListsList"
-        />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_arrow_back" />
 
     <Button
         android:id="@+id/btnSaveGroceryListEdit"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-
-        android:layout_margin="4dp"
         android:text="Save"
-        app:layout_constraintBottom_toBottomOf="@+id/btnCancelGroceryListEdit"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnCancelGroceryListEdit"
-        app:layout_constraintTop_toTopOf="@+id/btnCancelGroceryListEdit" />
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
+    <ImageButton
         android:id="@+id/btnAddIngredientGroceryListEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:text="Add"
-
+        android:background="@drawable/small_item_button_shape"
+        app:srcCompat="@drawable/ic_increment"
         app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/linearLayout"

@@ -4,58 +4,108 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="8dp"
     tools:context=".activities.RecipeDetailActivity">
 
-    <ImageView
-        android:id="@+id/ivRecipeImageRecipeDetail"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:scaleType="fitXY"
-        app:layout_constraintTop_toBottomOf="@+id/tvRecipeNameRecipeDetail"
-        tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/tvRecipeNameRecipeDetail"
-        android:textSize="30sp"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Recipe Name"
+        android:textSize="30sp"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnBackRecipeDetail"
         app:layout_constraintTop_toTopOf="parent" />
-
     <ScrollView
-        android:id="@+id/svRecipeDetail"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnConfirmRecipeDetail"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivRecipeImageRecipeDetail"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@+id/tvRecipeNameRecipeDetail">
 
-        <TextView
-            android:id="@+id/tvRecipeIngredientsUsedRecipeDetail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:isScrollContainer="true"
-            android:text="Ingredients Used"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            />
+            <ImageView
+                android:id="@+id/ivRecipeImageRecipeDetail"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginTop="8dp"
+                android:scaleType="fitXY"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvRecipeNameRecipeDetail"
+                tools:srcCompat="@tools:sample/avatars" />
+
+
+
+            <TextView
+                android:id="@+id/tvRecipeIngredientsUsedLabelRecipeDetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:isScrollContainer="true"
+                android:text="Ingredients"
+
+                />
+            <TextView
+                android:id="@+id/tvRecipeIngredientsUsedRecipeDetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:isScrollContainer="true"
+                android:text="Ingredients Used"
+
+                />
+            <TextView
+                android:id="@+id/tvRecipeInstructionsLabelRecipeDetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp"
+                android:isScrollContainer="true"
+                android:text="Let's make it!"
+
+                />
+            <TextView
+                android:id="@+id/tvRecipeInstructionsRecipeDetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:isScrollContainer="true"
+                android:text="Instructions"
+
+                />
+        </LinearLayout>
     </ScrollView>
 
     <Button
         android:id="@+id/btnConfirmRecipeDetail"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Let's make it!"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btnBackRecipeDetail"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:text="Back"
+        android:background="@drawable/small_item_button_shape"
+        app:srcCompat="@drawable/ic_baseline_arrow_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -23,13 +23,13 @@ class Converters() {
 
 
     @TypeConverter
-    fun fromListInstructions(value: Instructions): String?{
+    fun fromListInstructions(value: List<Instructions>): String?{
         return if(value == null) "" else Gson().toJson(value)
     }
 
     @TypeConverter
-    fun toListInstructions(value: String): Instructions {
-        return Gson().fromJson(value, object : TypeToken<Instructions>(){}.type)
+    fun toListInstructions(value: String): List<Instructions> {
+        return Gson().fromJson(value, object : TypeToken<List<Instructions>>(){}.type)
     }
 
     @TypeConverter

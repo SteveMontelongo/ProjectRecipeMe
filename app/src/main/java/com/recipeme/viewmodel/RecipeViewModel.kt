@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.recipeme.models.Ingredient
+import com.recipeme.models.Instructions
 import com.recipeme.models.RecipeResponse
 import com.recipeme.network.ApiConfig
 import retrofit2.Call
@@ -18,6 +19,9 @@ class RecipeViewModel : ViewModel() {
 
     private val _recipeDataById = MutableLiveData<RecipeResponse>()
     val recipeDataById: MutableLiveData<RecipeResponse> get() = _recipeDataById
+
+    private val _recipeInstructionsById = MutableLiveData<List<Instructions>>()
+    val recipeInstructionsById: MutableLiveData<List<Instructions>> get() = _recipeInstructionsById
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
@@ -96,6 +100,38 @@ class RecipeViewModel : ViewModel() {
             }
 
             override fun onFailure(call: Call<RecipeResponse>, t: Throwable) {
+                onError(t.message)
+                t.printStackTrace()
+            }
+        })
+    }
+
+    fun getRecipeInstructionsById(id: Int){
+
+        _isLoading.value = true
+        _isError.value = false
+
+        Log.d("Get ID" , id.toString())
+
+        val client = ApiConfig.getApiService().getRecipeInstructionsById(searchById = id.toString())
+
+        //Send API request using RETROFIT
+        client.enqueue(object : Callback<List<Instructions>> {
+            override fun onResponse(
+                call: Call<List<Instructions>>,
+                response: Response<List<Instructions>>
+            ){
+                val responseBody = response.body()
+                if(!response.isSuccessful || responseBody == null){
+                    onError("Data Processing Error")
+                    return
+                }
+
+                _isLoading.value = false
+                _recipeInstructionsById.postValue(responseBody!!) //assertion may be editted
+            }
+
+            override fun onFailure(call: Call<List<Instructions>>, t: Throwable) {
                 onError(t.message)
                 t.printStackTrace()
             }
