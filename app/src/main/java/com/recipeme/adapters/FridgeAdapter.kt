@@ -1,6 +1,5 @@
 package com.recipeme.adapters
 
-import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -11,11 +10,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.google.android.material.internal.ContextUtils.getActivity
 import com.recipeme.R
 import com.recipeme.interfaces.FridgeOnItemClick
 import com.recipeme.models.Ingredient
-import java.security.AccessController.getContext
 
 class FridgeAdapter(var ingredients: MutableList<Ingredient>, private var listener: FridgeOnItemClick, private var context: Context) : RecyclerView.Adapter<FridgeAdapter.FridgeIngredientViewHolder>(){
 
@@ -39,8 +36,9 @@ class FridgeAdapter(var ingredients: MutableList<Ingredient>, private var listen
             .placeholder(R.mipmap.ic_fruit)
             .error(R.mipmap.ic_fruit)).load(ingredient.image).into(holder.itemImageView)
         holder.nameTextView.text = ingredient.name
-        holder.deleteButton.setOnClickListener{
+        holder.deleteButton.setOnLongClickListener{
             this.listener.onDelete(holder.absoluteAdapterPosition)
+            true
         }
     }
 

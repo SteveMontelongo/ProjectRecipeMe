@@ -22,6 +22,12 @@ android {
                 arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
+
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("local.properties").newDataInputStream())
+
+        // Set API keys in BuildConfig
+        buildConfigField "String", "SPOONACULAR_API_KEY", "\"${properties.getProperty("SPOONACULAR_API_KEY")}\""
     }
 
     buildTypes {
