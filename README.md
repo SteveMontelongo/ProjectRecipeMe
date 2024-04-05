@@ -7,30 +7,38 @@ The full application will involve several steps to accurately track available re
 1. The user will create a grocery list from the available ingredient list in the application.
 2. The user will obtain the ingredients while checking off the ingredients in the list. As the ingredients are check off, they will automatically be added to the user's online fridge.
 3. The user will then refresh the recipes screen, and the recipes based on the available ingredients in the user's online fridge will update.
-4. The user will then click on a recipe, confirm to the application that the recipe will be made, and then the application will automatically deduct the required ingredients from the user's online fridge.
+4. The user will then click on a recipe, confirm to the application that the recipe will be made, and then the application will deduct the required ingredients from the user's online fridge if selected.
 
-Time spent: 2 hours spent in total
+Time spent: 48 hours spent in total
 
 ## Required Features
 
 The following **required** functionality is completed:
 
-- [] **User can create a grocery list**
-- [] **User can add an item to their grocery list**
-- [] **User can delete an item off their grocery list**
-- [] **User can see their grocery list**
+- [x] **User can create a grocery list**
+- [x] **User can add an item to their grocery list**
+- [x] **User can delete an item off their grocery list**
+- [x] **User can see their grocery list**
+- [x] **User can rename a grocery list**
+- [x] **User can see their fridge ingredients**
+- [x] **User can delete ingredients off their fridge**
+- [x] **User can see recipes based off of the ingredient of their fridge**
+- [x] **User can see details of the recipe if selected**
+- [x] **User can update their fridge based on the recipes used**
 
 
 The following **optional** features are implemented:
 
-- [] Grocery List can be customized by themes 🎨 **customized** 🎨
+- [ ] **Grocery List can be customized by themes 🎨customized🎨**
+- [ ] **Recipes can be bookmarked for later use**
+- [ ] **Users will be able to adjust settings by the 'more' button**
+- [ ] **Users will be able to login to create a backup of the grocery lists and fridge**
 
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
 
-TO BE DONE ************
-
+(https://github.com/SteveMontelongo/ProjectRecipeMe/blob/main/RecipeApp.gif)
 GIF created with LICEcap  
 
 ## Notes
