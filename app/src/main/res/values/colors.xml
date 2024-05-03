@@ -8,6 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="custom_item">#FF0377FF</color>
     <color name="darker_red">#66000F</color>
     <color name="dark_red">#AA000F</color>
     <color name="yellow">#FFFF00</color>

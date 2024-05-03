@@ -1,5 +1,7 @@
 package com.recipeme.adapters
 
+import android.content.Context
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
@@ -7,12 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.recipeme.R
 import com.recipeme.interfaces.GroceryIngredientOnQuantityClick
 import com.recipeme.models.Ingredient
 
-class GroceryListIngredientAdapter(private var ingredients: List<Ingredient>, private val listener: GroceryIngredientOnQuantityClick) : RecyclerView.Adapter<GroceryListIngredientAdapter.GroceryListIngredientViewHolder>(){
+class GroceryListIngredientAdapter(private var ingredients: List<Ingredient>, private val listener: GroceryIngredientOnQuantityClick, private val context: Context) : RecyclerView.Adapter<GroceryListIngredientAdapter.GroceryListIngredientViewHolder>(){
 
     inner class GroceryListIngredientViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val nameTextView: TextView = itemView.findViewById<TextView>(R.id.tvIngredientNameGroceryList)
@@ -32,6 +36,9 @@ class GroceryListIngredientAdapter(private var ingredients: List<Ingredient>, pr
     override fun onBindViewHolder(holder: GroceryListIngredientViewHolder, position: Int) {
         val ingredient: Ingredient = ingredients[holder.absoluteAdapterPosition]
         holder.nameTextView.text = ingredient.name
+        if(ingredient.custom){
+            holder.nameTextView.setTextColor(ContextCompat.getColor(context, R.color.custom_item))
+        }
         holder.quantityTextView.text = ingredient.amount.toString()
         holder.unitLabelTextView.text = ingredient.unit
         if(ingredient.amount.toInt() == 1){

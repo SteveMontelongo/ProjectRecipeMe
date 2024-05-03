@@ -60,7 +60,7 @@ class RecipeConfirmationActivity : AppCompatActivity(), GroceryContentOnItemClic
                 for((i, id) in _ids.withIndex()){
                     Log.d("Recipe Items", _names[i] + " - " + _ids[i].toString())
                     if(fridgeIds.contains(id)){
-                        _ingredients.add(Ingredient(id, "null", 0.0, "null", IngredientsData.map[id]!!, "", false))
+                        _ingredients.add(Ingredient(id, "null", 0.0, "null", IngredientsData.map[id]!!, "", false, false))
                     }
                 }
                 _ingredientsRecyclerView.adapter?.notifyDataSetChanged()

@@ -33,6 +33,7 @@ import com.recipeme.utils.RecipeCache
 import com.recipeme.viewmodel.RecipeViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.util.*
 
 class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, MainFragmentInteraction, PaginationInteraction {
 
@@ -43,6 +44,7 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
     private lateinit var _ingredients: MutableList<Ingredient>
     private lateinit var _recipesDao: RecipeDao
     private lateinit var _ids: IntArray
+    private lateinit var _previousPageStack: Stack<Recipe>
     private var _page = 1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +57,7 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
         _fridgeDao = db.fridgeDao()
         _recipesDao = db.recipeDao()
         _ingredients = emptyList<Ingredient>().toMutableList()
+        _previousPageStack = Stack()
         _recipeViewModel = RecipeViewModel()
         subscribe()
 
@@ -233,6 +236,7 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
     override fun incrementPage(page: Int) {
         Log.d("Increment", "Increment Page")
         _page = page
+        addToPreviousPageStack(_recipes)
         loadRecipeData(true)
     }
 
@@ -241,10 +245,40 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
         Log.d("Decrement", "Decrement Page")
         _page = page
         main.pageForwardEnable()
-        loadRecipeData(true)
+        _recipes.clear()
+        if(_previousPageStack.isNotEmpty()){
+            Log.d("Recipe Fragment", "Loaded from previous stack")
+            _recipes.clear()
+            _recipes.addAll(retrieveFromPreviousPageStack())
+            Log.d("Recipe Fragment", _recipes.toString())
+            _recyclerView.adapter?.notifyDataSetChanged()
+        }
+        //loadRecipeData(true)
     }
 
     override fun pageReset() {
         _page = 1
+    }
+
+    private fun addToPreviousPageStack(recipes: MutableList<Recipe>){
+        for(recipe in recipes){
+            _previousPageStack.add(recipe)
+            Log.d("AddingToStack", recipe.id.toString())
+        }
+        Log.d("RecipeFragment", _previousPageStack.toString())
+    }
+
+    private fun retrieveFromPreviousPageStack(): MutableList<Recipe>{
+        var recipesToAdd = emptyList<Recipe>().toMutableList()
+        while(_previousPageStack.isNotEmpty() && recipesToAdd.size < 10){
+            recipesToAdd.add(_previousPageStack.pop())
+            Log.d("RetreivingFromStack", recipesToAdd[recipesToAdd.size - 1].toString())
+        }
+        if(recipesToAdd.isNotEmpty()){
+            Log.d("Not Empty", " ")
+            return recipesToAdd.reversed() as MutableList<Recipe>
+        }
+        Log.d("Empty", " ")
+        return emptyList<Recipe>().toMutableList()
     }
 }

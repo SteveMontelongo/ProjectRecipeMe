@@ -62,7 +62,7 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
         val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "recipe-me-database").build()
         _groceryListDao = db.groceryListDao()
 
-        val groceryListIngredientAdapter = GroceryListIngredientAdapter(_ingredients, this)
+        val groceryListIngredientAdapter = GroceryListIngredientAdapter(_ingredients, this, this)
         _recyclerView= findViewById(R.id.rvGroceryListsList)
         _recyclerView.adapter = groceryListIngredientAdapter
         _recyclerView.layoutManager = LinearLayoutManager(this)
@@ -125,13 +125,13 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
                     }
                 }
                 R.id.btnAddIngredientGroceryListEdit->{
-
+                    var isCustom = false
                     val ingredientName = findViewById<EditText>(R.id.etIngredientGroceryListEdit).text.toString()
                     var ingredientQuantity = findViewById<EditText>(R.id.etIngredientUnitsGroceryListEdit)
                     val ingredientUnitLabel = findViewById<TextView>(R.id.etIngredientUnitLabelGroceryListEdit).text.toString()
                     val duplicatePosition = isIngredientDuplicate(ingredientName)
                     if(ingredientQuantity.text.toString() == "") ingredientQuantity.setText("1")
-                    if(ingredientQuantity.text.length < 1){
+                    if(ingredientQuantity.text.isEmpty()){
                         _ingredientWarningString.text = "Please enter valid quantity."
                     }else if(ingredientQuantity.text.toString().toDouble() > 99){
                         _ingredientWarningString.text = "Max quantity exceeded."
@@ -142,7 +142,11 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
 //                            _ingredientWarningString.text = "Limit name under 21 characters."
 //                        }else
                         if(!_arrayIngredientNames.contains(ingredientName)){
-                            _ingredientWarningString.text = "Please make a selection from the available ingredients."
+                            //_ingredientWarningString.text = "Please make a selection from the available ingredients."
+                            isCustom = true
+                        }
+                        if(ingredientName.isEmpty()){
+                            _ingredientWarningString.text = "Please enter a custom name or make a selection from the available ingredients."
                         }else if(duplicatePosition !=-1){
                             if(isQuantityLabelSame(ingredientUnitLabel, duplicatePosition)){
 
@@ -160,7 +164,7 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
                                 }
                             }
                             _ingredientWarningString.text = ""
-                            _ingredients.add(Ingredient(key,"NULL", ingredientQuantity.text.toString().toDouble(), "NULL", ingredientName, ingredientUnitLabel, false))
+                            _ingredients.add(Ingredient(key,"NULL", ingredientQuantity.text.toString().toDouble(), "NULL", ingredientName, ingredientUnitLabel, false, isCustom))
                             _recyclerView.adapter?.notifyItemInserted(_ingredients.size-1)
 
                         }

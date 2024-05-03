@@ -158,7 +158,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                 if(_pageIncrement.isInvisible) {
                     _pageIncrement.visibility = VISIBLE
                 }
-                if(_pageDecrement.isInvisible && !(_pageNumber.text.toString().toInt() < 2)) {
+                if(_pageDecrement.isInvisible && _pageNumber.text.toString().toInt() >= 2) {
                     _pageDecrement.visibility = VISIBLE
                 }else{
                     _pageDecrement.visibility = INVISIBLE

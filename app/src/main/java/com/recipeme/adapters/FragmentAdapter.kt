@@ -15,12 +15,12 @@ class FragmentAdapter(fragmentActivity: FragmentActivity) :FragmentStateAdapter(
         return 3
     }
 
-    fun getPageTitle(position: Int): String {
-        when(position){
-            0 -> return "Fridge"
-            1 -> return "Grocery Lists"
-            2 -> return "Recipes"
-            else -> return "Main"
+    private fun getPageTitle(position: Int): String {
+        return when(position){
+            0 -> "Fridge"
+            1 -> "Grocery Lists"
+            2 -> "Recipes"
+            else -> "Main"
         }
     }
 
@@ -45,18 +45,18 @@ class FragmentAdapter(fragmentActivity: FragmentActivity) :FragmentStateAdapter(
 
     fun getFragment(position: Int): Fragment? {
         Log.d("Manager2", position.toString())
-        when(position){
+        return when(position){
             0 -> {
-                return FridgeFragment()
+                FridgeFragment()
             }
             1 -> {
-                return GroceryListFragment()
+                GroceryListFragment()
             }
             2 -> {
-                return RecipesFragment()
+                RecipesFragment()
             }
             else ->{
-                return GroceryListFragment()
+                GroceryListFragment()
             }
         }
     }

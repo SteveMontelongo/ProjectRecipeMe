@@ -12,5 +12,6 @@ data class Ingredient(
     @ColumnInfo(name="image") var image: String,
     @ColumnInfo(name="name") var name: String,
     @ColumnInfo(name="unit") var unit: String,
-    @ColumnInfo(name="obtained") var obtained: Boolean
+    @ColumnInfo(name="obtained") var obtained: Boolean,
+    @ColumnInfo(name="custom") var custom: Boolean
 )

@@ -54,7 +54,7 @@ class GroceryListContentActivity : AppCompatActivity(), GroceryContentOnItemClic
             }
         }
         _ingredientsRecyclerView = findViewById(R.id.rvGroceryListContentItems)
-        _ingredientsRecyclerView.adapter = GroceryListContentAdapter(_ingredients, this)
+        _ingredientsRecyclerView.adapter = GroceryListContentAdapter(_ingredients, this, this)
         _ingredientsRecyclerView.layoutManager = LinearLayoutManager(this)
 
     }
@@ -69,6 +69,10 @@ class GroceryListContentActivity : AppCompatActivity(), GroceryContentOnItemClic
                     var ingredientsToUpdate = emptyList<Ingredient>().toMutableList()
                     var ingredientIdsFromFridge: List<Int>
                     for(ingredient in _ingredients){
+                        if(ingredient.custom && ingredient.obtained){
+                            _groceryList.items.remove(ingredient)
+                            continue
+                        }
                         if(ingredient.obtained){
                             ingredientsToUpdate.add(ingredient)
                             _groceryList.items.remove(ingredient)
@@ -78,8 +82,8 @@ class GroceryListContentActivity : AppCompatActivity(), GroceryContentOnItemClic
                         this?.let {
                             ingredientIdsFromFridge = _fridgeDao.getAllIds()
                             //clears up duplicates
-                            Log.d("GroceryList", "Fridge " + ingredientIdsFromFridge.toString())
-                            Log.d("GroceryList", "Updating " + ingredientsToUpdate.toString())
+                            Log.d("GroceryList", "Fridge $ingredientIdsFromFridge")
+                            Log.d("GroceryList", "Updating $ingredientsToUpdate")
                             for(ingredient in ingredientsToUpdate){
                                 if(ingredientIdsFromFridge.contains(ingredient.id)){
                                     ingredientsToUpdate.remove(ingredient)
