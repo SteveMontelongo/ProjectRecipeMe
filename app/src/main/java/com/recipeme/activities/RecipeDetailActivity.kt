@@ -30,6 +30,7 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var _recipeViewModel: RecipeViewModel
     private lateinit var _ids: IntArray
     private lateinit var _filteredIds: IntArray
+    private lateinit var _filteredStrings: Array<String>
     private lateinit var _recipeCache : Recipe
     private lateinit var _recipeDao: RecipeDao
     private var _recipeId: Int = 0
@@ -43,6 +44,7 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
         _recipeId = recipeId
         _ids = intent.getIntArrayExtra("ingredientsUsedIds")!!
         _filteredIds = IntArray(_ids.size)
+        _filteredStrings = Array<String>(_ids.size){""}
         _recipeCache = Recipe(0, emptyList(), "", "", mutableListOf<Instructions>() as MutableList<Instructions>, false)
 //        for(_recipe in RecipeCache.recipeCache){
 //            if(recipeId == _recipe.id){
@@ -70,6 +72,7 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
                             if(extendedIngredient !=null){
                                 if(_ids.contains(extendedIngredient.id!!)){
                                     _filteredIds[i] = extendedIngredient.id
+                                    _filteredStrings[i] = extendedIngredient.name.toString()
                                     i++
                                 }
                             }
@@ -107,7 +110,6 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
                     findViewById<TextView>(R.id.tvRecipeInstructionsRecipeDetail).text = resultText
                     Log.d("Recipe", "Instructions loaded by Cache")
                 }
-
                 subscribe()
             }
         }
@@ -115,6 +117,7 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
         findViewById<Button>(R.id.btnConfirmRecipeDetail).setOnClickListener(this)
         findViewById<ImageButton>(R.id.btnBackRecipeDetail).setOnClickListener(this)
     }
+
 
     private fun subscribe(){
         _recipeViewModel.isLoading.observe(this){isLoading ->
@@ -151,6 +154,7 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
                 if(extendedIngredient !=null){
                     if(_ids.contains(extendedIngredient.id!!)){
                         _filteredIds[i] = extendedIngredient.id
+                        _filteredStrings[i] = extendedIngredient.name.toString()
                         i++
                     }
                 }
@@ -218,7 +222,9 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
             when(v.id){
                 R.id.btnConfirmRecipeDetail ->{
                     val intent = Intent(this, RecipeConfirmationActivity::class.java)
+
                     intent.putExtra("ingredientsUsedIds", _filteredIds)
+                    intent.putExtra("ingredientUsedNames", _filteredStrings)
                     resultLauncher.launch(intent)
                 }
                 R.id.btnBackRecipeDetail ->{

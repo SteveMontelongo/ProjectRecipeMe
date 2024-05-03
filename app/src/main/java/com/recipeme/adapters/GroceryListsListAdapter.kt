@@ -34,9 +34,9 @@ class GroceryListsListAdapter(private var groceryLists: List<GroceryList>, priva
         holder.nameTextView.setOnClickListener{
             this.clickListener.onClickItem(holder.absoluteAdapterPosition, groceryList.name)
         }
-        holder.deleteButton.setOnClickListener{
-
+        holder.deleteButton.setOnLongClickListener{
             this.clickListener.onClickDelete(holder.absoluteAdapterPosition)
+            true
         }
         holder.editButton.setOnClickListener{
             this.clickListener.onClickEdit(holder.absoluteAdapterPosition, groceryList.name)

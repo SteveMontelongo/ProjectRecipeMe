@@ -19,12 +19,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.recipeme.R
+import com.recipeme.activities.MainActivity
 import com.recipeme.activities.RecipeDetailActivity
 import com.recipeme.adapters.RecipesAdapter
 import com.recipeme.daos.FridgeDao
 import com.recipeme.daos.RecipeDao
 import com.recipeme.databases.AppDatabase
 import com.recipeme.interfaces.MainFragmentInteraction
+import com.recipeme.interfaces.PaginationInteraction
 import com.recipeme.interfaces.RecipeOnClickItem
 import com.recipeme.models.*
 import com.recipeme.utils.RecipeCache
@@ -32,7 +34,7 @@ import com.recipeme.viewmodel.RecipeViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, MainFragmentInteraction {
+class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, MainFragmentInteraction, PaginationInteraction {
 
     private lateinit var _recipeViewModel: RecipeViewModel
     private lateinit var _recyclerView: RecyclerView
@@ -41,6 +43,7 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
     private lateinit var _ingredients: MutableList<Ingredient>
     private lateinit var _recipesDao: RecipeDao
     private lateinit var _ids: IntArray
+    private var _page = 1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -98,6 +101,11 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
 
     private fun setResultText(recipeData: List<RecipeResponse>) {
         _recipes.clear()
+        if(recipeData.isEmpty()){
+            Log.d("Response", "EmptyResponse")
+            var main = activity as MainActivity
+            main.pageForwardDisable()
+        }
         for(recipe in recipeData){
             if(recipe.usedIngredients != null){
                 var recipeItem = Recipe(recipe.id!!,
@@ -151,8 +159,11 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
     }
 
     override fun refreshClickFragment(data: String) {
+        val main = activity as MainActivity
+        main.pageForwardEnable()
         loadRecipeData(true)
     }
+
 
     override fun addClickFragment(data: String) {
         TODO("Not yet implemented")
@@ -184,7 +195,7 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
                     }
                     if (ingredientsFromFridge.isNotEmpty()) {
                         isFridgeEmptyMsg(false)
-                        _recipeViewModel.getRecipeData(ingredientsFromFridge)
+                        _recipeViewModel.getRecipeData(ingredientsFromFridge, (_page - 1)*10)
                     } else {
                         isFridgeEmptyMsg(true)
                         Log.d("Recipe", "No ingredients found in the fridge.")
@@ -208,7 +219,7 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
                     } else {
                         if (ingredientsFromFridge.isNotEmpty()) {
                             isFridgeEmptyMsg(false)
-                            _recipeViewModel.getRecipeData(ingredientsFromFridge)
+                            _recipeViewModel.getRecipeData(ingredientsFromFridge, (_page - 1)*10)
                         } else {
                             isFridgeEmptyMsg(true)
                             Log.d("Recipe", "No ingredients found in the fridge.")
@@ -217,5 +228,23 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
                 }
             }
         }
+    }
+
+    override fun incrementPage(page: Int) {
+        Log.d("Increment", "Increment Page")
+        _page = page
+        loadRecipeData(true)
+    }
+
+    override fun decrementPage(page: Int) {
+        val main = activity as MainActivity
+        Log.d("Decrement", "Decrement Page")
+        _page = page
+        main.pageForwardEnable()
+        loadRecipeData(true)
+    }
+
+    override fun pageReset() {
+        _page = 1
     }
 }

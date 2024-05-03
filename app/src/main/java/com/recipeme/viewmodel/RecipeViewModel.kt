@@ -32,7 +32,7 @@ class RecipeViewModel : ViewModel() {
     var errorMessage: String = ""
         private set
 
-    fun getRecipeData(ingredients: MutableList<Ingredient>){
+    fun getRecipeData(ingredients: MutableList<Ingredient>, offset: Int){
 
         _isLoading.value = true
         _isError.value = false
@@ -47,7 +47,7 @@ class RecipeViewModel : ViewModel() {
         Log.d("request String", request)
         Log.d("requestUpdated String", requestUpdated)
 
-        val client = ApiConfig.getApiService().getRecipeByIngredients(ingredients = requestUpdated)
+        val client = ApiConfig.getApiService().getRecipeByIngredients(ingredients = requestUpdated, offset = offset)
 
         //Send API request using RETROFIT
         client.enqueue(object : Callback<List<RecipeResponse>> {

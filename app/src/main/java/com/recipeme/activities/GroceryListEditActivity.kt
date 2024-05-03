@@ -130,6 +130,7 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
                     var ingredientQuantity = findViewById<EditText>(R.id.etIngredientUnitsGroceryListEdit)
                     val ingredientUnitLabel = findViewById<TextView>(R.id.etIngredientUnitLabelGroceryListEdit).text.toString()
                     val duplicatePosition = isIngredientDuplicate(ingredientName)
+                    if(ingredientQuantity.text.toString() == "") ingredientQuantity.setText("1")
                     if(ingredientQuantity.text.length < 1){
                         _ingredientWarningString.text = "Please enter valid quantity."
                     }else if(ingredientQuantity.text.toString().toDouble() > 99){
@@ -164,14 +165,14 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
 
                         }
                         _autoCompleteIngredientName.text.clear()
-                        ingredientQuantity.setText("1")
+                        ingredientQuantity.setText("")
                     }
                 }
             }
         }
     }
 
-    fun isIngredientDuplicate(name: String): Int{
+    private fun isIngredientDuplicate(name: String): Int{
         for((position, ingredient: Ingredient) in _ingredients.withIndex()) {
             if (name.compareTo(ingredient.name) == 0) {
                 return position
@@ -180,7 +181,7 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
         return -1
     }
 
-    fun isQuantityLabelSame(label: String, position: Int):Boolean {
+    private fun isQuantityLabelSame(label: String, position: Int):Boolean {
         //quantity check function not used.
         return true
     }

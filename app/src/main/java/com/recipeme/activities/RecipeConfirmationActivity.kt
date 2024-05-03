@@ -29,6 +29,7 @@ class RecipeConfirmationActivity : AppCompatActivity(), GroceryContentOnItemClic
     private lateinit var _fridgeDao: FridgeDao
     private lateinit var _ingredientsRecyclerView: RecyclerView
     private lateinit var _ids: IntArray
+    private lateinit var _names: Array<String>
     private lateinit var _fridgeItems: MutableList<Ingredient>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +41,8 @@ class RecipeConfirmationActivity : AppCompatActivity(), GroceryContentOnItemClic
         _ingredientsRecyclerView.adapter = RecipeConfirmationAdapter(_ingredients, this)
         _ingredientsRecyclerView.layoutManager = LinearLayoutManager(this)
         _ids = intent.getIntArrayExtra("ingredientsUsedIds")!!
+        _names = intent.getStringArrayExtra("ingredientUsedNames")!!
+
 
         findViewById<Button>(R.id.btnCancelRecipeConfirmation).setOnClickListener(this)
         findViewById<Button>(R.id.btnUpdateRecipeConfirmation).setOnClickListener(this)
@@ -52,10 +55,12 @@ class RecipeConfirmationActivity : AppCompatActivity(), GroceryContentOnItemClic
                 var fridgeIds = IntArray(_fridgeItems.size)
                 for((j, ingredient) in _fridgeItems.withIndex()){
                     fridgeIds[j] = ingredient.id
+                    Log.d("Fridge Items", ingredient.name + " - " + ingredient.id)
                 }
-                for(id in _ids){
+                for((i, id) in _ids.withIndex()){
+                    Log.d("Recipe Items", _names[i] + " - " + _ids[i].toString())
                     if(fridgeIds.contains(id)){
-                        _ingredients.add(Ingredient(id, "null", 0.0, "null", IngredientsData.map.get(id)!!, "", false))
+                        _ingredients.add(Ingredient(id, "null", 0.0, "null", IngredientsData.map[id]!!, "", false))
                     }
                 }
                 _ingredientsRecyclerView.adapter?.notifyDataSetChanged()

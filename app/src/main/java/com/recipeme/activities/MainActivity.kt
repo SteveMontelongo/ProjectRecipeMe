@@ -20,22 +20,31 @@ import com.recipeme.adapters.FragmentAdapter
 import com.recipeme.fragments.FridgeFragment
 import com.recipeme.fragments.GroceryListFragment
 import com.recipeme.fragments.RecipesFragment
+import com.recipeme.interfaces.MainActivityInteraction
 import com.recipeme.utils.IngredientsData
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
 
-class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabSelectedListener{
+class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabSelectedListener, MainActivityInteraction{
 
     private var _tabTitle = arrayOf("Fridge", "GroceryList", "Recipes")
     private lateinit var _textLabel: TextView
     private lateinit var _adapter: FragmentAdapter
+    private lateinit var _pageIncrement: ImageButton
+    private lateinit var _pageDecrement:ImageButton
+    private lateinit var _pageNumber: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         var viewPager = findViewById<ViewPager2>(R.id.viewPager)
         var tabLayout = findViewById<TabLayout>(R.id.tabLayout)
         findViewById<ImageButton>(R.id.ibMoreMain).setOnClickListener(this)
+        _pageIncrement= findViewById<ImageButton>(R.id.ibPageIncrementMain)
+        _pageIncrement.setOnClickListener(this)
+        _pageDecrement = findViewById<ImageButton>(R.id.ibPageDecrementMain)
+        _pageDecrement.setOnClickListener(this)
+        _pageNumber = findViewById<TextView>(R.id.tvPageMain)
         _textLabel = findViewById<TextView>(R.id.tvLabelMain)
         _adapter = FragmentAdapter(this)
         viewPager.adapter = _adapter
@@ -75,6 +84,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                 if(!btnTwo.isInvisible) {
                     btnTwo.visibility = INVISIBLE
                 }
+                if(!_pageIncrement.isInvisible) {
+                    _pageIncrement.visibility = INVISIBLE
+                }
+                if(!_pageDecrement.isInvisible) {
+                    _pageDecrement.visibility = INVISIBLE
+                }
+                if(!_pageNumber.isInvisible) {
+                    _pageNumber.visibility = INVISIBLE
+                }
                 //refresh
                 findViewById<ImageButton>(R.id.ibOneMain).setOnClickListener() {
                     val f = supportFragmentManager.findFragmentByTag("f0") as FridgeFragment
@@ -99,6 +117,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                 if(!btnTwo.isInvisible) {
                     btnTwo.visibility = INVISIBLE
                 }
+                if(!_pageIncrement.isInvisible) {
+                    _pageIncrement.visibility = INVISIBLE
+                }
+                if(!_pageDecrement.isInvisible) {
+                    _pageDecrement.visibility = INVISIBLE
+                }
+                if(!_pageNumber.isInvisible) {
+                    _pageNumber.visibility = INVISIBLE
+                }
                 //add
                 btnOne.setOnClickListener() {
                     val f =
@@ -117,13 +144,27 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                 }
             }
             2 ->{
+                if(_pageNumber.text.toString().toInt() < 2){
+
+                }
                 Log.d("Fragment Position", "2");
                 if(btnOne.isInvisible) {
                     btnOne.visibility = VISIBLE
                 }
-                btnOne.setImageResource(R.drawable.ic_refresh)
+                btnOne.setImageResource(R.drawable.ic_search)
                 if(!btnTwo.isInvisible) {
                     btnTwo.visibility = INVISIBLE
+                }
+                if(_pageIncrement.isInvisible) {
+                    _pageIncrement.visibility = VISIBLE
+                }
+                if(_pageDecrement.isInvisible && !(_pageNumber.text.toString().toInt() < 2)) {
+                    _pageDecrement.visibility = VISIBLE
+                }else{
+                    _pageDecrement.visibility = INVISIBLE
+                }
+                if(_pageNumber.isInvisible) {
+                    _pageNumber.visibility = VISIBLE
                 }
                 //refresh
                 btnOne.setOnClickListener() {
@@ -131,6 +172,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                     if (f != null) {
                         // Check if the fragment is properly initialized and attached to the activity
                         f.refreshClickFragment("Refresh")
+                        pageReset(_pageNumber)
+                        f.pageReset()
                     } else {
                         // Handle the case where the fragment or _fridgeDao is not properly initialized
                         Log.e(
@@ -169,9 +212,64 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
     }
 
     override fun onClick(v: View?) {
+        if(v != null){
+            when(v.id){
 
+                R.id.ibPageIncrementMain ->{
+                    val f = supportFragmentManager.findFragmentByTag("f2") as RecipesFragment
+                    Log.d("Main", "Increase")
+                    if(increasePageNumber(_pageNumber)){
+                            f.incrementPage(_pageNumber.text.toString().toInt())
+                        }
+                }
+                R.id.ibPageDecrementMain ->{
+                    val f = supportFragmentManager.findFragmentByTag("f2") as RecipesFragment
+                    Log.d("Main", "Decrease")
+                    if(decreasePageNumber(_pageNumber)) {
+                        f.decrementPage(_pageNumber.text.toString().toInt())
+                    }
+                }
+            }
+        }
     }
 
+    private fun increasePageNumber(p: TextView): Boolean{
+        var pNumber = p.text.toString().toInt()
+        pNumber++
+        p.text = pNumber.toString()
+        if(pNumber > 1){
+            if(_pageDecrement.isInvisible) {
+                _pageDecrement.visibility = VISIBLE
+            }
+        }
+        return true
+    }
 
+    private fun decreasePageNumber(p: TextView): Boolean{
+        var pNumber = p.text.toString().toInt()
+        if(pNumber <= 2){
+            if(!_pageDecrement.isInvisible) {
+                _pageDecrement.visibility = INVISIBLE
+            }
+        }
+        if(pNumber > 1){
+            pNumber--
+            p.text = pNumber.toString()
+            return true
+        }
+        return false
+    }
+
+    private fun pageReset(p: TextView){
+        p.text = "1"
+    }
+
+    override fun pageForwardDisable() {
+        _pageIncrement.visibility = INVISIBLE
+    }
+
+    override fun pageForwardEnable() {
+        _pageIncrement.visibility = VISIBLE
+    }
 
 }
