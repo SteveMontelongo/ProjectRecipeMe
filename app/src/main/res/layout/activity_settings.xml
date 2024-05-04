@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.SettingsActivity"
+    android:padding="8dp">
+
+    <ImageButton
+        android:id="@+id/btnCancelSettings"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:background="@drawable/small_item_button_shape"
+        android:text="Cancel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_arrow_back" />
+    <TextView
+        android:id="@+id/settingsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Settings"
+        android:textSize="32sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:id="@+id/layoutDeleteFridgeButtonSettings"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/small_delete_button_shape"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settingsLabel"
+        android:weightSum="10"
+        android:layout_marginTop="20dp"
+        >
+
+        <ImageView
+            android:id="@+id/ivFridgeSettings"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_fridge_white" />
+
+        <Button
+            android:id="@+id/btnDeleteFridgeSettings"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:gravity="start|center_vertical"
+            android:maxLength="27"
+            android:maxLines="1"
+            android:layout_weight="9"
+            android:text="Delete Fridge"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:background="#00000000"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutDeleteGroceryButtonSettings"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/small_delete_button_shape"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutDeleteFridgeButtonSettings"
+        android:weightSum="10"
+        android:layout_marginTop="20dp"
+        >
+
+        <ImageView
+            android:id="@+id/ivGrocerySettings"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_grocery_white" />
+
+        <Button
+            android:id="@+id/btnDeleteGrocerySettings"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:gravity="start|center_vertical"
+            android:maxLength="27"
+            android:maxLines="1"
+            android:layout_weight="9"
+            android:text="Delete Grocery"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:background="#00000000"
+            />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

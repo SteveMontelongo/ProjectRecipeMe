@@ -20,6 +20,7 @@
             android:layout_height="200dp"
             android:layout_marginTop="10dp"
             android:scaleType="fitXY"
+            android:background="@drawable/roundstyle"
             app:srcCompat="@drawable/ic_launcher_background"/>
 
 
@@ -27,7 +28,7 @@
             android:id="@+id/tvRecipeNameItem"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="#85FFFFFF"
+            android:background="@drawable/roundstyle"
             android:ellipsize="end"
             android:gravity="start|center_vertical|center_horizontal"
             android:text="Item Name"

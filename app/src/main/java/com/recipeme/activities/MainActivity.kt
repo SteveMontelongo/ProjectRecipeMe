@@ -3,6 +3,9 @@ package com.recipeme.activities
 import android.app.Activity
 import android.app.Fragment
 import android.content.Context
+import android.content.Intent
+import android.content.res.Resources
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -10,7 +13,9 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isInvisible
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
@@ -28,7 +33,6 @@ import java.io.InputStreamReader
 
 class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabSelectedListener, MainActivityInteraction{
 
-    private var _tabTitle = arrayOf("Fridge", "GroceryList", "Recipes")
     private lateinit var _textLabel: TextView
     private lateinit var _adapter: FragmentAdapter
     private lateinit var _pageIncrement: ImageButton
@@ -49,9 +53,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
         _adapter = FragmentAdapter(this)
         viewPager.adapter = _adapter
         tabLayout.addOnTabSelectedListener(this)
+        var tabIcon = listOf<Int>(R.drawable.ic_fridge, R.drawable.ic_grocery, R.drawable.ic_recipes)
+        var tabTitle = listOf<String>("Fridge", "Grocery", "Recipes")
+
         TabLayoutMediator(tabLayout, viewPager){
             tab, position ->
-            tab.text = _tabTitle[position]
+            tab.setIcon(tabIcon[position])
+            tab.text = tabTitle[position]
         }.attach()
 
         val inputStream = InputStreamReader(
@@ -229,7 +237,22 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                         f.decrementPage(_pageNumber.text.toString().toInt())
                     }
                 }
+                R.id.ibMoreMain->{
+                    val intent = Intent(this, SettingsActivity::class.java)
+                    resultSettingsLauncher.launch(intent)
+                }
             }
+        }
+    }
+
+    var resultSettingsLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+        if(result.resultCode == Activity.RESULT_OK){
+            val data:Intent? = result.data
+            val f0 = supportFragmentManager.findFragmentByTag("f0") as FridgeFragment
+            val f1 = supportFragmentManager.findFragmentByTag("f1") as GroceryListFragment
+            Log.d("Settings", "ResultCode OK")
+            f0.refreshClickFragment("null")
+            f1.refreshClickFragment("null")
         }
     }
 

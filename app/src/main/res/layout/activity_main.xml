@@ -26,19 +26,19 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Fridge" />
+            android:icon="@drawable/ic_fridge" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="GroceryLists"
+            android:icon="@drawable/ic_grocery"
             tools:layout_editor_absoluteX="102dp"
             tools:layout_editor_absoluteY="695dp" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Recipes"
+            android:icon="@drawable/ic_recipes"
             tools:layout_editor_absoluteX="76dp"
             tools:layout_editor_absoluteY="695dp" />
     </com.google.android.material.tabs.TabLayout>
@@ -62,7 +62,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="@drawable/small_item_button_shape"
-        app:srcCompat="@drawable/ic_more"
+        app:srcCompat="@drawable/ic_settings"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="8dp"/>

@@ -126,16 +126,15 @@ class FridgeFragment : Fragment(), View.OnClickListener, FridgeOnItemClick, Main
     }
 
     override fun onDelete(position: Int) {
+        var ingredient = _ingredients[position]
         GlobalScope.launch {
-            var ingredient = _ingredients[position]
-            GlobalScope.launch {
-                _fridgeDao.deleteIngredient(ingredient)
-                Handler(Looper.getMainLooper()).post{
-                    _ingredients.remove(ingredient)
-                    _recyclerview.adapter?.notifyDataSetChanged()
-                }
+            _fridgeDao.deleteIngredient(ingredient)
+            Handler(Looper.getMainLooper()).post{
+                _ingredients.remove(ingredient)
+                _recyclerview.adapter?.notifyDataSetChanged()
             }
         }
+
     }
 
     override fun refreshClickFragment(data: String) {

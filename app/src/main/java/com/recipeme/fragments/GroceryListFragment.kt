@@ -57,11 +57,20 @@ class GroceryListFragment : Fragment(), View.OnClickListener, GroceryListOnItemC
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _grocerylists = emptyList<GroceryList>().toMutableList()
+        loadGroceryLists()
+        val groceryListsListAdapter = GroceryListsListAdapter(_grocerylists, this)
+        _recyclerView = view.findViewById<RecyclerView>(R.id.rvGroceryListsList)
+        _recyclerView.adapter = groceryListsListAdapter
+        _recyclerView.layoutManager = LinearLayoutManager(this.context)
+    }
+
+    private fun loadGroceryLists(){
+        _grocerylists.clear()
         GlobalScope.launch{
             val entities = emptyList<GroceryList>().toMutableList()
             context?.let{
                 if(_groceryListDao.getAll().isNotEmpty()){
-                     entities.addAll(_groceryListDao.getAll())
+                    entities.addAll(_groceryListDao.getAll())
                 }
             }
             Handler(Looper.getMainLooper()).post {
@@ -71,10 +80,6 @@ class GroceryListFragment : Fragment(), View.OnClickListener, GroceryListOnItemC
                 _recyclerView.adapter?.notifyDataSetChanged()
             }
         }
-        val groceryListsListAdapter = GroceryListsListAdapter(_grocerylists, this)
-        _recyclerView = view.findViewById<RecyclerView>(R.id.rvGroceryListsList)
-        _recyclerView.adapter = groceryListsListAdapter
-        _recyclerView.layoutManager = LinearLayoutManager(this.context)
     }
 
     override fun onCreateView(
@@ -148,7 +153,8 @@ class GroceryListFragment : Fragment(), View.OnClickListener, GroceryListOnItemC
     }
 
     override fun refreshClickFragment(data: String) {
-        //no implementation
+        Log.d("Refreshing GroceryLists", "Testing")
+        loadGroceryLists()
     }
 
     override fun addClickFragment(data: String) {
