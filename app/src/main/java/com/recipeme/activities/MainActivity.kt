@@ -245,7 +245,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
         }
     }
 
-    var resultSettingsLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+    private var resultSettingsLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
         if(result.resultCode == Activity.RESULT_OK){
             val data:Intent? = result.data
             val f0 = supportFragmentManager.findFragmentByTag("f0") as FridgeFragment

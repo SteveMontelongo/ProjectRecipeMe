@@ -2,6 +2,7 @@ package com.recipeme.activities
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.drawable.Icon
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -12,11 +13,13 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.bumptech.glide.Glide
 import com.recipeme.R
+import com.recipeme.daos.IconDao
 import com.recipeme.daos.RecipeDao
 import com.recipeme.databases.AppDatabase
 import com.recipeme.models.*
@@ -31,8 +34,10 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var _ids: IntArray
     private lateinit var _filteredIds: IntArray
     private lateinit var _filteredStrings: Array<String>
+    private lateinit var _filteredImageStrings: Array<String>
     private lateinit var _recipeCache : Recipe
     private lateinit var _recipeDao: RecipeDao
+    private lateinit var _iconDao: IconDao
     private var _recipeId: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,10 +45,13 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
         var db  :AppDatabase = Room.databaseBuilder(this, AppDatabase::class.java, "recipe-me-database").build()
         _recipeViewModel = RecipeViewModel()
         _recipeDao = db.recipeDao()
+        _iconDao = db.iconDao()
+
         var recipeId = intent.getIntExtra("recipeId", 0)
         _recipeId = recipeId
         _ids = intent.getIntArrayExtra("ingredientsUsedIds")!!
         _filteredIds = IntArray(_ids.size)
+        _filteredImageStrings = Array<String>(_ids.size){""}
         _filteredStrings = Array<String>(_ids.size){""}
         _recipeCache = Recipe(0, emptyList(), "", "", mutableListOf<Instructions>() as MutableList<Instructions>, false)
 //        for(_recipe in RecipeCache.recipeCache){
@@ -73,6 +81,7 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
                                 if(_ids.contains(extendedIngredient.id!!)){
                                     _filteredIds[i] = extendedIngredient.id
                                     _filteredStrings[i] = extendedIngredient.name.toString()
+                                    _filteredImageStrings[i] = extendedIngredient.image.toString()
                                     i++
                                 }
                             }
@@ -155,6 +164,8 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
                     if(_ids.contains(extendedIngredient.id!!)){
                         _filteredIds[i] = extendedIngredient.id
                         _filteredStrings[i] = extendedIngredient.name.toString()
+                        _filteredImageStrings[i] = extendedIngredient.image.toString()
+                        Log.d("RecipeDetail Ingredient", "Index $i -" + extendedIngredient.id.toString() +" - "+ extendedIngredient.name +" - "+ extendedIngredient.image)
                         i++
                     }
                 }
@@ -221,8 +232,53 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
         if(v != null){
             when(v.id){
                 R.id.btnConfirmRecipeDetail ->{
+                    GlobalScope.launch {
+                        var iconNamesUpdated = emptyList<String>().toMutableList()
+                        var icons = _iconDao.getAll()
+                        var iconsIds = emptyList<Int>().toMutableList()
+                        for(icon in icons){
+                            iconsIds.add(icon.id)
+                        }
+                        if(_filteredIds.isNotEmpty()){
+                            for((i, ingredientId) in _filteredIds.withIndex()){
+                                if(iconsIds.isNotEmpty()) {
+                                    if (!iconsIds.contains(ingredientId)) {
+                                        Log.d(
+                                            "RecipeDetail Data",
+                                            "ID - $ingredientId - " + _filteredStrings[i] + " - " + _filteredImageStrings
+                                        )
+                                        val updateIcon = IngredientIcon(
+                                            ingredientId,
+                                            _filteredStrings[i],
+                                            _filteredImageStrings[i]
+                                        )
+                                        _iconDao.insertIcon(updateIcon)
+                                        iconNamesUpdated.add(_filteredStrings[i])
+                                    }
+                                }else{
+                                    if(ingredientId != 0) {
+                                        Log.d(
+                                            "RecipeDetail Data",
+                                            "ID - $ingredientId - " + _filteredStrings[i] + " - " + _filteredImageStrings
+                                        )
+                                        val updateIcon = IngredientIcon(
+                                            ingredientId,
+                                            _filteredStrings[i],
+                                            _filteredImageStrings[i]
+                                        )
+                                        _iconDao.insertIcon(updateIcon)
+                                        iconNamesUpdated.add(_filteredStrings[i])
+                                    }
+                                }
+                            }
+                        }
+                        Handler(Looper.getMainLooper()).post{
+                            for(item in iconNamesUpdated){
+                                Toast.makeText(applicationContext,"Congrats! "+ item + " icon earned!", Toast.LENGTH_LONG).show()
+                            }
+                    }
+                    }
                     val intent = Intent(this, RecipeConfirmationActivity::class.java)
-
                     intent.putExtra("ingredientsUsedIds", _filteredIds)
                     intent.putExtra("ingredientUsedNames", _filteredStrings)
                     resultLauncher.launch(intent)

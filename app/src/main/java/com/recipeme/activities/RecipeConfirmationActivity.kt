@@ -16,6 +16,7 @@ import com.recipeme.adapters.GroceryListContentAdapter
 import com.recipeme.adapters.RecipeConfirmationAdapter
 import com.recipeme.daos.FridgeDao
 import com.recipeme.daos.GroceryListDao
+import com.recipeme.daos.IconDao
 import com.recipeme.databases.AppDatabase
 import com.recipeme.interfaces.GroceryContentOnItemClick
 import com.recipeme.models.GroceryList

@@ -18,8 +18,9 @@
 
         <ImageView
             android:id="@+id/ivIngredientFridge"
-            android:layout_width="50dp"
+            android:layout_width="25dp"
             android:layout_height="50dp"
+            android:scaleType="fitXY"
             android:layout_weight="1"
             app:layout_constraintBottom_toBottomOf="@+id/tvIngredientNameFridge"
             app:layout_constraintEnd_toStartOf="@+id/tvIngredientNameFridge"

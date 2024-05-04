@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.recipeme.R
 import com.recipeme.interfaces.FridgeOnItemClick
@@ -31,10 +32,11 @@ class FridgeAdapter(var ingredients: MutableList<Ingredient>, private var listen
 
     override fun onBindViewHolder(holder: FridgeIngredientViewHolder, position: Int) {
         val ingredient: Ingredient = ingredients.get(holder.absoluteAdapterPosition)
-        Glide.with(context).applyDefaultRequestOptions(
-            RequestOptions()
+        Glide.with(context).load(ingredient.image).apply(
+            RequestOptions().override(100, 100).fitCenter().transform(
+                RoundedCorners(35))
             .placeholder(R.mipmap.ic_fruit)
-            .error(R.mipmap.ic_fruit)).load(ingredient.image).into(holder.itemImageView)
+            .error(R.mipmap.ic_fruit)).into(holder.itemImageView)
         holder.nameTextView.text = ingredient.name
         holder.deleteButton.setOnLongClickListener{
             this.listener.onDelete(holder.absoluteAdapterPosition)

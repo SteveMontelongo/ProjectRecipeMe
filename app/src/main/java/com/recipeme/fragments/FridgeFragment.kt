@@ -14,16 +14,19 @@ import androidx.room.Room
 import com.recipeme.R
 import com.recipeme.adapters.FridgeAdapter
 import com.recipeme.daos.FridgeDao
+import com.recipeme.daos.IconDao
 import com.recipeme.databases.AppDatabase
 import com.recipeme.interfaces.FridgeOnItemClick
 import com.recipeme.interfaces.MainFragmentInteraction
 import com.recipeme.models.Ingredient
+import com.recipeme.models.IngredientIcon
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class FridgeFragment : Fragment(), View.OnClickListener, FridgeOnItemClick, MainFragmentInteraction{
     private lateinit var _db : AppDatabase
     private lateinit var _fridgeDao: FridgeDao
+    private lateinit var _iconDao: IconDao
     private lateinit var _ingredients: MutableList<Ingredient>
     private lateinit var _recyclerview: RecyclerView
 
@@ -36,6 +39,7 @@ class FridgeFragment : Fragment(), View.OnClickListener, FridgeOnItemClick, Main
             AppDatabase::class.java, "recipe-me-database"
         ).build()
         _fridgeDao = _db.fridgeDao()
+        _iconDao = _db.iconDao()
     }
 
     override fun onDetach() {
@@ -140,10 +144,25 @@ class FridgeFragment : Fragment(), View.OnClickListener, FridgeOnItemClick, Main
     override fun refreshClickFragment(data: String) {
         GlobalScope.launch{
             var ingredientsToUpdate: MutableList<Ingredient> = emptyList<Ingredient>().toMutableList()
+            var iconsToUpdate: MutableList<IngredientIcon> = emptyList<IngredientIcon>().toMutableList()
             ingredientsToUpdate.addAll(_fridgeDao.getAll())
+            iconsToUpdate.addAll(_iconDao.getAll())
 
             Handler(Looper.getMainLooper()).post(){
                 _ingredients.clear()
+                if(iconsToUpdate.isNotEmpty()){
+                    for(ingredient in ingredientsToUpdate){
+                        for(icon in iconsToUpdate){
+                            if(ingredient.image.compareTo("NULL") == 0 && ingredient.id == icon.id){
+                                Log.d("FridgeFragment", "Ingredient - ${ingredient.name}" + " " +icon.icon )
+                                ingredient.image = icon.icon.substring(0)
+                                break
+                            }else{
+                                continue
+                            }
+                        }
+                    }
+                }
                 _ingredients.addAll(ingredientsToUpdate)
                 _recyclerview.adapter?.notifyDataSetChanged()
             }
