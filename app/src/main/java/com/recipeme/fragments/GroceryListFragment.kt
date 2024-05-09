@@ -31,6 +31,8 @@ import com.recipeme.models.GroceryList
 import com.recipeme.models.Ingredient
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.text.DateFormat
+import java.util.*
 
 class GroceryListFragment : Fragment(), View.OnClickListener, GroceryListOnItemClick, MainFragmentInteraction{
     private lateinit var _db: AppDatabase
@@ -110,6 +112,7 @@ class GroceryListFragment : Fragment(), View.OnClickListener, GroceryListOnItemC
     var resultItemLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
         if(result.resultCode == Activity.RESULT_OK){
             val data:Intent? = result.data
+
         }
     }
 
@@ -118,7 +121,15 @@ class GroceryListFragment : Fragment(), View.OnClickListener, GroceryListOnItemC
             val data:Intent? = result.data
             val dataNewListName = data?.getStringExtra("ListName")
             val dataNewListPosition = data?.getIntExtra("Position", 0)
-            if (dataNewListPosition != null) {
+            Log.d("Position", dataNewListPosition.toString())
+            if(dataNewListPosition == _grocerylists.size){
+                _grocerylists.add(GroceryList(dataNewListName.toString(), DateFormat.getDateInstance().format(
+                    Date()
+                ),
+                    emptyList<Ingredient>().toMutableList()))
+                val indexInsert = _grocerylists.size
+                _recyclerView.adapter?.notifyItemInserted(indexInsert)
+            }else if (dataNewListPosition != null) {
                 _grocerylists[dataNewListPosition].name = dataNewListName.toString()
             }
             _recyclerView.adapter?.notifyDataSetChanged()
@@ -158,8 +169,12 @@ class GroceryListFragment : Fragment(), View.OnClickListener, GroceryListOnItemC
     }
 
     override fun addClickFragment(data: String) {
-        val intent = Intent(this.context, PopupGroceryListsList::class.java)
-        resultLauncher.launch(intent)
+//        val intent = Intent(this.context, PopupGroceryListsList::class.java)
+//        resultLauncher.launch(intent)
+        val intent = Intent(this.context, GroceryListEditActivity::class.java)
+        intent.putExtra("ListName", "")
+        intent.putExtra("Position", _grocerylists.size)
+        resultEditLauncher.launch(intent)
     }
 
 }

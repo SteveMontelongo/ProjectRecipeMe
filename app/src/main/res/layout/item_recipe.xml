@@ -20,8 +20,7 @@
             android:layout_height="200dp"
             android:layout_marginTop="10dp"
             android:scaleType="fitXY"
-            android:background="@drawable/roundstyle"
-            app:srcCompat="@drawable/ic_launcher_background"/>
+            app:srcCompat="@drawable/ic_recipes"/>
 
 
         <TextView

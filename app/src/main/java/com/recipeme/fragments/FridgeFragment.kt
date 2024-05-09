@@ -74,9 +74,24 @@ class FridgeFragment : Fragment(), View.OnClickListener, FridgeOnItemClick, Main
 //        view.findViewById<ImageButton>(R.id.iBtnRefreshFridge).setOnClickListener(this)
         GlobalScope.launch {
             var ingredientsToUpdate: MutableList<Ingredient> = emptyList<Ingredient>().toMutableList()
+            var iconsToUpdate: MutableList<IngredientIcon> = emptyList<IngredientIcon>().toMutableList()
             ingredientsToUpdate.addAll(_fridgeDao.getAll())
+            iconsToUpdate.addAll(_iconDao.getAll())
             Handler(Looper.getMainLooper()).post{
                 _ingredients.addAll(ingredientsToUpdate)
+                if(iconsToUpdate.isNotEmpty()){
+                    for(ingredient in ingredientsToUpdate){
+                        for(icon in iconsToUpdate){
+                            if(ingredient.image.compareTo("NULL") == 0 && ingredient.id == icon.id){
+                                Log.d("FridgeFragment", "Ingredient - ${ingredient.name}" + " " +icon.icon )
+                                ingredient.image = icon.icon.substring(0)
+                                break
+                            }else{
+                                continue
+                            }
+                        }
+                    }
+                }
                 _recyclerview.adapter?.notifyDataSetChanged()
             }
         }

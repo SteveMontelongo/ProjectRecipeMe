@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp">
+    android:padding="8dp"
+    android:id="@+id/mainGroceryListEdit">
 
 
     <EditText
@@ -38,9 +39,10 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/tvIngredientWarning"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etIngredientGroceryListEdit"
+        app:layout_constraintTop_toBottomOf="@+id/tvListNameWarning"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias=".8">
+        app:layout_constraintHorizontal_bias=".8"
+        app:layout_constraintVertical_bias="0">
 
         <TextView
             android:id="@+id/etIngredientUnitLabelGroceryListEdit"
@@ -74,7 +76,7 @@
         android:text="Ingredient Warning"
         android:textColor="@color/dark_red"
         android:textSize="12sp"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/etIngredientGroceryListEdit"
         tools:layout_editor_absoluteX="0dp" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -124,7 +126,7 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvListNameWarning" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <ImageButton
         android:id="@+id/btnCancelGroceryListEdit"
@@ -148,10 +150,10 @@
 
     <ImageButton
         android:id="@+id/btnAddIngredientGroceryListEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_margin="4dp"
-        android:background="@drawable/small_item_button_shape"
+        android:background="@drawable/small_edit_button_shape"
         android:text="Add"
         app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"

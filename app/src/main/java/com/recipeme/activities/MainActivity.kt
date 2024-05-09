@@ -52,10 +52,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
         _textLabel = findViewById<TextView>(R.id.tvLabelMain)
         _adapter = FragmentAdapter(this)
         viewPager.adapter = _adapter
-        tabLayout.addOnTabSelectedListener(this)
+
         var tabIcon = listOf<Int>(R.drawable.ic_fridge, R.drawable.ic_grocery, R.drawable.ic_recipes)
         var tabTitle = listOf<String>("Fridge", "Grocery", "Recipes")
 
+        tabLayout.addOnTabSelectedListener(this)
         TabLayoutMediator(tabLayout, viewPager){
             tab, position ->
             tab.setIcon(tabIcon[position])
@@ -75,33 +76,50 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
             var lineSplit = line!!.split(";")
             data.map[lineSplit[1].toInt()] = lineSplit[0]
         }
+
+
+
     }
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
-        Log.d("Tab" , tab?.text.toString())
+        Log.d("Fragment Title" , tab?.text.toString())
         _textLabel.text = tab?.text.toString()
         val btnOne = findViewById<ImageButton>(R.id.ibOneMain)
         val btnTwo = findViewById<ImageButton>(R.id.ibTwoMain)
         when(tab?.position){
             0 ->{
                 Log.d("Fragment Position", "0");
-                if(btnOne.isInvisible) {
-                    btnOne.visibility = VISIBLE
-                }
-                btnOne.setImageResource(R.drawable.ic_refresh)
-                if(!btnTwo.isInvisible) {
-                    btnTwo.visibility = INVISIBLE
-                }
+                setButton(btnOne, R.drawable.ic_refresh, VISIBLE)
+                setButton(btnTwo, R.drawable.ic_help, VISIBLE)
                 if(!_pageIncrement.isInvisible) {
-                    _pageIncrement.visibility = INVISIBLE
+                    pageForwardDisable()
                 }
                 if(!_pageDecrement.isInvisible) {
-                    _pageDecrement.visibility = INVISIBLE
+                    pagePreviousDisable()
                 }
                 if(!_pageNumber.isInvisible) {
                     _pageNumber.visibility = INVISIBLE
                 }
-                //refresh
+
+                //autoRefresh
+                try{
+                    val f = supportFragmentManager.findFragmentByTag("f0") as FridgeFragment
+                    if (f != null) {
+                        Log.d("Main Fridge", "autoRefresh")
+                        // Check if the fragment is properly initialized and attached to the activity
+                        f.refreshClickFragment("Refresh")
+                    } else {
+                        // Handle the case where the fragment or _fridgeDao is not properly initialized
+                        Log.e(
+                            "MainActivity",
+                            "Fragment is not properly initialized"
+                        )
+                    }
+                }catch (e: java.lang.Exception
+                ){
+                    Log.e("Error", e.toString())
+                }
+                //manualRefresh
                 findViewById<ImageButton>(R.id.ibOneMain).setOnClickListener() {
                     val f = supportFragmentManager.findFragmentByTag("f0") as FridgeFragment
                     if (f != null) {
@@ -118,23 +136,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
             }
             1 ->{
                 Log.d("Fragment Position", "1");
-                if(btnOne.isInvisible) {
-                    btnOne.visibility = VISIBLE
-                }
-                btnOne.setImageResource(R.drawable.ic_increment)
-                if(!btnTwo.isInvisible) {
-                    btnTwo.visibility = INVISIBLE
-                }
+                setButton(btnOne, R.drawable.ic_increment, VISIBLE)
+                setButton(btnTwo, R.drawable.ic_help, VISIBLE)
                 if(!_pageIncrement.isInvisible) {
-                    _pageIncrement.visibility = INVISIBLE
+                    pageForwardDisable()
                 }
                 if(!_pageDecrement.isInvisible) {
-                    _pageDecrement.visibility = INVISIBLE
+                    pagePreviousDisable()
                 }
                 if(!_pageNumber.isInvisible) {
                     _pageNumber.visibility = INVISIBLE
                 }
-                //add
                 btnOne.setOnClickListener() {
                     val f =
                         supportFragmentManager.findFragmentByTag("f1") as GroceryListFragment
@@ -152,24 +164,26 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                 }
             }
             2 ->{
-                if(_pageNumber.text.toString().toInt() < 2){
-
-                }
                 Log.d("Fragment Position", "2");
-                if(btnOne.isInvisible) {
-                    btnOne.visibility = VISIBLE
-                }
-                btnOne.setImageResource(R.drawable.ic_search)
-                if(!btnTwo.isInvisible) {
-                    btnTwo.visibility = INVISIBLE
-                }
-                if(_pageIncrement.isInvisible) {
-                    _pageIncrement.visibility = VISIBLE
+                setButton(btnOne, R.drawable.ic_search, VISIBLE)
+                setButton(btnTwo, R.drawable.ic_help, VISIBLE)
+                btnTwo.setImageResource(R.drawable.ic_help)
+                try {
+                    if (_pageIncrement.isInvisible) {
+                        val f = supportFragmentManager.findFragmentByTag("f2") as RecipesFragment
+                        if (f.isForwardPageDisabled()) {
+                            pageForwardDisable()
+                        } else {
+                            pageForwardEnable()
+                        }
+                    }
+                }catch(e: java.lang.Exception){
+                    Log.e("error", e.toString())
                 }
                 if(_pageDecrement.isInvisible && _pageNumber.text.toString().toInt() >= 2) {
-                    _pageDecrement.visibility = VISIBLE
+                    pagePreviousEnable()
                 }else{
-                    _pageDecrement.visibility = INVISIBLE
+                    pagePreviousDisable()
                 }
                 if(_pageNumber.isInvisible) {
                     _pageNumber.visibility = VISIBLE
@@ -181,6 +195,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                         // Check if the fragment is properly initialized and attached to the activity
                         f.refreshClickFragment("Refresh")
                         pageReset(_pageNumber)
+                        pagePreviousDisable()
                         f.pageReset()
                     } else {
                         // Handle the case where the fragment or _fridgeDao is not properly initialized
@@ -201,22 +216,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
     }
 
     override fun onTabReselected(tab: TabLayout.Tab?) {
-        when(tab?.position) {
-            0 -> {
-                //ToDo - Make the refresh automatic
-                val f = supportFragmentManager.findFragmentByTag("f0") as FridgeFragment
-                if (f != null) {
-                    // Check if the fragment is properly initialized and attached to the activity
-                    f.refreshClickFragment("Refresh")
-                } else {
-                    // Handle the case where the fragment or _fridgeDao is not properly initialized
-                    Log.e(
-                        "MainActivity",
-                        "Fragment is not properly initialized"
-                    )
-                }
-            }
-        }
+
     }
 
     override fun onClick(v: View?) {
@@ -261,9 +261,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
         pNumber++
         p.text = pNumber.toString()
         if(pNumber > 1){
-            if(_pageDecrement.isInvisible) {
-                _pageDecrement.visibility = VISIBLE
-            }
+            pagePreviousEnable()
         }
         return true
     }
@@ -271,9 +269,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
     private fun decreasePageNumber(p: TextView): Boolean{
         var pNumber = p.text.toString().toInt()
         if(pNumber <= 2){
-            if(!_pageDecrement.isInvisible) {
-                _pageDecrement.visibility = INVISIBLE
-            }
+            pagePreviousDisable()
         }
         if(pNumber > 1){
             pNumber--
@@ -288,11 +284,34 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
     }
 
     override fun pageForwardDisable() {
-        _pageIncrement.visibility = INVISIBLE
+        if(_pageIncrement.visibility == VISIBLE) {
+            _pageIncrement.visibility = INVISIBLE
+        }
     }
 
     override fun pageForwardEnable() {
-        _pageIncrement.visibility = VISIBLE
+        if(_pageIncrement.visibility == INVISIBLE) {
+            _pageIncrement.visibility = VISIBLE
+        }
+    }
+
+    override fun pagePreviousDisable() {
+        if(_pageDecrement.visibility == VISIBLE) {
+            _pageDecrement.visibility = INVISIBLE
+        }
+    }
+
+    override fun pagePreviousEnable() {
+        if(_pageDecrement.visibility == INVISIBLE) {
+            _pageDecrement.visibility = VISIBLE
+        }
+    }
+
+    private fun setButton(button: ImageButton, resId: Int, visibility: Int){
+        if(button.visibility != visibility){
+            button.visibility = visibility
+        }
+        button.setImageResource(resId)
     }
 
 }

@@ -9,7 +9,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
 import com.recipeme.R
 import com.recipeme.interfaces.GroceryListOnItemClick
 import com.recipeme.interfaces.RecipeOnClickItem
@@ -36,8 +39,9 @@ class RecipesAdapter(private var recipes: List<Recipe>, private var listener: Re
         holder.nameTextView.text = recipe.name
         Glide.with(context).applyDefaultRequestOptions(
             RequestOptions()
-                .placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_launcher_background)).load(recipe.image).into(holder.imageView)
+                .placeholder(R.drawable.ic_recipes).format(DecodeFormat.PREFER_ARGB_8888)
+                .override(SIZE_ORIGINAL).transform(RoundedCorners(25))
+                .error(R.drawable.ic_recipes)).load(recipe.image).into(holder.imageView)
 
         holder.imageView.setOnClickListener{
             this.listener.onClickItem(holder.absoluteAdapterPosition)

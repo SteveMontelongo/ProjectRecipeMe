@@ -32,11 +32,23 @@ class FridgeAdapter(var ingredients: MutableList<Ingredient>, private var listen
 
     override fun onBindViewHolder(holder: FridgeIngredientViewHolder, position: Int) {
         val ingredient: Ingredient = ingredients.get(holder.absoluteAdapterPosition)
-        Glide.with(context).load(ingredient.image).apply(
-            RequestOptions().override(100, 100).fitCenter().transform(
-                RoundedCorners(35))
-            .placeholder(R.mipmap.ic_fruit)
-            .error(R.mipmap.ic_fruit)).into(holder.itemImageView)
+        if(ingredient.image == "NULL"){
+            Glide.with(context).load(R.mipmap.ic_fruit).apply(
+                RequestOptions().override(100, 100).fitCenter().transform(
+                    RoundedCorners(35)
+                )
+                    .placeholder(R.mipmap.ic_fruit)
+                    .error(R.mipmap.ic_fruit)
+            ).into(holder.itemImageView)
+        }else {
+            Glide.with(context).load(ingredient.image).apply(
+                RequestOptions().override(100, 100).fitCenter().transform(
+                    RoundedCorners(35)
+                )
+                    .placeholder(R.mipmap.ic_fruit)
+                    .error(R.mipmap.ic_fruit)
+            ).into(holder.itemImageView)
+        }
         holder.nameTextView.text = ingredient.name
         holder.deleteButton.setOnLongClickListener{
             this.listener.onDelete(holder.absoluteAdapterPosition)

@@ -32,8 +32,12 @@ class GroceryListContentAdapter(private var ingredients: MutableList<Ingredient>
     override fun onBindViewHolder(holder: GroceryListContentIngredientViewHolder, position: Int) {
         val ingredient: Ingredient = ingredients.get(holder.absoluteAdapterPosition)
         holder.nameTextView.text = ingredient.name
-        if(ingredient.custom){
+        if(ingredient.obtained){
+            holder.nameTextView.setTextColor(ContextCompat.getColor(context, R.color.cart_item_checked))
+        }else if(ingredient.custom){
             holder.nameTextView.setTextColor(ContextCompat.getColor(context, R.color.custom_item))
+        }else{
+            holder.nameTextView.setTextColor(ContextCompat.getColor(context, R.color.black))
         }
         holder.quantityTextView.text = ingredient.amount.toString()
         holder.statusButton.setImageResource(

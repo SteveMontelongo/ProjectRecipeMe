@@ -1,12 +1,15 @@
 package com.recipeme.activities
 
+import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
@@ -74,7 +77,11 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
                 _listOfNames.remove(_listName)
 
                 Handler(Looper.getMainLooper()).post{
-                    _ingredients.addAll(_oldList.items)
+                    if(::_oldList.isInitialized){
+                        _ingredients.addAll(_oldList.items)
+                    }else{
+
+                    }
                     _recyclerView.adapter?.notifyDataSetChanged()
                 }
             }
@@ -112,19 +119,22 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
                             //edit for ingredients
                             GlobalScope.launch{
                                 this?.let{
-                                    _groceryListDao.delete(_oldList)
+                                    if(::_oldList.isInitialized) {
+                                        _groceryListDao.delete(_oldList)
+                                    }
                                     _groceryListDao.insertAll(GroceryList(newListName, currentDate, _ingredients))
                                 }
                             }
                             intent.putExtra("Position", position)
                             intent.putExtra("ListName", newListName)
                         }
-
+                        Log.d("GroceryEdit", "Test " + position)
                         setResult(RESULT_OK, intent)
                         finish()
                     }
                 }
                 R.id.btnAddIngredientGroceryListEdit->{
+                    hideSoftKeyboard()
                     var isCustom = false
                     val ingredientName = findViewById<EditText>(R.id.etIngredientGroceryListEdit).text.toString()
                     var ingredientQuantity = findViewById<EditText>(R.id.etIngredientUnitsGroceryListEdit)
@@ -206,5 +216,12 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
     }
     private fun nameIsDuplicate(name: String, list: MutableList<String>):Boolean{
         return list.contains(name)
+    }
+
+    fun hideSoftKeyboard() {
+        currentFocus?.let {
+            val inputMethodManager = ContextCompat.getSystemService(this, InputMethodManager::class.java)!!
+            inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
+        }
     }
 }

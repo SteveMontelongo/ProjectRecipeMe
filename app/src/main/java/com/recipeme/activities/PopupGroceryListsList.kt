@@ -46,7 +46,7 @@ class PopupGroceryListsList : AppCompatActivity() {
         }
 
         confirmButton.setOnClickListener(){
-            if(name.text.toString().length < 1){
+            if(name.text.toString().isEmpty()){
                 Toast.makeText(this, "Please enter a valid name", Toast.LENGTH_SHORT).show()
             }else if(name.text.toString().length > 20) {
                 Toast.makeText(this, "Please limit character length to 20 characters", Toast.LENGTH_SHORT).show()

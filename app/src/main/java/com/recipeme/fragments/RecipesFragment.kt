@@ -45,6 +45,7 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
     private lateinit var _recipesDao: RecipeDao
     private lateinit var _ids: IntArray
     private lateinit var _previousPageStack: Stack<Recipe>
+    private var _isContentEmpty = false
     private var _page = 1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,6 +109,11 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
             Log.d("Response", "EmptyResponse")
             var main = activity as MainActivity
             main.pageForwardDisable()
+            _isContentEmpty = true
+            Log.d("Recipes Fragment Internal Test", _isContentEmpty.toString())
+        }else{
+            _isContentEmpty = false
+            Log.d("Recipes Fragment Internal Test", _isContentEmpty.toString())
         }
         for(recipe in recipeData){
             if(recipe.usedIngredients != null){
@@ -177,6 +183,7 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
         if(isEmpty){
             msgError?.text = "Uh oh, looks like your fridge is empty. Try shopping to add ingredients to your fridge."
             msgError?.visibility = android.view.View.VISIBLE
+
         }else{
             msgError?.visibility = android.view.View.INVISIBLE
         }
@@ -256,6 +263,11 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
         //loadRecipeData(true)
     }
 
+    fun isForwardPageDisabled(): Boolean{
+        Log.d("Recipes Fragment Test", _isContentEmpty.toString())
+        return _isContentEmpty
+    }
+
     override fun pageReset() {
         _page = 1
     }
@@ -278,6 +290,10 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
             Log.d("Not Empty", " ")
             return recipesToAdd.reversed() as MutableList<Recipe>
         }
+        val main = activity as MainActivity
+        main.pageForwardDisable()
+        _isContentEmpty = true
+        Log.d("Recipes Fragment Internal Test", _isContentEmpty.toString())
         Log.d("Empty", " ")
         return emptyList<Recipe>().toMutableList()
     }

@@ -76,6 +76,7 @@ class GroceryListContentActivity : AppCompatActivity(), GroceryContentOnItemClic
                         if(ingredient.obtained){
                             ingredientsToUpdate.add(ingredient)
                             _groceryList.items.remove(ingredient)
+                            Toast.makeText(this, ingredient.name + " added to fridge.", Toast.LENGTH_SHORT).show()
                         }
                     }
                     GlobalScope.launch {
@@ -84,12 +85,19 @@ class GroceryListContentActivity : AppCompatActivity(), GroceryContentOnItemClic
                             //clears up duplicates
                             Log.d("GroceryList", "Fridge $ingredientIdsFromFridge")
                             Log.d("GroceryList", "Updating $ingredientsToUpdate")
-                            for(ingredient in ingredientsToUpdate){
-                                if(ingredientIdsFromFridge.contains(ingredient.id)){
-                                    ingredientsToUpdate.remove(ingredient)
-                                    Log.d("GroceryList", "Removed ${{ingredient}}")
-                                }
-                            }
+                            ingredientsToUpdate?.removeAll { ingredientIdsFromFridge.contains(it.id) }
+//                            var ingredientIndexes = emptyList<Int>().toMutableList()
+//                            for((i, ingredient) in ingredientsToUpdate.withIndex()){
+//                                if(ingredientIdsFromFridge.contains(ingredient.id)){
+//                                    Log.d("GroceryList", "Removed ${ingredient.name}")
+//                                    ingredientIndexes.add(i)
+//                                    //ingredientsToUpdate.remove(ingredient)
+//                                }
+//                            }
+//                            for(i in ingredientIndexes){
+//                                ingredientsToUpdate.removeAt(i)
+//                            }
+                            Log.d("GroceryList", "Updated List $ingredientsToUpdate")
                             if(ingredientsToUpdate.isNotEmpty()){
                                 _fridgeDao.insertAll(ingredientsToUpdate)
                             }
@@ -113,6 +121,15 @@ class GroceryListContentActivity : AppCompatActivity(), GroceryContentOnItemClic
 
     override fun onClickStatus(position: Int) {
         _ingredients[position].obtained = !_ingredients[position].obtained
-        _ingredientsRecyclerView.adapter?.notifyDataSetChanged()
+        _groceryList.items.clear()
+        _groceryList.items.addAll(_ingredients)
+        GlobalScope.launch{
+            this?.let {
+                _groceryListDao.update(_groceryList)
+                Handler(Looper.getMainLooper()).post{
+                    _ingredientsRecyclerView.adapter?.notifyDataSetChanged()
+                }
+            }
+        }
     }
 }
