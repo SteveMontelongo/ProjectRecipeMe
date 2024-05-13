@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Settings"
+        android:text="Information"
         android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,19 +33,67 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/InfoLabel">
+        app:layout_constraintTop_toBottomOf="@+id/InfoLabel"
+        app:layout_constraintVertical_bias="1.0">
 
-        <TextView
-            android:id="@+id/groceryInfo1"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/svInfo"
-            app:layout_constraintEnd_toEndOf="@id/svInfo"
-            app:layout_constraintTop_toTopOf="@id/svInfo"
-            android:text ="Thank you for using RecipeMe!\nTo get started, you must create a grocery list in the Grocery tab. "
-            />
+            android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/groceryInfo1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="\nThank you for using RecipeMe!
+                \nTo get started, you must create a grocery list in the Grocery tab. " />
+
+            <TextView
+                android:id="@+id/groceryInfo2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="\nPress the add button to add a new grocery list." />
+
+            <TextView
+                android:id="@+id/groceryInfo3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enter a list name on top, then add any ingredients to the list.
+Any ingredients listed in blue will be considered custom and will not affect your fridge; however,
+they can still be tracked in your grocery list. Once you are done adding ingredients to your list,
+press the save button below to save your list." />
+
+            <TextView
+                android:id="@+id/groceryInfo4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="\nTo delete a list, hold on the red button for 2 seconds.
+To edit a list, click on the yellow button. To see a list's contents and add them to your fridge click on the list's name." />
+
+            <TextView
+                android:id="@+id/groceryInfo5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="\nYou can confirm if you have an item by clicking on the cart item. If it's green it is considered 'obtained'.
+When you want to confirm all the items you have in your cart, press on the confirm button and it will add all the items into your fridge." />
+
+            <TextView
+                android:id="@+id/groceryInfo6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="\nThis tab is called your fridge. These are the items that have been obtained in your grocery list.
+To delete an item, hold the red button for 2 seconds. The recipe tab will bring up recipes based on the items in this fridge." />
+
+            <TextView
+                android:id="@+id/groceryInfo7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="\nThis tab is the recipes tab. You can search up recipes by clicking the search button on top.
+You can also navigate through pages using the arrow buttons next to the page number. Each page will display up to 10 recipes." />
+
+        </LinearLayout>
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

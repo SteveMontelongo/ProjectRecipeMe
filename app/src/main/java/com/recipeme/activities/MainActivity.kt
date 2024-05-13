@@ -133,6 +133,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                         )
                     }
                 }
+
+                btnTwo.setOnClickListener() {
+                    var intent = Intent(this, InfoActivity::class.java)
+                    resultHelpLauncher.launch(intent)
+                }
             }
             1 ->{
                 Log.d("Fragment Position", "1");
@@ -161,6 +166,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                             "Fragment is not properly initialized"
                         )
                     }
+                }
+
+                btnTwo.setOnClickListener() {
+                    var intent = Intent(this, InfoActivity::class.java)
+                    resultHelpLauncher.launch(intent)
                 }
             }
             2 ->{
@@ -204,6 +214,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                             "Fragment is not properly initialized"
                         )
                     }
+                }
+
+                btnTwo.setOnClickListener() {
+                    var intent = Intent(this, InfoActivity::class.java)
+                    resultHelpLauncher.launch(intent)
                 }
             }
         }
@@ -253,6 +268,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
             Log.d("Settings", "ResultCode OK")
             f0.refreshClickFragment("null")
             f1.refreshClickFragment("null")
+        }
+    }
+
+    private var resultHelpLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+        if(result.resultCode == Activity.RESULT_OK){
+            val data:Intent? = result.data
         }
     }
 
