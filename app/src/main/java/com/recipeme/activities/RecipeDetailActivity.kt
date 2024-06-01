@@ -53,7 +53,7 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
         _filteredIds = IntArray(_ids.size)
         _filteredImageStrings = Array<String>(_ids.size){""}
         _filteredStrings = Array<String>(_ids.size){""}
-        _recipeCache = Recipe(0, emptyList(), "", "", mutableListOf<Instructions>() as MutableList<Instructions>, false)
+        _recipeCache = Recipe(0, emptyList(), "", "", mutableListOf<Instructions>() as MutableList<Instructions>, "UNSAVED")
 //        for(_recipe in RecipeCache.recipeCache){
 //            if(recipeId == _recipe.id){
 //                _recipeCache = _recipe
@@ -171,7 +171,7 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
             if(recipeData.extendedIngredients != null && recipeData.extendedIngredients.isNotEmpty()){
-                _recipeCache = Recipe(recipeData.id!!, recipeData.extendedIngredients as List<UsedIngredientsItem>, recipeData.title!!, recipeData.image!!, emptyList<Instructions>() as MutableList<Instructions>, false
+                _recipeCache = Recipe(recipeData.id!!, recipeData.extendedIngredients as List<UsedIngredientsItem>, recipeData.title!!, recipeData.image!!, emptyList<Instructions>() as MutableList<Instructions>, "UNSAVED"
                 )
             }
 

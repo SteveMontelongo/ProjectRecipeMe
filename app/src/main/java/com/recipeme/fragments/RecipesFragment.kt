@@ -35,8 +35,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
 
-class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, MainFragmentInteraction, PaginationInteraction {
+enum class RecipeState{UNSAVED, SAVED, FAVORITE}
 
+class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, MainFragmentInteraction, PaginationInteraction {
     private lateinit var _recipeViewModel: RecipeViewModel
     private lateinit var _recyclerView: RecyclerView
     private lateinit var _recipes: MutableList<Recipe>
@@ -75,14 +76,13 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
         _recyclerView = view.findViewById<RecyclerView>(R.id.rvRecipes)
         _recyclerView.adapter = RecipesAdapter(_recipes, this, requireContext())
         _recyclerView.layoutManager= LinearLayoutManager(requireContext())
-        loadRecipeData(false)
+        loadRecipeData("SAVED")
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         return inflater.inflate(R.layout.fragment_recipes, container, false)
     }
 
@@ -105,21 +105,19 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
 
     private fun setResultText(recipeData: List<RecipeResponse>) {
         _recipes.clear()
-        if(recipeData.isEmpty()){
+        _isContentEmpty = if(recipeData.isEmpty()){
             Log.d("Response", "EmptyResponse")
             var main = activity as MainActivity
             main.pageForwardDisable()
-            _isContentEmpty = true
-            Log.d("Recipes Fragment Internal Test", _isContentEmpty.toString())
+            true
         }else{
-            _isContentEmpty = false
-            Log.d("Recipes Fragment Internal Test", _isContentEmpty.toString())
+            false
         }
         for(recipe in recipeData){
             if(recipe.usedIngredients != null){
                 var recipeItem = Recipe(recipe.id!!,
                     recipe.usedIngredients as List<UsedIngredientsItem>, recipe.title!!, recipe.image!!, mutableListOf<Instructions>() as
-                    MutableList<Instructions>, false)
+                    MutableList<Instructions>, "SAVED")
 //                _recipes.add(recipeItem)
 //                if(!RecipeCache.recipeCache.contains(recipeItem)){
 //                    RecipeCache.recipeCache.add(recipeItem)
@@ -134,13 +132,19 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
             var updateRecipes: MutableList<Recipe> = mutableListOf()
             var allIds: MutableList<Int> = mutableListOf()
             allIds.addAll(_recipesDao.getIdsFromCache())
+            for(id in allIds){
+                Log.d("IDS", id.toString())
+            }
             for(recipe in _recipes){
                 if(allIds.contains(recipe.id)){
                     updateRecipes.add(recipe)
+                    Log.d("UPDATE", recipe.id.toString())
                 }else{
                     insertRecipes.add(recipe)
+                    Log.d("INSERT", recipe.id.toString())
                 }
             }
+
             _recipesDao.insertAll(insertRecipes)
             _recipesDao.updateRecipes(updateRecipes)
             Handler(Looper.getMainLooper()).post{
@@ -170,7 +174,7 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
     override fun refreshClickFragment(data: String) {
         val main = activity as MainActivity
         main.pageForwardEnable()
-        loadRecipeData(true)
+        loadRecipeData("UNSAVED")
     }
 
 
@@ -189,12 +193,12 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
         }
     }
 
-    private fun loadRecipeData(refresh: Boolean){
+    private fun loadRecipeData(state: String){
         var ingredientsFromFridge: MutableList<Ingredient> = emptyList<Ingredient>().toMutableList()
         var recipesToUpdate: MutableList<Recipe> = emptyList<Recipe>().toMutableList()
         ingredientsFromFridge.clear()
         _ingredients.clear()
-        if(refresh) {
+        if(state == "UNSAVED") {
             GlobalScope.launch {
                 ingredientsFromFridge.addAll(_fridgeDao.getAll())
                 Handler(Looper.getMainLooper()).post{
@@ -212,7 +216,7 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
                     }
                 }
             }
-        }else {
+        }else if(state == "SAVED"){
             GlobalScope.launch {
                 ingredientsFromFridge.addAll(_fridgeDao.getAll())
                 recipesToUpdate.addAll(_recipesDao.getFromCache())
@@ -237,14 +241,39 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
                     }
                 }
             }
+        }else if(state == "FAVORITE"){
+        GlobalScope.launch {
+            ingredientsFromFridge.addAll(_fridgeDao.getAll())
+            recipesToUpdate.addAll(_recipesDao.getFromFavorite())
+            Handler(Looper.getMainLooper()).post{
+                _ids = IntArray(ingredientsFromFridge.size)
+                _ingredients.addAll(ingredientsFromFridge)
+                for((i, ingredient) in _ingredients.withIndex()){
+                    _ids[i] =  ingredient.id
+                }
+                if (recipesToUpdate.isNotEmpty()) {
+                    Log.d("Recipe", "Data pulled from cache.")
+                    _recipes.addAll(recipesToUpdate)
+                    _recyclerView.adapter?.notifyDataSetChanged()
+                } else {
+                    if (ingredientsFromFridge.isNotEmpty()) {
+                        isFridgeEmptyMsg(false)
+                        _recipeViewModel.getRecipeData(ingredientsFromFridge, (_page - 1)*10)
+                    } else {
+                        isFridgeEmptyMsg(true)
+                        Log.d("Recipe", "No ingredients found in the fridge.")
+                    }
+                }
+            }
         }
+    }
     }
 
     override fun incrementPage(page: Int) {
         Log.d("Increment", "Increment Page")
         _page = page
         addToPreviousPageStack(_recipes)
-        loadRecipeData(true)
+        loadRecipeData("UNSAVED")
     }
 
     override fun decrementPage(page: Int) {

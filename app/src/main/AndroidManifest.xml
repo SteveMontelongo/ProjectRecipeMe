@@ -15,6 +15,13 @@
         android:theme="@style/Theme.RecipeMe"
         tools:targetApi="31">
         <activity
+            android:name=".activities.ThemesActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".activities.InfoActivity"
             android:exported="false">
             <meta-data
@@ -56,7 +63,6 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-
         </activity>
         <activity
             android:name=".activities.PopupGroceryListsList"

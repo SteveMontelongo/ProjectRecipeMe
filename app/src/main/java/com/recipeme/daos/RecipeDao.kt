@@ -6,14 +6,17 @@ import com.recipeme.models.Recipe
 
 @Dao
 interface RecipeDao {
-    @Query("SELECT * FROM Recipe WHERE saved = false")
+    @Query("SELECT * FROM Recipe WHERE state = 'SAVED'")
     fun getFromCache(): MutableList<Recipe>
 
-    @Query("SELECT id FROM Recipe WHERE saved = false")
+    @Query("SELECT id FROM Recipe WHERE state = 'SAVED'")
     fun getIdsFromCache(): MutableList<Int>
 
-    @Query("SELECT * FROM Recipe WHERE saved = true")
-    fun getFromSaved(): MutableList<Recipe>
+//    @Query("SELECT * FROM Recipe WHERE state = 'SAVED'")
+//    fun getFromSaved(): MutableList<Recipe>
+
+    @Query("SELECT * FROM Recipe WHERE state = 'FAVORITE'")
+    fun getFromFavorite(): MutableList<Recipe>
 
     @Query("SELECT * FROM Recipe WHERE id = :id")
     fun getFromId(id: Int): Recipe

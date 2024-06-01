@@ -4,11 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.SettingsActivity"
+    tools:context=".activities.ThemesActivity"
     android:padding="8dp">
 
+    <ImageView
+        android:id="@+id/backgroundAppThemes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/recipe_me_plain"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageButton
-        android:id="@+id/btnCancelSettings"
+        android:id="@+id/btnCancelThemes"
         android:layout_width="80dp"
         android:layout_height="40dp"
         android:background="@drawable/small_item_button_shape"
@@ -21,14 +32,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Settings"
+        android:text="Themes"
         android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/layoutThemesButtonSettings"
+        android:id="@+id/layoutPlainTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/small_item_button_shape"
@@ -38,19 +49,26 @@
         android:layout_marginTop="20dp"
         >
 
+        <ImageView
+            android:id="@+id/ivPlainTheme"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/recipe_me_plain"
+            android:scaleType="fitXY"/>
 
         <Button
-            android:id="@+id/btnThemesSettings"
+            android:id="@+id/btnPainTheme"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="8dp"
             android:ellipsize="end"
-            android:gravity="center|center_vertical"
+            android:gravity="start|center_vertical"
             android:maxLength="27"
             android:maxLines="1"
             android:layout_weight="9"
-            android:text="Themes"
+            android:text="Default"
             android:textStyle="bold"
             android:textSize="20sp"
             android:textColor="@color/black"
@@ -59,26 +77,27 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layoutDeleteFridgeButtonSettings"
+        android:id="@+id/layoutIcecubesTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/small_delete_button_shape"
+        android:background="@drawable/small_item_button_shape"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutThemesButtonSettings"
+        app:layout_constraintTop_toBottomOf="@+id/layoutPlainTheme"
         android:weightSum="10"
         android:layout_marginTop="20dp"
         >
 
         <ImageView
-            android:id="@+id/ivFridgeSettings"
+            android:id="@+id/ivIcecubesTheme"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_weight="1"
-            app:srcCompat="@drawable/ic_fridge_white" />
+            app:srcCompat="@drawable/recipe_me_icecubes"
+            android:scaleType="centerCrop"/>
 
         <Button
-            android:id="@+id/btnDeleteFridgeSettings"
+            android:id="@+id/btnIcecubesTheme"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginStart="12dp"
@@ -88,35 +107,36 @@
             android:maxLength="27"
             android:maxLines="1"
             android:layout_weight="9"
-            android:text="Delete Fridge"
+            android:text="Icecubes"
             android:textStyle="bold"
             android:textSize="20sp"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:background="#00000000"
             />
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layoutDeleteGroceryButtonSettings"
+        android:id="@+id/layoutFruityTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/small_delete_button_shape"
+        android:background="@drawable/small_item_button_shape"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutDeleteFridgeButtonSettings"
+        app:layout_constraintTop_toBottomOf="@+id/layoutIcecubesTheme"
         android:weightSum="10"
         android:layout_marginTop="20dp"
         >
 
         <ImageView
-            android:id="@+id/ivGrocerySettings"
+            android:id="@+id/ivFruityTheme"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_weight="1"
-            app:srcCompat="@drawable/ic_grocery_white" />
+            app:srcCompat="@drawable/recipe_me_fruity"
+            android:scaleType="centerCrop"/>
 
         <Button
-            android:id="@+id/btnDeleteGrocerySettings"
+            android:id="@+id/btnFruityTheme"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginStart="12dp"
@@ -126,13 +146,12 @@
             android:maxLength="27"
             android:maxLines="1"
             android:layout_weight="9"
-            android:text="Delete Grocery"
+            android:text="Fruit"
             android:textStyle="bold"
             android:textSize="20sp"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:background="#00000000"
             />
 
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

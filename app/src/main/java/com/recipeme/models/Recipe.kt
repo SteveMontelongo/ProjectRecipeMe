@@ -12,7 +12,7 @@ data class Recipe(
     @ColumnInfo(name="name") var name: String,
     @ColumnInfo(name="image") var image: String,
     @ColumnInfo(name="instructions") var instructions: MutableList<Instructions>,
-    @ColumnInfo(name="saved") var saved: Boolean
+    @ColumnInfo(name="state") var state: String
 )
 
 @Entity

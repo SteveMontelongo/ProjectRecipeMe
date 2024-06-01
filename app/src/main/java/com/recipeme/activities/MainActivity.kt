@@ -12,6 +12,7 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
     private lateinit var _pageIncrement: ImageButton
     private lateinit var _pageDecrement:ImageButton
     private lateinit var _pageNumber: TextView
+    private lateinit var _background: ImageView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -51,6 +53,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
         _pageNumber = findViewById<TextView>(R.id.tvPageMain)
         _textLabel = findViewById<TextView>(R.id.tvLabelMain)
         _adapter = FragmentAdapter(this)
+        _background = findViewById<ImageView>(R.id.backgroundApp)
+
+        val sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
+        val backgroundInt = sharedPreferences.getInt("background", R.drawable.recipe_me_plain)
+        setBackground(backgroundInt)
+
         viewPager.adapter = _adapter
 
         var tabIcon = listOf<Int>(R.drawable.ic_fridge, R.drawable.ic_grocery, R.drawable.ic_recipes)
@@ -263,11 +271,19 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
     private var resultSettingsLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
         if(result.resultCode == Activity.RESULT_OK){
             val data:Intent? = result.data
-            val f0 = supportFragmentManager.findFragmentByTag("f0") as FridgeFragment
-            val f1 = supportFragmentManager.findFragmentByTag("f1") as GroceryListFragment
-            Log.d("Settings", "ResultCode OK")
-            f0.refreshClickFragment("null")
-            f1.refreshClickFragment("null")
+            try {
+                val f0 = supportFragmentManager.findFragmentByTag("f0") as FridgeFragment
+                val f1 = supportFragmentManager.findFragmentByTag("f1") as GroceryListFragment
+                f0.refreshClickFragment("null")
+                f1.refreshClickFragment("null")
+            }catch(e: Exception){
+                Log.e("Error", e.toString())
+            }
+
+            val sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
+            val backgroundInt = sharedPreferences.getInt("background", R.drawable.recipe_me_plain)
+            Log.d("Theme Test", backgroundInt.toString())
+            setBackground(backgroundInt)
         }
     }
 
@@ -335,4 +351,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
         button.setImageResource(resId)
     }
 
+    private fun setBackground(resId: Int){
+        _background.setImageResource(resId)
+    }
 }
