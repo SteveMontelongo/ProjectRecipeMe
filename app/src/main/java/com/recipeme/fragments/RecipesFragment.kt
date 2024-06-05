@@ -46,6 +46,7 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
     private lateinit var _ingredients: MutableList<Ingredient>
     private lateinit var _recipesDao: RecipeDao
     private lateinit var _ids: IntArray
+    private lateinit var _idsFavorite: IntArray
     private lateinit var _previousPageStack: Stack<Recipe>
     private var _isContentEmpty = false
     private var _page = 1
@@ -116,14 +117,20 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
         }
         for(recipe in recipeData){
             if(recipe.usedIngredients != null){
-                var recipeItem = Recipe(recipe.id!!,
-                    recipe.usedIngredients as List<UsedIngredientsItem>, recipe.title!!, recipe.image!!, mutableListOf<Instructions>() as
-                    MutableList<Instructions>, "SAVED")
+                    var recipeItem = Recipe(
+                        recipe.id!!,
+                        recipe.usedIngredients as List<UsedIngredientsItem>,
+                        recipe.title!!,
+                        recipe.image!!,
+                        mutableListOf<Instructions>() as
+                                MutableList<Instructions>,
+                        "SAVED"
+                    )
 //                _recipes.add(recipeItem)
 //                if(!RecipeCache.recipeCache.contains(recipeItem)){
 //                    RecipeCache.recipeCache.add(recipeItem)
 //                }
-                _recipes.add(recipeItem)
+                    _recipes.add(recipeItem)
 
             }
 
@@ -133,13 +140,17 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
             var updateRecipes: MutableList<Recipe> = mutableListOf()
             var allIds: MutableList<Int> = mutableListOf()
             allIds.addAll(_recipesDao.getIdsFromCache())
+            var favIds = _recipesDao.getIdsFromFavorite()
+            allIds.addAll(favIds)
             for(id in allIds){
                 Log.d("IDS", id.toString())
             }
             for(recipe in _recipes){
                 if(allIds.contains(recipe.id)){
-                    updateRecipes.add(recipe)
-                    Log.d("UPDATE", recipe.id.toString())
+                    if(!favIds.contains(recipe.id)){
+                        updateRecipes.add(recipe)
+                        Log.d("UPDATE", recipe.id.toString())
+                    }
                 }else{
                     insertRecipes.add(recipe)
                     Log.d("INSERT", recipe.id.toString())
@@ -240,6 +251,7 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
                         if (recipesToUpdate.isNotEmpty()) {
                             errorMsg(resources.getText(R.string.error_msg_empty_fridge).toString(), false)
                             Log.d("Recipe", "Data pulled from cache.")
+                            _recipes.clear()
                             _recipes.addAll(recipesToUpdate)
                             _recyclerView.adapter?.notifyDataSetChanged()
                         } else {
@@ -270,6 +282,10 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
                         if (recipesToUpdate.isNotEmpty()) {
                             errorMsg(resources.getText(R.string.error_msg_empty_favorite).toString(),false)
                             Log.d("Recipe", "Data pulled from favorite.")
+                            for(recipe in recipesToUpdate){
+                                Log.d("RecipeFavorite", recipe.name)
+                            }
+                            _recipes.clear()
                             _recipes.addAll(recipesToUpdate)
                             _recyclerView.adapter?.notifyDataSetChanged()
                         } else {

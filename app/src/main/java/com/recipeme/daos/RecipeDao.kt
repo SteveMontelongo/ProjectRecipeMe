@@ -18,6 +18,9 @@ interface RecipeDao {
     @Query("SELECT * FROM Recipe WHERE state = 'FAVORITE'")
     fun getFromFavorite(): MutableList<Recipe>
 
+    @Query("SELECT id FROM Recipe WHERE state = 'FAVORITE'")
+    fun getIdsFromFavorite(): MutableList<Int>
+
     @Query("SELECT * FROM Recipe WHERE id = :id")
     fun getFromId(id: Int): Recipe
 

@@ -42,7 +42,14 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvRecipeNameRecipeDetail"
                 tools:srcCompat="@tools:sample/avatars" />
 
+            <ImageButton
+                android:id="@+id/btnFavoriteRecipeDetail"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/ic_favorite_unfilled"
+                android:layout_gravity="end">
 
+            </ImageButton>
 
             <TextView
                 android:id="@+id/tvRecipeIngredientsUsedLabelRecipeDetail"

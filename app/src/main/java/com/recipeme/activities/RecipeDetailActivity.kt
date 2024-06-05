@@ -2,11 +2,11 @@ package com.recipeme.activities
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.drawable.Icon
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.ContactsContract.CommonDataKinds.Im
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -16,18 +16,15 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.room.Room
-import androidx.room.RoomDatabase
 import com.bumptech.glide.Glide
 import com.recipeme.R
 import com.recipeme.daos.IconDao
 import com.recipeme.daos.RecipeDao
 import com.recipeme.databases.AppDatabase
 import com.recipeme.models.*
-import com.recipeme.utils.RecipeCache
 import com.recipeme.viewmodel.RecipeViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.Collections.copy
 
 class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var _recipeViewModel: RecipeViewModel
@@ -38,7 +35,9 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var _recipeCache : Recipe
     private lateinit var _recipeDao: RecipeDao
     private lateinit var _iconDao: IconDao
+    private var _isFavorite: Boolean = false
     private var _recipeId: Int = 0
+    private lateinit var _favoriteButton: ImageButton
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipe_detail)
@@ -59,15 +58,25 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
 //                _recipeCache = _recipe
 //            }
 //        }
+        _favoriteButton = findViewById<ImageButton>(R.id.btnFavoriteRecipeDetail)
+        _favoriteButton.setOnClickListener(this)
         GlobalScope.launch {
             var recipesCache = _recipeDao.getFromCache()
+            var recipesFavorite = _recipeDao.getFromFavorite()
             Handler(Looper.getMainLooper()).post{
                 for(_recipe in recipesCache){
                     if(recipeId == _recipe.id){
                         _recipeCache = _recipe
                     }
                 }
-
+                for(_recipe in recipesFavorite){
+                    if(recipeId == _recipe.id){
+                        _recipeCache = _recipe
+                        _isFavorite = true
+                    }
+                }
+                Log.d("Recipe Information", _recipeCache.name + _recipeCache.usedIngredients.toString())
+                isFavorite(_isFavorite, _favoriteButton)
                 if (_recipeCache.id != 0){
                     Log.d("Recipe", "Recipe loaded by Cache")
                     findViewById<TextView>(R.id.tvRecipeNameRecipeDetail).text = _recipeCache.name
@@ -286,7 +295,11 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
                 R.id.btnBackRecipeDetail ->{
                     finish()
                 }
+                R.id.btnFavoriteRecipeDetail->{
+                    toggleFavorite(_isFavorite, _favoriteButton)
+                }
             }
+
         }
     }
 
@@ -298,6 +311,31 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
 
     fun loadRecipeInstructions(){
 
+    }
+
+    fun isFavorite(isFavorite: Boolean, favoriteButton : ImageButton){
+        if(isFavorite){
+            favoriteButton.setBackgroundResource(R.drawable.ic_favorite_filled)
+        }else{
+            favoriteButton.setBackgroundResource(R.drawable.ic_favorite_unfilled)
+        }
+    }
+
+    fun toggleFavorite(isFavorite: Boolean, button: ImageButton){
+        if(isFavorite){
+            _recipeCache.state = "SAVED"
+        }else{
+            _recipeCache.state = "FAVORITE"
+        }
+
+        GlobalScope.launch {
+            _recipeDao.update(_recipeCache)
+            Handler(Looper.getMainLooper()).post {
+                Log.d("RecipeFragment", "Recipe Toggle Updated")
+            }
+        }
+        _isFavorite != _isFavorite
+        isFavorite(_isFavorite, _favoriteButton)
     }
 }
 
