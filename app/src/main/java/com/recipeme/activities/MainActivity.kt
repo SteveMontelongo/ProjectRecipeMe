@@ -184,8 +184,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
             2 ->{
                 Log.d("Fragment Position", "2");
                 setButton(btnOne, R.drawable.ic_search, VISIBLE)
-                setButton(btnTwo, R.drawable.ic_help, VISIBLE)
-                btnTwo.setImageResource(R.drawable.ic_help)
+                setButton(btnTwo, R.drawable.ic_favorite_filled, VISIBLE)
                 try {
                     if (_pageIncrement.isInvisible) {
                         val f = supportFragmentManager.findFragmentByTag("f2") as RecipesFragment
@@ -225,8 +224,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                 }
 
                 btnTwo.setOnClickListener() {
-                    var intent = Intent(this, InfoActivity::class.java)
-                    resultHelpLauncher.launch(intent)
+                    //edit
+                    val f = supportFragmentManager.findFragmentByTag("f2") as RecipesFragment
+                    if (f != null) {
+                        // Check if the fragment is properly initialized and attached to the activity
+                        f.favoriteClickFragment("Favorite")
+                        pageReset(_pageNumber)
+                        pagePreviousDisable()
+                        f.pageReset()
+                    } else {
+                        // Handle the case where the fragment or _fridgeDao is not properly initialized
+                        Log.e(
+                            "MainActivity",
+                            "Fragment is not properly initialized"
+                        )
+                    }
                 }
             }
         }

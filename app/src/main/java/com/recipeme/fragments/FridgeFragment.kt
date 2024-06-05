@@ -188,4 +188,8 @@ class FridgeFragment : Fragment(), View.OnClickListener, FridgeOnItemClick, Main
         TODO("Not yet implemented")
     }
 
+    override fun favoriteClickFragment(data: String) {
+        TODO("Not yet implemented")
+    }
+
 }

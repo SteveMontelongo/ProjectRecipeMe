@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -35,7 +36,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
 
-enum class RecipeState{UNSAVED, SAVED, FAVORITE}
+enum class RecipeState{SEARCH, SAVED, FAVORITE}
 
 class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, MainFragmentInteraction, PaginationInteraction {
     private lateinit var _recipeViewModel: RecipeViewModel
@@ -174,7 +175,7 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
     override fun refreshClickFragment(data: String) {
         val main = activity as MainActivity
         main.pageForwardEnable()
-        loadRecipeData("UNSAVED")
+        loadRecipeData("SEARCH")
     }
 
 
@@ -182,14 +183,22 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
         TODO("Not yet implemented")
     }
 
-    private fun isFridgeEmptyMsg(isEmpty: Boolean){
-        var msgError = view?.findViewById<TextView>(R.id.tvErrorMsgRecipes)
-        if(isEmpty){
-            msgError?.text = "Uh oh, looks like your fridge is empty. Try shopping to add ingredients to your fridge."
-            msgError?.visibility = android.view.View.VISIBLE
+    override fun favoriteClickFragment(data: String) {
+        Toast.makeText(this.context, "Favorite", Toast.LENGTH_SHORT).show()
+        loadRecipeData("FAVORITE")
+    }
 
-        }else{
-            msgError?.visibility = android.view.View.INVISIBLE
+    private fun errorMsg(msg: String, isVisible: Boolean){
+        var msgError = view?.findViewById<TextView>(R.id.tvErrorMsgRecipes)
+        when(isVisible){
+            true ->{
+                msgError?.visibility = android.view.View.VISIBLE
+                msgError?.text = msg
+            }
+            false ->{
+                msgError?.text = ""
+                msgError?.visibility = android.view.View.INVISIBLE
+            }
         }
     }
 
@@ -198,82 +207,94 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
         var recipesToUpdate: MutableList<Recipe> = emptyList<Recipe>().toMutableList()
         ingredientsFromFridge.clear()
         _ingredients.clear()
-        if(state == "UNSAVED") {
-            GlobalScope.launch {
-                ingredientsFromFridge.addAll(_fridgeDao.getAll())
-                Handler(Looper.getMainLooper()).post{
-                    _ids = IntArray(ingredientsFromFridge.size)
-                    _ingredients.addAll(ingredientsFromFridge)
-                    for((i, ingredient) in _ingredients.withIndex()){
-                        _ids[i] =  ingredient.id
-                    }
-                    if (ingredientsFromFridge.isNotEmpty()) {
-                        isFridgeEmptyMsg(false)
-                        _recipeViewModel.getRecipeData(ingredientsFromFridge, (_page - 1)*10)
-                    } else {
-                        isFridgeEmptyMsg(true)
-                        Log.d("Recipe", "No ingredients found in the fridge.")
-                    }
-                }
-            }
-        }else if(state == "SAVED"){
-            GlobalScope.launch {
-                ingredientsFromFridge.addAll(_fridgeDao.getAll())
-                recipesToUpdate.addAll(_recipesDao.getFromCache())
-                Handler(Looper.getMainLooper()).post{
-                    _ids = IntArray(ingredientsFromFridge.size)
-                    _ingredients.addAll(ingredientsFromFridge)
-                    for((i, ingredient) in _ingredients.withIndex()){
-                        _ids[i] =  ingredient.id
-                    }
-                    if (recipesToUpdate.isNotEmpty()) {
-                        Log.d("Recipe", "Data pulled from cache.")
-                        _recipes.addAll(recipesToUpdate)
-                        _recyclerView.adapter?.notifyDataSetChanged()
-                    } else {
+        when(state) {
+            "SEARCH"-> {
+                GlobalScope.launch {
+                    ingredientsFromFridge.addAll(_fridgeDao.getAll())
+                    Handler(Looper.getMainLooper()).post {
+                        _ids = IntArray(ingredientsFromFridge.size)
+                        _ingredients.addAll(ingredientsFromFridge)
+                        for ((i, ingredient) in _ingredients.withIndex()) {
+                            _ids[i] = ingredient.id
+                        }
                         if (ingredientsFromFridge.isNotEmpty()) {
-                            isFridgeEmptyMsg(false)
-                            _recipeViewModel.getRecipeData(ingredientsFromFridge, (_page - 1)*10)
+                            errorMsg(resources.getText(R.string.error_msg_empty_fridge).toString(), false)
+                            _recipeViewModel.getRecipeData(ingredientsFromFridge, (_page - 1) * 10)
                         } else {
-                            isFridgeEmptyMsg(true)
+                            errorMsg(resources.getText(R.string.error_msg_empty_fridge).toString(),true)
                             Log.d("Recipe", "No ingredients found in the fridge.")
                         }
                     }
                 }
             }
-        }else if(state == "FAVORITE"){
-        GlobalScope.launch {
-            ingredientsFromFridge.addAll(_fridgeDao.getAll())
-            recipesToUpdate.addAll(_recipesDao.getFromFavorite())
-            Handler(Looper.getMainLooper()).post{
-                _ids = IntArray(ingredientsFromFridge.size)
-                _ingredients.addAll(ingredientsFromFridge)
-                for((i, ingredient) in _ingredients.withIndex()){
-                    _ids[i] =  ingredient.id
+            "SAVED"-> {
+                GlobalScope.launch {
+                    ingredientsFromFridge.addAll(_fridgeDao.getAll())
+                    recipesToUpdate.addAll(_recipesDao.getFromCache())
+                    Handler(Looper.getMainLooper()).post {
+                        _ids = IntArray(ingredientsFromFridge.size)
+                        _ingredients.addAll(ingredientsFromFridge)
+                        for ((i, ingredient) in _ingredients.withIndex()) {
+                            _ids[i] = ingredient.id
+                        }
+                        if (recipesToUpdate.isNotEmpty()) {
+                            errorMsg(resources.getText(R.string.error_msg_empty_fridge).toString(), false)
+                            Log.d("Recipe", "Data pulled from cache.")
+                            _recipes.addAll(recipesToUpdate)
+                            _recyclerView.adapter?.notifyDataSetChanged()
+                        } else {
+                            if (ingredientsFromFridge.isNotEmpty()) {
+                                errorMsg(resources.getText(R.string.error_msg_empty_fridge).toString(),false)
+                                _recipeViewModel.getRecipeData(
+                                    ingredientsFromFridge,
+                                    (_page - 1) * 10
+                                )
+                            } else {
+                                errorMsg(resources.getText(R.string.error_msg_empty_fridge).toString(),true)
+                                Log.d("Recipe", "No ingredients found in the fridge.")
+                            }
+                        }
+                    }
                 }
-                if (recipesToUpdate.isNotEmpty()) {
-                    Log.d("Recipe", "Data pulled from cache.")
-                    _recipes.addAll(recipesToUpdate)
-                    _recyclerView.adapter?.notifyDataSetChanged()
-                } else {
-                    if (ingredientsFromFridge.isNotEmpty()) {
-                        isFridgeEmptyMsg(false)
-                        _recipeViewModel.getRecipeData(ingredientsFromFridge, (_page - 1)*10)
-                    } else {
-                        isFridgeEmptyMsg(true)
-                        Log.d("Recipe", "No ingredients found in the fridge.")
+            }
+            "FAVORITE"-> {
+                GlobalScope.launch {
+                    ingredientsFromFridge.addAll(_fridgeDao.getAll())
+                    recipesToUpdate.addAll(_recipesDao.getFromFavorite())
+                    Handler(Looper.getMainLooper()).post {
+                        _ids = IntArray(ingredientsFromFridge.size)
+                        _ingredients.addAll(ingredientsFromFridge)
+                        for ((i, ingredient) in _ingredients.withIndex()) {
+                            _ids[i] = ingredient.id
+                        }
+                        if (recipesToUpdate.isNotEmpty()) {
+                            errorMsg(resources.getText(R.string.error_msg_empty_favorite).toString(),false)
+                            Log.d("Recipe", "Data pulled from favorite.")
+                            _recipes.addAll(recipesToUpdate)
+                            _recyclerView.adapter?.notifyDataSetChanged()
+                        } else {
+                            /*if (ingredientsFromFridge.isNotEmpty()) {
+                                isFridgeEmptyMsg(false)
+                                _recipeViewModel.getRecipeData(
+                                    ingredientsFromFridge,
+                                    (_page - 1) * 10
+                                )
+                            } else {*/
+                                errorMsg(resources.getText(R.string.error_msg_empty_favorite).toString(),true)
+                                Log.d("Recipe", "No recipes were favorited.")
+
+                        }
                     }
                 }
             }
         }
-    }
     }
 
     override fun incrementPage(page: Int) {
         Log.d("Increment", "Increment Page")
         _page = page
         addToPreviousPageStack(_recipes)
-        loadRecipeData("UNSAVED")
+        loadRecipeData("SEARCH")
     }
 
     override fun decrementPage(page: Int) {

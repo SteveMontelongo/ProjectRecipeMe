@@ -177,5 +177,9 @@ class GroceryListFragment : Fragment(), View.OnClickListener, GroceryListOnItemC
         resultEditLauncher.launch(intent)
     }
 
+    override fun favoriteClickFragment(data: String) {
+        TODO("Not yet implemented")
+    }
+
 }
 
