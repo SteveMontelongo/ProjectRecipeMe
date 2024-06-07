@@ -46,10 +46,10 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
     private lateinit var _ingredients: MutableList<Ingredient>
     private lateinit var _recipesDao: RecipeDao
     private lateinit var _ids: IntArray
-    private lateinit var _idsFavorite: IntArray
     private lateinit var _previousPageStack: Stack<Recipe>
     private var _isContentEmpty = false
     private var _page = 1
+    private var _isFavoriteTab = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -64,7 +64,6 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
         _previousPageStack = Stack()
         _recipeViewModel = RecipeViewModel()
         subscribe()
-
         _recipes = emptyList<Recipe>().toMutableList()
 
     }
@@ -191,12 +190,12 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
 
 
     override fun addClickFragment(data: String) {
-        TODO("Not yet implemented")
+        return
     }
 
-    override fun favoriteClickFragment(data: String) {
-        Toast.makeText(this.context, "Favorite", Toast.LENGTH_SHORT).show()
-        loadRecipeData("FAVORITE")
+    override fun favoriteClickFragment(state: String) {
+        loadRecipeData(state)
+        _isFavoriteTab = !_isFavoriteTab
     }
 
     private fun errorMsg(msg: String, isVisible: Boolean){
@@ -362,5 +361,9 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
         Log.d("Recipes Fragment Internal Test", _isContentEmpty.toString())
         Log.d("Empty", " ")
         return emptyList<Recipe>().toMutableList()
+    }
+
+    fun isFavoriteTabActive(): Boolean{
+        return _isFavoriteTab
     }
 }

@@ -233,7 +233,7 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
         }
-        Log.d("Recipe", "ResultText " + resultText)
+        Log.d("Recipe", "ResultText $resultText")
         findViewById<TextView>(R.id.tvRecipeInstructionsRecipeDetail).text = resultText
     }
 
@@ -313,7 +313,8 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
-    fun isFavorite(isFavorite: Boolean, favoriteButton : ImageButton){
+
+    private fun isFavorite(isFavorite: Boolean, favoriteButton : ImageButton){
         if(isFavorite){
             favoriteButton.setBackgroundResource(R.drawable.ic_favorite_filled)
         }else{
@@ -321,9 +322,10 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    fun toggleFavorite(isFavorite: Boolean, button: ImageButton){
+    private fun toggleFavorite(isFavorite: Boolean, button: ImageButton){
         if(isFavorite){
             _recipeCache.state = "SAVED"
+
         }else{
             _recipeCache.state = "FAVORITE"
         }
@@ -334,8 +336,10 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
                 Log.d("RecipeFragment", "Recipe Toggle Updated")
             }
         }
-        _isFavorite != _isFavorite
-        isFavorite(_isFavorite, _favoriteButton)
+        Log.d("Favorite - before", _isFavorite.toString())
+        _isFavorite = !_isFavorite
+        Log.d("Favorite - after", _isFavorite.toString())
+        isFavorite(_isFavorite, button)
     }
 }
 

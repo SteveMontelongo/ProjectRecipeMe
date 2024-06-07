@@ -94,6 +94,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
         _textLabel.text = tab?.text.toString()
         val btnOne = findViewById<ImageButton>(R.id.ibOneMain)
         val btnTwo = findViewById<ImageButton>(R.id.ibTwoMain)
+
         when(tab?.position){
             0 ->{
                 Log.d("Fragment Position", "0");
@@ -182,12 +183,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                 }
             }
             2 ->{
-                Log.d("Fragment Position", "2");
-                setButton(btnOne, R.drawable.ic_search, VISIBLE)
-                setButton(btnTwo, R.drawable.ic_favorite_filled, VISIBLE)
                 try {
+                    val f = supportFragmentManager.findFragmentByTag("f2") as RecipesFragment
+                    Log.d("Fragment Position", "2");
+                    setButton(btnOne, R.drawable.ic_search, VISIBLE)
+                    if(f.isFavoriteTabActive()) {
+                        setButton(btnTwo, R.drawable.ic_cached, VISIBLE)
+                    }else{
+                        setButton(btnTwo, R.drawable.ic_favorite_filled_black, VISIBLE)
+                    }
                     if (_pageIncrement.isInvisible) {
-                        val f = supportFragmentManager.findFragmentByTag("f2") as RecipesFragment
+
                         if (f.isForwardPageDisabled()) {
                             pageForwardDisable()
                         } else {
@@ -195,6 +201,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                         }
                     }
                 }catch(e: java.lang.Exception){
+                    setButton(btnTwo, R.drawable.ic_favorite_filled_black, VISIBLE)
                     Log.e("error", e.toString())
                 }
                 if(_pageDecrement.isInvisible && _pageNumber.text.toString().toInt() >= 2) {
@@ -205,7 +212,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                 if(_pageNumber.isInvisible) {
                     _pageNumber.visibility = VISIBLE
                 }
-                //refresh
+                //Search
                 btnOne.setOnClickListener() {
                     val f = supportFragmentManager.findFragmentByTag("f2") as RecipesFragment
                     if (f != null) {
@@ -214,6 +221,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                         pageReset(_pageNumber)
                         pagePreviousDisable()
                         f.pageReset()
+                        _textLabel.text = "Recipes"
                     } else {
                         // Handle the case where the fragment or _fridgeDao is not properly initialized
                         Log.e(
@@ -223,12 +231,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                     }
                 }
 
+                //toggle favorites/cache
                 btnTwo.setOnClickListener() {
-                    //edit
                     val f = supportFragmentManager.findFragmentByTag("f2") as RecipesFragment
                     if (f != null) {
                         // Check if the fragment is properly initialized and attached to the activity
-                        f.favoriteClickFragment("Favorite")
+                        if(f.isFavoriteTabActive()){
+                            f.favoriteClickFragment("SAVED")
+                            btnTwo.setImageResource(R.drawable.ic_favorite_filled_black)
+                            _textLabel.text = "Saved Recipes"
+                        }else{
+
+                            f.favoriteClickFragment("FAVORITE")
+                            btnTwo.setImageResource(R.drawable.ic_cached)
+                            _textLabel.text = "Favorite Recipes"
+                        }
                         pageReset(_pageNumber)
                         pagePreviousDisable()
                         f.pageReset()
@@ -366,4 +383,5 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
     private fun setBackground(resId: Int){
         _background.setImageResource(resId)
     }
+
 }
