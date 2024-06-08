@@ -31,7 +31,6 @@ import com.recipeme.utils.IngredientsData
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-
 class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabSelectedListener, MainActivityInteraction{
 
     private lateinit var _textLabel: TextView
@@ -84,9 +83,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
             var lineSplit = line!!.split(";")
             data.map[lineSplit[1].toInt()] = lineSplit[0]
         }
-
-
-
     }
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -192,26 +188,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                     }else{
                         setButton(btnTwo, R.drawable.ic_favorite_filled_black, VISIBLE)
                     }
-                    if (_pageIncrement.isInvisible) {
-
-                        if (f.isForwardPageDisabled()) {
-                            pageForwardDisable()
-                        } else {
-                            pageForwardEnable()
-                        }
-                    }
+//                    if (_pageIncrement.isInvisible) {
+//
+//                        if (f.isForwardPageDisabled()) {
+//                            pageForwardDisable()
+//                        } else {
+//                            pageForwardEnable()
+//                        }
+//                    }
                 }catch(e: java.lang.Exception){
                     setButton(btnTwo, R.drawable.ic_favorite_filled_black, VISIBLE)
+                    pagePreviousDisable()
+                    pageForwardDisable()
                     Log.e("error", e.toString())
                 }
-                if(_pageDecrement.isInvisible && _pageNumber.text.toString().toInt() >= 2) {
-                    pagePreviousEnable()
-                }else{
-                    pagePreviousDisable()
-                }
-                if(_pageNumber.isInvisible) {
-                    _pageNumber.visibility = VISIBLE
-                }
+
                 //Search
                 btnOne.setOnClickListener() {
                     val f = supportFragmentManager.findFragmentByTag("f2") as RecipesFragment
@@ -222,6 +213,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                         pagePreviousDisable()
                         f.pageReset()
                         _textLabel.text = "Recipes"
+                        if(_pageDecrement.isInvisible && _pageNumber.text.toString().toInt() >= 2) {
+                            pagePreviousEnable()
+                        }else{
+                            pagePreviousDisable()
+                        }
+                        if(_pageNumber.isInvisible) {
+                            _pageNumber.visibility = VISIBLE
+                        }
                     } else {
                         // Handle the case where the fragment or _fridgeDao is not properly initialized
                         Log.e(
@@ -235,6 +234,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                 btnTwo.setOnClickListener() {
                     val f = supportFragmentManager.findFragmentByTag("f2") as RecipesFragment
                     if (f != null) {
+                        pageForwardDisable()
+                        pagePreviousDisable()
+                        _pageNumber.visibility = INVISIBLE
                         // Check if the fragment is properly initialized and attached to the activity
                         if(f.isFavoriteTabActive()){
                             f.favoriteClickFragment("SAVED")

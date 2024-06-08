@@ -163,6 +163,13 @@ class GroceryListFragment : Fragment(), View.OnClickListener, GroceryListOnItemC
         resultItemLauncher.launch(intent)
     }
 
+    override fun onClickLaunch(position: Int, name: String) {
+        val intent = Intent(this.context, GroceryListContentActivity::class.java)
+        intent.putExtra("ListName", name)
+        intent.putExtra("Position", position)
+        resultItemLauncher.launch(intent)
+    }
+
     override fun refreshClickFragment(data: String) {
         Log.d("Refreshing GroceryLists", "Testing")
         loadGroceryLists()

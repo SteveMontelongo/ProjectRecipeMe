@@ -18,6 +18,7 @@ class GroceryListsListAdapter(private var groceryLists: List<GroceryList>, priva
         val dateTextView: TextView = itemView.findViewById<TextView>(R.id.tvGroceryListsListDate)
         val deleteButton: ImageButton = itemView.findViewById<ImageButton>(R.id.ibDeleteGroceryListsList)
         val editButton: ImageButton = itemView.findViewById<ImageButton>(R.id.ibEditGroceryListsList)
+        val launchButton: ImageButton = itemView.findViewById<ImageButton>(R.id.ibLaunchGroceryListsList)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroceryListsListAdapter.GroceryListsListViewHolder {
@@ -40,6 +41,9 @@ class GroceryListsListAdapter(private var groceryLists: List<GroceryList>, priva
         }
         holder.editButton.setOnClickListener{
             this.clickListener.onClickEdit(holder.absoluteAdapterPosition, groceryList.name)
+        }
+        holder.launchButton.setOnClickListener{
+            this.clickListener.onClickLaunch(holder.absoluteAdapterPosition, groceryList.name)
         }
     }
 

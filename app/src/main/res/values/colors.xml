@@ -19,4 +19,5 @@
     <color name="list_item">#EEEEEEEE</color>
     <color name="list_item_pressed">#DDDDDDDD</color>
     <color name="cart_item_checked">#F000F000</color>
+    <color name="cart_item_pressed">#F000A000</color>
 </resources>
