@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -50,6 +51,7 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
     private var _isContentEmpty = false
     private var _page = 1
     private var _isFavoriteTab = false
+    private var _lastClickTime = 0.0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -106,7 +108,14 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
 
     private fun setResultText(recipeData: List<RecipeResponse>) {
         _recipes.clear()
-        _isContentEmpty = if(recipeData.isEmpty()){
+        var recipeDataSubList = emptyList<RecipeResponse>().toMutableList()
+        for(recipe in recipeData){
+            recipeDataSubList.add(recipe)
+            if(recipeDataSubList.size > 9){
+                break
+            }
+        }
+        _isContentEmpty = if(recipeData.size < 11){
             Log.d("Response", "EmptyResponse")
             var main = activity as MainActivity
             main.pageForwardDisable()
@@ -114,7 +123,7 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
         }else{
             false
         }
-        for(recipe in recipeData){
+        for(recipe in recipeDataSubList){
             if(recipe.usedIngredients != null){
                     var recipeItem = Recipe(
                         recipe.id!!,
@@ -359,11 +368,11 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
         main.pageForwardDisable()
         _isContentEmpty = true
         Log.d("Recipes Fragment Internal Test", _isContentEmpty.toString())
-        Log.d("Empty", " ")
         return emptyList<Recipe>().toMutableList()
     }
 
     fun isFavoriteTabActive(): Boolean{
         return _isFavoriteTab
     }
+
 }

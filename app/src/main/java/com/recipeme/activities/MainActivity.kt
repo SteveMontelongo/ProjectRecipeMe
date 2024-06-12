@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import android.view.View
 import android.view.View.INVISIBLE
@@ -39,6 +40,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
     private lateinit var _pageDecrement:ImageButton
     private lateinit var _pageNumber: TextView
     private lateinit var _background: ImageView
+    private var _lastClickTime = 0.0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -126,6 +128,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                 }
                 //manualRefresh
                 findViewById<ImageButton>(R.id.ibOneMain).setOnClickListener() {
+                    if(isSpamClick())return@setOnClickListener
                     val f = supportFragmentManager.findFragmentByTag("f0") as FridgeFragment
                     if (f != null) {
                         // Check if the fragment is properly initialized and attached to the activity
@@ -140,6 +143,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                 }
 
                 btnTwo.setOnClickListener() {
+                    if(isSpamClick())return@setOnClickListener
                     var intent = Intent(this, InfoActivity::class.java)
                     resultHelpLauncher.launch(intent)
                 }
@@ -158,6 +162,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                     _pageNumber.visibility = INVISIBLE
                 }
                 btnOne.setOnClickListener() {
+                    if(isSpamClick())return@setOnClickListener
                     val f =
                         supportFragmentManager.findFragmentByTag("f1") as GroceryListFragment
 
@@ -174,15 +179,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                 }
 
                 btnTwo.setOnClickListener() {
+                    if(isSpamClick())return@setOnClickListener
                     var intent = Intent(this, InfoActivity::class.java)
                     resultHelpLauncher.launch(intent)
                 }
             }
             2 ->{
+                Log.d("Fragment Position", "2");
+                setButton(btnOne, R.drawable.ic_search, VISIBLE)
                 try {
                     val f = supportFragmentManager.findFragmentByTag("f2") as RecipesFragment
-                    Log.d("Fragment Position", "2");
-                    setButton(btnOne, R.drawable.ic_search, VISIBLE)
                     if(f.isFavoriteTabActive()) {
                         setButton(btnTwo, R.drawable.ic_cached, VISIBLE)
                     }else{
@@ -205,6 +211,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
 
                 //Search
                 btnOne.setOnClickListener() {
+                    if(isSpamClick())return@setOnClickListener
                     val f = supportFragmentManager.findFragmentByTag("f2") as RecipesFragment
                     if (f != null) {
                         // Check if the fragment is properly initialized and attached to the activity
@@ -232,6 +239,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
 
                 //toggle favorites/cache
                 btnTwo.setOnClickListener() {
+                    if(isSpamClick())return@setOnClickListener
+
                     val f = supportFragmentManager.findFragmentByTag("f2") as RecipesFragment
                     if (f != null) {
                         pageForwardDisable()
@@ -278,6 +287,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
             when(v.id){
 
                 R.id.ibPageIncrementMain ->{
+                    if(isSpamClick())return
                     val f = supportFragmentManager.findFragmentByTag("f2") as RecipesFragment
                     Log.d("Main", "Increase")
                     if(increasePageNumber(_pageNumber)){
@@ -285,6 +295,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                         }
                 }
                 R.id.ibPageDecrementMain ->{
+                    if(isSpamClick())return
                     val f = supportFragmentManager.findFragmentByTag("f2") as RecipesFragment
                     Log.d("Main", "Decrease")
                     if(decreasePageNumber(_pageNumber)) {
@@ -292,6 +303,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                     }
                 }
                 R.id.ibMoreMain->{
+                    if(isSpamClick())return
                     val intent = Intent(this, SettingsActivity::class.java)
                     resultSettingsLauncher.launch(intent)
                 }
@@ -384,6 +396,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
 
     private fun setBackground(resId: Int){
         _background.setImageResource(resId)
+    }
+
+    fun isSpamClick(): Boolean{
+        if (SystemClock.elapsedRealtime() -_lastClickTime < 2000){
+            Log.d("Click", "Too fast")
+            return true
+        }
+        _lastClickTime = SystemClock.elapsedRealtime().toDouble();
+        return false
     }
 
 }

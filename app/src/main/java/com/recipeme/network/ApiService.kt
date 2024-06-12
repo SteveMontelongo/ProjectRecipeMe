@@ -10,7 +10,7 @@ interface ApiService {
     fun getRecipeByIngredients(
         @Query("apiKey") key:String = ApiConfig.API_KEY,
         @Query("ingredients") ingredients: String,
-        @Query("number") number: String = "10",
+        @Query("number") number: String = "20",
         @Query("offset") offset: Int
     ): Call<List<RecipeResponse>>
 
