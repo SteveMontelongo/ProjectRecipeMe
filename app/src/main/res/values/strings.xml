@@ -12,6 +12,62 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
+    <!-- Strings used for the application - English -->
     <string name="error_msg_empty_fridge">Uh oh, looks like your fridge is empty. Try shopping to add ingredients to your fridge.</string>
     <string name="error_msg_empty_favorite">Uh oh, looks like you haven\'t favorited a recipe. Try to add a recipe to your favorites.</string>
+    <!-- Main Page - English -->
+    <string name="main_page_label_fridge">Fridge</string>
+    <string name="main_page_label_grocery">Grocery</string>
+    <string name="main_page_label_recipes">Recipes</string>
+    <string name="main_page_label_saved_recipes">Saved Recipes</string>
+    <string name="main_page_label_favorite_recipes">Favorite Recipes</string>
+    <!-- Grocerylist Content Page - English -->
+    <string name="grocery_content_label">Grocery</string>
+    <string name="grocery_content_update">Update</string>
+    <!-- Grocerylist Edit Page - English -->
+    <string name="grocery_edit_input_hint">Enter list name</string>
+    <string name="grocery_edit_input_warning_1">Please enter a valid list name.</string>
+    <string name="grocery_edit_input_warning_2">Limit list name under 21 characters.</string>
+    <string name="grocery_edit_input_warning_3">A list of that name already exists!</string>
+    <string name="grocery_edit_input_ingredient_hint">Ingredient</string>
+    <string name="grocery_edit_ingredient_warning_1">Please enter valid quantity.</string>
+    <string name="grocery_edit_ingredient_warning_2">Max quantity exceeded.</string>
+    <string name="grocery_edit_quantity_label">QTY.</string>
+    <string name="grocery_edit_save">Save</string>
+    <!-- Info Page - English -->
+    <string name="info_label">Information</string>
+    <string name="info_text_1">\nThank you for using RecipeMe!
+    \nTo get started, you must create a grocery list in the Grocery tab.</string>
+    <string name="info_text_2">\nPress the add button to add a new grocery list.</string>
+    <string name="info_text_3">Enter a list name on top, then add any ingredients to the list.
+Any ingredients listed in blue will be considered custom and will not affect your fridge; however,
+they can still be tracked in your grocery list. Once you are done adding ingredients to your list,
+press the save button below to save your list.</string>
+    <string name="info_text_4">\nTo delete a list, hold on the red button for 2 seconds.
+To edit a list, click on the yellow button. To see a list\'s contents and add them to your fridge click on the list\'s name.</string>
+    <string name="info_text_5">\nYou can confirm if you have an item by clicking on the cart item. If it\'s green it is considered \'obtained\'.
+When you want to confirm all the items you have in your cart, press on the confirm button and it will add all the items into your fridge.</string>
+    <string name="info_text_6">\nThis tab is called your fridge. These are the items that have been obtained in your grocery list.
+To delete an item, hold the red button for 2 seconds. The recipe tab will bring up recipes based on the items in this fridge.</string>
+    <string name="info_text_7">\nThis tab is the recipes tab. You can search up recipes by clicking the search button on top.
+You can also navigate through pages using the arrow buttons next to the page number. Each page will display up to 10 recipes.</string>
+    <!-- Recipe Confirmation Page - English -->
+    <string name="recipe_confirmation_page_label">Have you used up any of these ingredients?</string>
+    <string name="page_cancel_label">Cancel</string>
+    <string name="page_update_label">Update</string>
+    <!-- Recipe Detail Page - English -->
+    <string name="recipe_detail_ingredients_label">Ingredients</string>
+    <string name="recipe_detail_steps_label">Let\'s make it!</string>
+    <!-- Settings Page - English -->
+    <string name="settings_page_label">Settings</string>
+    <string name="settings_themes">Themes</string>
+    <string name="settings_fridge_delete">DELETE FRIDGE</string>
+    <string name="settings_grocery_delete">DELETE GROCERY</string>
+    <string name="settings_hold_label">Press and hold to</string>
+    <!-- Themes Page - English -->
+    <string name="themes_label">Themes</string>
+
+
+
+
 </resources>

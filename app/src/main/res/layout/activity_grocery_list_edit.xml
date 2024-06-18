@@ -16,7 +16,7 @@
         android:gravity="center"
         android:hint="Enter list name"
         android:inputType="textPersonName"
-        android:text="List Name"
+        android:text=""
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -143,7 +143,6 @@
             android:layout_margin="4dp"
             android:layout_weight=".75"
             android:background="@drawable/small_confirm_button_shape"
-            android:text="Add"
             app:srcCompat="@drawable/ic_increment" />
     </LinearLayout>
 
@@ -152,7 +151,6 @@
         android:layout_width="80dp"
         android:layout_height="40dp"
         android:background="@drawable/small_item_button_shape"
-        android:text="Cancel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_arrow_back" />

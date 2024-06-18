@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Fragment
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -56,13 +57,24 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
         _adapter = FragmentAdapter(this)
         _background = findViewById<ImageView>(R.id.backgroundApp)
 
+
         val sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
         val backgroundInt = sharedPreferences.getInt("background", R.drawable.recipe_me_plain)
         setBackground(backgroundInt)
 
+        //set english
+        val editor: SharedPreferences.Editor = sharedPreferences.edit()
+        editor.putString("language", "english")
+        editor.apply()
+
+        //testing
+        val languageString = sharedPreferences.getString("language", "default")
+        Log.d("Language test", languageString.toString())
+
         viewPager.adapter = _adapter
 
         var tabIcon = listOf<Int>(R.drawable.ic_fridge, R.drawable.ic_grocery, R.drawable.ic_recipes)
+
         var tabTitle = listOf<String>("Fridge", "Grocery", "Recipes")
 
         tabLayout.addOnTabSelectedListener(this)
@@ -398,7 +410,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
         _background.setImageResource(resId)
     }
 
-    fun isSpamClick(): Boolean{
+    private fun isSpamClick(): Boolean{
         if (SystemClock.elapsedRealtime() -_lastClickTime < 2000){
             Log.d("Click", "Too fast")
             return true

@@ -36,7 +36,7 @@
         android:id="@+id/tvLabelRecipeConfirmation"
         android:layout_width="224dp"
         android:layout_height="wrap_content"
-        android:text="Have you used up any of these ingredients?"
+        android:text="@string/recipe_confirmation_page_label"
         android:textAlignment="center"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -50,7 +50,7 @@
         android:layout_margin="4dp"
         android:backgroundTint="@color/dark_red"
 
-        android:text="Cancel"
+        android:text="@string/page_cancel_label"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnUpdateRecipeConfirmation"
@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
 
         android:layout_margin="4dp"
-        android:text="Update"
+        android:text="@string/page_update_label"
         app:layout_constraintBottom_toBottomOf="@+id/btnCancelRecipeConfirmation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

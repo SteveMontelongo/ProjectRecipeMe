@@ -102,7 +102,7 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
                     }else if(newListName.length > 20){
                         _listNameWarningString.text = "Limit list name under 21 characters."
                     }else if(nameIsDuplicate(newListName, _listOfNames)){
-                        Toast.makeText(this, " A list of that name already exists!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "A list of that name already exists!", Toast.LENGTH_SHORT).show()
                     }else{
                         _listNameWarningString.text = ""
                         val currentDate = DateFormat.getDateInstance().format(Date())

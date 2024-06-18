@@ -59,7 +59,7 @@
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:isScrollContainer="true"
-                android:text="Ingredients"
+                android:text="@string/recipe_detail_ingredients_label"
 
                 />
             <TextView
@@ -79,7 +79,7 @@
                 android:textStyle="bold"
                 android:layout_marginTop="20dp"
                 android:isScrollContainer="true"
-                android:text="Let's make it!"
+                android:text="@string/recipe_detail_steps_label"
 
                 />
             <TextView
@@ -98,7 +98,7 @@
         android:id="@+id/btnConfirmRecipeDetail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Let's make it!"
+        android:text="@string/recipe_detail_steps_label"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -108,7 +108,6 @@
         android:id="@+id/btnBackRecipeDetail"
         android:layout_width="80dp"
         android:layout_height="40dp"
-        android:text="Back"
         android:background="@drawable/small_item_button_shape"
         app:srcCompat="@drawable/ic_baseline_arrow_back"
         app:layout_constraintStart_toStartOf="parent"
