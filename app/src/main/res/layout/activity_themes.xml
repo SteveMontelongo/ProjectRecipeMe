@@ -28,7 +28,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_arrow_back" />
     <TextView
-        android:id="@+id/settingsLabel"
+        android:id="@+id/themesLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -45,7 +45,7 @@
         android:background="@drawable/small_item_button_shape"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settingsLabel"
+        app:layout_constraintTop_toBottomOf="@+id/themesLabel"
         android:layout_marginTop="20dp"
         >
 

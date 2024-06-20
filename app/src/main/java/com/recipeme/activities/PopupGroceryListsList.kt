@@ -33,7 +33,9 @@ class PopupGroceryListsList : AppCompatActivity() {
         val name = findViewById<EditText>(R.id.etGListName)
         val cancelButton = findViewById<Button>(R.id.btnCancelPopUpGroceryListsList)
         val confirmButton = findViewById<Button>(R.id.btnConfirmPopUpGroceryListsList)
-
+        val sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
+        val languageString = sharedPreferences.getString("language", "english")
+        Log.d("Language test", languageString.toString())
         var listOfNames = emptyList<String>().toMutableList()
         GlobalScope.launch {
             this?.let {
@@ -47,12 +49,11 @@ class PopupGroceryListsList : AppCompatActivity() {
 
         confirmButton.setOnClickListener(){
             if(name.text.toString().isEmpty()){
-                Toast.makeText(this, "Please enter a valid name", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getMsg(0, languageString!!), Toast.LENGTH_SHORT).show()
             }else if(name.text.toString().length > 20) {
-                Toast.makeText(this, "Please limit character length to 20 characters", Toast.LENGTH_SHORT).show()
-            }else if(nameIsDuplicate(name.text.toString(
-            ), listOfNames)){
-                Toast.makeText(this, " A list of that name already exists!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getMsg(1, languageString!!), Toast.LENGTH_SHORT).show()
+            }else if(nameIsDuplicate(name.text.toString(), listOfNames)){
+                Toast.makeText(this, getMsg(2, languageString!!), Toast.LENGTH_SHORT).show()
             }
             else{
                 val intent = Intent()
@@ -73,6 +74,25 @@ class PopupGroceryListsList : AppCompatActivity() {
 
     private fun nameIsDuplicate(name: String, list: MutableList<String>):Boolean{
         return list.contains(name)
+    }
+
+    private fun getMsg(msgCode: Int, lang: String): String{
+        if(lang == "english"){
+            return when(msgCode){
+                0 -> getString(R.string.grocery_edit_input_warning_1)
+                1 -> getString(R.string.grocery_edit_input_warning_2)
+                2 -> getString(R.string.grocery_edit_input_warning_3)
+                else -> getString(R.string.grocery_edit_input_warning_1)
+            }
+        }else if (lang == "spanish"){
+            return when(msgCode){
+                0 -> "Por favor ingrese un nombre valido."
+                1 -> "Limite la longitud de los caracteres a 20 caracteres."
+                2 -> "Ya existe una lista con ese nombre!"
+                else -> "Por favor ingrese un nombre valido."
+            }
+        }
+        return "invalid"
     }
 
 }

@@ -17,7 +17,7 @@
         app:srcCompat="@drawable/ic_baseline_arrow_back" />
 
     <TextView
-        android:id="@+id/InfoLabel"
+        android:id="@+id/infoLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -35,7 +35,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/InfoLabel"
+        app:layout_constraintTop_toBottomOf="@+id/infoLabel"
         app:layout_constraintVertical_bias="1.0">
 
         <LinearLayout
@@ -47,43 +47,123 @@
                 android:id="@+id/groceryInfo1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="20sp"
                 android:text="@string/info_text_1" />
 
             <TextView
                 android:id="@+id/groceryInfo2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="20sp"
                 android:text="@string/info_text_2" />
+
+            <ImageView
+                android:layout_width="250dp"
+                android:layout_height="500dp"
+                android:scaleType="fitXY"
+                android:layout_gravity="center"
+                android:src="@drawable/recipe_me_info1" />
 
             <TextView
                 android:id="@+id/groceryInfo3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="20sp"
                 android:text="@string/info_text_3" />
+
+            <ImageView
+                android:layout_width="250dp"
+                android:layout_height="500dp"
+                android:scaleType="fitXY"
+                android:layout_gravity="center"
+                android:src="@drawable/recipe_me_info2" />
+            <ImageView
+                android:layout_width="250dp"
+                android:layout_height="500dp"
+                android:scaleType="fitXY"
+                android:layout_gravity="center"
+                android:src="@drawable/recipe_me_info3" />
 
             <TextView
                 android:id="@+id/groceryInfo4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="20sp"
                 android:text="@string/info_text_4" />
+
+            <ImageView
+                android:layout_width="250dp"
+                android:layout_height="500dp"
+                android:scaleType="fitXY"
+                android:layout_gravity="center"
+                android:src="@drawable/recipe_me_info4" />
 
             <TextView
                 android:id="@+id/groceryInfo5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="20sp"
                 android:text="@string/info_text_5" />
+
+            <ImageView
+                android:layout_width="250dp"
+                android:layout_height="500dp"
+                android:scaleType="fitXY"
+                android:layout_gravity="center"
+                android:src="@drawable/recipe_me_info5" />
 
             <TextView
                 android:id="@+id/groceryInfo6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="20sp"
                 android:text="@string/info_text_6" />
+
+            <ImageView
+                android:layout_width="250dp"
+                android:layout_height="500dp"
+                android:scaleType="fitXY"
+                android:layout_gravity="center"
+                android:src="@drawable/recipe_me_info6" />
 
             <TextView
                 android:id="@+id/groceryInfo7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="20sp"
                 android:text="@string/info_text_7" />
+
+            <ImageView
+                android:layout_width="250dp"
+                android:layout_height="500dp"
+                android:scaleType="fitXY"
+                android:layout_gravity="center"
+                android:src="@drawable/recipe_me_info8" />
+
+            <TextView
+                android:id="@+id/groceryInfo8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="@string/info_text_7" />
+            <ImageView
+                android:layout_width="250dp"
+                android:layout_height="500dp"
+                android:scaleType="fitXY"
+                android:layout_gravity="center"
+                android:src="@drawable/recipe_me_info7" />
+            <TextView
+                android:id="@+id/groceryInfo9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="@string/info_text_7" />
+            <ImageView
+                android:layout_width="250dp"
+                android:layout_height="500dp"
+                android:scaleType="fitXY"
+                android:layout_gravity="center"
+                android:src="@drawable/recipe_me_info9" />
 
         </LinearLayout>
     </ScrollView>

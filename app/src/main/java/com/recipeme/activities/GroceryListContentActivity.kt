@@ -33,6 +33,8 @@ class GroceryListContentActivity : AppCompatActivity(), GroceryContentOnItemClic
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_grocery_list_content)
+        val sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
+        val languageString = sharedPreferences.getString("language", "english")
         var listNameTextView = findViewById<TextView>(R.id.tvGroceryListContentName)
         var db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "recipe-me-database").build()
         var listName = intent.getStringExtra("ListName").toString()
@@ -40,7 +42,9 @@ class GroceryListContentActivity : AppCompatActivity(), GroceryContentOnItemClic
         _ingredients = emptyList<Ingredient>().toMutableList()
         _groceryListDao = db.groceryListDao()
         _fridgeDao = db.fridgeDao()
-        findViewById<Button>(R.id.btnUpdateGroceryListContent).setOnClickListener(this)
+        var updateButton = findViewById<Button>(R.id.btnUpdateGroceryListContent)
+        updateButton.setOnClickListener(this)
+        updateButton.text = getMsg(1, languageString!!)
         findViewById<ImageButton>(R.id.btnCancelGroceryListContent).setOnClickListener(this)
         GlobalScope.launch{
             this?.let {
@@ -131,5 +135,22 @@ class GroceryListContentActivity : AppCompatActivity(), GroceryContentOnItemClic
                 }
             }
         }
+    }
+
+    private fun getMsg(msgCode: Int, lang: String): String{
+        if(lang == "english"){
+            return when(msgCode){
+                0 -> getString(R.string.grocery_content_label)
+                1 -> getString(R.string.page_update_label)
+                else -> getString(R.string.grocery_content_label)
+            }
+        }else if (lang == "spanish"){
+            return when(msgCode){
+                0 -> getString(R.string.grocery_content_label_sp)
+                1 -> getString(R.string.page_update_label_sp)
+                else -> getString(R.string.grocery_content_label_sp)
+            }
+        }
+        return "invalid"
     }
 }

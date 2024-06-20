@@ -8,6 +8,7 @@ import android.view.View.OnClickListener
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.recipeme.R
 
@@ -20,6 +21,9 @@ class ThemesActivity : AppCompatActivity(), OnClickListener {
         setContentView(R.layout.activity_themes)
 
         _sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
+        val languageString = _sharedPreferences.getString("language", "english")
+        var pageLabel = findViewById<TextView>(R.id.themesLabel)
+        pageLabel.text = getMsg(0, languageString!!)
         val cancelBtn = findViewById<ImageButton>(R.id.btnCancelThemes)
         val plainBtn = findViewById<Button>(R.id.btnPainTheme).setOnClickListener(this)
         val iceBtn = findViewById<Button>(R.id.btnIcecubesTheme).setOnClickListener(this)
@@ -64,6 +68,21 @@ class ThemesActivity : AppCompatActivity(), OnClickListener {
 
     private fun setBackground(resId: Int){
         _background.setImageResource(resId)
+    }
+
+    private fun getMsg(msgCode: Int, lang: String): String{
+        if(lang == "english"){
+            return when(msgCode){
+                0 -> getString(R.string.themes_label)
+                else -> getString(R.string.themes_label)
+            }
+        }else if (lang == "spanish"){
+            return when(msgCode){
+                0 -> getString(R.string.themes_label_sp)
+                else -> getString(R.string.themes_label_sp)
+            }
+        }
+        return "invalid"
     }
 }
 

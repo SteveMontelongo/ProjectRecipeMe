@@ -17,6 +17,8 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.MainThread
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
@@ -231,16 +233,24 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
                 GlobalScope.launch {
                     ingredientsFromFridge.addAll(_fridgeDao.getAll())
                     Handler(Looper.getMainLooper()).post {
+                        var sharedPreferences = activity?.getSharedPreferences("MyPreferences",
+                            AppCompatActivity.MODE_PRIVATE
+                        )
+                        val languageString = sharedPreferences?.getString("language", "english")
                         _ids = IntArray(ingredientsFromFridge.size)
                         _ingredients.addAll(ingredientsFromFridge)
                         for ((i, ingredient) in _ingredients.withIndex()) {
                             _ids[i] = ingredient.id
                         }
                         if (ingredientsFromFridge.isNotEmpty()) {
-                            errorMsg(resources.getText(R.string.error_msg_empty_fridge).toString(), false)
+                            errorMsg(getMsg(0, languageString!!), false)
                             _recipeViewModel.getRecipeData(ingredientsFromFridge, (_page - 1) * 10)
                         } else {
-                            errorMsg(resources.getText(R.string.error_msg_empty_fridge).toString(),true)
+                            val main = activity as MainActivity
+                            main.pageForwardDisable()
+                            main.pagePreviousDisable()
+                            main.pageInvisible()
+                            errorMsg(getMsg(0, languageString!!),true)
                             Log.d("Recipe", "No ingredients found in the fridge.")
                         }
                     }
@@ -251,26 +261,30 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
                     ingredientsFromFridge.addAll(_fridgeDao.getAll())
                     recipesToUpdate.addAll(_recipesDao.getFromCache())
                     Handler(Looper.getMainLooper()).post {
+                        var sharedPreferences = activity?.getSharedPreferences("MyPreferences",
+                            AppCompatActivity.MODE_PRIVATE
+                        )
+                        val languageString = sharedPreferences?.getString("language", "english")
                         _ids = IntArray(ingredientsFromFridge.size)
                         _ingredients.addAll(ingredientsFromFridge)
                         for ((i, ingredient) in _ingredients.withIndex()) {
                             _ids[i] = ingredient.id
                         }
                         if (recipesToUpdate.isNotEmpty()) {
-                            errorMsg(resources.getText(R.string.error_msg_empty_fridge).toString(), false)
+                            errorMsg(getMsg(0, languageString!!), false)
                             Log.d("Recipe", "Data pulled from cache.")
                             _recipes.clear()
                             _recipes.addAll(recipesToUpdate)
                             _recyclerView.adapter?.notifyDataSetChanged()
                         } else {
                             if (ingredientsFromFridge.isNotEmpty()) {
-                                errorMsg(resources.getText(R.string.error_msg_empty_fridge).toString(),false)
+                                errorMsg(getMsg(0, languageString!!),false)
                                 _recipeViewModel.getRecipeData(
                                     ingredientsFromFridge,
                                     (_page - 1) * 10
                                 )
                             } else {
-                                errorMsg(resources.getText(R.string.error_msg_empty_fridge).toString(),true)
+                                errorMsg(getMsg(0, languageString!!),true)
                                 Log.d("Recipe", "No ingredients found in the fridge.")
                             }
                         }
@@ -282,13 +296,17 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
                     ingredientsFromFridge.addAll(_fridgeDao.getAll())
                     recipesToUpdate.addAll(_recipesDao.getFromFavorite())
                     Handler(Looper.getMainLooper()).post {
+                        var sharedPreferences = activity?.getSharedPreferences("MyPreferences",
+                            AppCompatActivity.MODE_PRIVATE
+                        )
+                        val languageString = sharedPreferences?.getString("language", "english")
                         _ids = IntArray(ingredientsFromFridge.size)
                         _ingredients.addAll(ingredientsFromFridge)
                         for ((i, ingredient) in _ingredients.withIndex()) {
                             _ids[i] = ingredient.id
                         }
                         if (recipesToUpdate.isNotEmpty()) {
-                            errorMsg(resources.getText(R.string.error_msg_empty_favorite).toString(),false)
+                            errorMsg(getMsg(0, languageString!!),false)
                             Log.d("Recipe", "Data pulled from favorite.")
                             for(recipe in recipesToUpdate){
                                 Log.d("RecipeFavorite", recipe.name)
@@ -304,7 +322,7 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
                                     (_page - 1) * 10
                                 )
                             } else {*/
-                                errorMsg(resources.getText(R.string.error_msg_empty_favorite).toString(),true)
+                                errorMsg(getMsg(0, languageString!!),true)
                                 Log.d("Recipe", "No recipes were favorited.")
 
                         }
@@ -373,6 +391,21 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
 
     fun isFavoriteTabActive(): Boolean{
         return _isFavoriteTab
+    }
+
+    private fun getMsg(msgCode: Int, lang: String): String{
+        if(lang == "english"){
+            return when(msgCode){
+                0 -> getString(R.string.error_msg_empty_fridge)
+                else -> getString(R.string.error_msg_empty_fridge)
+            }
+        }else if (lang == "spanish"){
+            return when(msgCode){
+                0 -> getString(R.string.error_msg_empty_fridge_sp)
+                else -> getString(R.string.error_msg_empty_fridge_sp)
+            }
+        }
+        return "invalid"
     }
 
 }

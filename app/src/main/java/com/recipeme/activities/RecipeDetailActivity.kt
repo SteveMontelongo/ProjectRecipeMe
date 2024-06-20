@@ -58,6 +58,13 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
 //                _recipeCache = _recipe
 //            }
 //        }
+        val sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
+        val languageString = sharedPreferences.getString("language", "english")
+
+        var ingredientsLabel = findViewById<TextView>(R.id.tvRecipeIngredientsUsedLabelRecipeDetail)
+        ingredientsLabel.text = getMsg(0, languageString!!)
+        var stepsLabel = findViewById<TextView>(R.id.tvRecipeInstructionsLabelRecipeDetail)
+        stepsLabel.text = getMsg(1, languageString!!)
         _favoriteButton = findViewById<ImageButton>(R.id.btnFavoriteRecipeDetail)
         _favoriteButton.setOnClickListener(this)
         GlobalScope.launch {
@@ -132,8 +139,11 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
 
-        findViewById<Button>(R.id.btnConfirmRecipeDetail).setOnClickListener(this)
-        findViewById<ImageButton>(R.id.btnBackRecipeDetail).setOnClickListener(this)
+        var confirmButton = findViewById<Button>(R.id.btnConfirmRecipeDetail)
+        confirmButton.setOnClickListener(this)
+        confirmButton.text = getMsg(2, languageString!!)
+        var cancelButton = findViewById<ImageButton>(R.id.btnBackRecipeDetail)
+        cancelButton.setOnClickListener(this)
     }
 
 
@@ -340,6 +350,25 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
         _isFavorite = !_isFavorite
         Log.d("Favorite - after", _isFavorite.toString())
         isFavorite(_isFavorite, button)
+    }
+
+    private fun getMsg(msgCode: Int, lang: String): String{
+        if(lang == "english"){
+            return when(msgCode){
+                0 -> getString(R.string.recipe_detail_ingredients_label)
+                1 -> getString(R.string.recipe_detail_steps_label)
+                2 -> getString(R.string.recipe_detail_steps_label)
+                else -> getString(R.string.grocery_edit_input_warning_1)
+            }
+        }else if (lang == "spanish"){
+            return when(msgCode){
+                0 -> getString(R.string.recipe_detail_ingredients_label_sp)
+                1 -> getString(R.string.recipe_detail_steps_label_sp)
+                2 -> getString(R.string.recipe_detail_steps_label_sp)
+                else -> getString(R.string.recipe_confirmation_page_label_sp)
+            }
+        }
+        return "invalid"
     }
 }
 

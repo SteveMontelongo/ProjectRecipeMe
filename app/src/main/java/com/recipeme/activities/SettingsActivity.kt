@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.room.Room
@@ -25,6 +26,13 @@ import kotlinx.coroutines.launch
 class SettingsActivity : AppCompatActivity(){
     lateinit var groceryListDao: GroceryListDao
     lateinit var fridgeDao: FridgeDao
+    private lateinit var _pageLabel: TextView
+    private lateinit var _buttonHoldLabelFridge: TextView
+    private lateinit var _buttonHoldLabelGrocery: TextView
+    private lateinit var _deleteFridge: Button
+    private lateinit var _deleteGrocery: Button
+    private lateinit var _themesBtn: Button
+    private lateinit var _languagesBtn: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -32,16 +40,31 @@ class SettingsActivity : AppCompatActivity(){
         groceryListDao = db.groceryListDao()
         fridgeDao = db.fridgeDao()
 
-        val deleteFridge = findViewById<Button>(R.id.btnDeleteFridgeSettings)
-        val deleteGrocery = findViewById<Button>(R.id.btnDeleteGrocerySettings)
+        val sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
+        val languageString = sharedPreferences.getString("language", "english")
+
+        _pageLabel = findViewById<TextView>(R.id.settingsLabel)
+        _pageLabel.text = getMsg(0, languageString!!)
+        _buttonHoldLabelFridge = findViewById<TextView>(R.id.fridgeDeleteLabel)
+        _buttonHoldLabelFridge.text = getMsg(4, languageString!!)
+        _buttonHoldLabelGrocery = findViewById<TextView>(R.id.groceryDeleteLabel)
+        _buttonHoldLabelGrocery.text = getMsg(4, languageString!!)
+        _deleteFridge = findViewById<Button>(R.id.btnDeleteFridgeSettings)
+        _deleteFridge.text = getMsg(1, languageString!!)
+        _deleteGrocery = findViewById<Button>(R.id.btnDeleteGrocerySettings)
+        _deleteGrocery.text = getMsg(2, languageString!!)
         val cancelBtn = findViewById<ImageButton>(R.id.btnCancelSettings)
-        val themesBtn = findViewById<Button>(R.id.btnThemesSettings)
+        _themesBtn = findViewById<Button>(R.id.btnThemesSettings)
+        _themesBtn.text = getMsg(3, languageString!!)
+        _languagesBtn = findViewById<Button>(R.id.btnLanguagesSettings)
+        _languagesBtn.text = getMsg(5, languageString!!)
+
         cancelBtn.setOnClickListener{
             val intent = Intent()
             setResult(RESULT_OK, intent)
             finish()
         }
-        deleteFridge.setOnLongClickListener {
+        _deleteFridge.setOnLongClickListener {
             GlobalScope.launch {
                 var ingredientIds = fridgeDao.getAllIds()
                 for(id in ingredientIds){
@@ -53,7 +76,7 @@ class SettingsActivity : AppCompatActivity(){
             }
             true
         }
-        deleteGrocery.setOnLongClickListener {
+        _deleteGrocery.setOnLongClickListener {
             GlobalScope.launch {
                 var groceryLists = groceryListDao.getAll()
                 for(list in groceryLists){
@@ -66,8 +89,13 @@ class SettingsActivity : AppCompatActivity(){
             true
         }
 
-        themesBtn.setOnClickListener{
+        _themesBtn.setOnClickListener{
             var intent = Intent(this, ThemesActivity::class.java)
+            resultSettingsLauncher.launch(intent)
+        }
+
+        _languagesBtn.setOnClickListener{
+            var intent = Intent(this, LanguagesActivity::class.java)
             resultSettingsLauncher.launch(intent)
         }
 
@@ -77,7 +105,41 @@ class SettingsActivity : AppCompatActivity(){
         if(result.resultCode == Activity.RESULT_OK){
             val data:Intent? = result.data
 
+            val sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
+            val languageString = sharedPreferences.getString("language", "english")
+            _pageLabel.text = getMsg(0, languageString!!)
+            _deleteFridge.text = getMsg(1, languageString!!)
+            _deleteGrocery.text = getMsg(2, languageString!!)
+            _buttonHoldLabelFridge.text = getMsg(4, languageString!!)
+            _buttonHoldLabelGrocery.text = getMsg(4, languageString!!)
+            _themesBtn.text = getMsg(3, languageString!!)
+            _languagesBtn.text = getMsg(5, languageString!!)
         }
+    }
+
+    private fun getMsg(msgCode: Int, lang: String): String{
+        if(lang == "english"){
+            return when(msgCode){
+                0 -> getString(R.string.settings_page_label)
+                1 -> getString(R.string.settings_fridge_delete)
+                2 -> getString(R.string.settings_grocery_delete)
+                3 -> getString(R.string.settings_themes)
+                4 -> getString(R.string.settings_hold_label)
+                5 -> getString(R.string.settings_languages)
+                else -> getString(R.string.settings_page_label)
+            }
+        }else if (lang == "spanish"){
+            return when(msgCode){
+                0 -> getString(R.string.settings_page_label_sp)
+                1 -> getString(R.string.settings_fridge_delete_sp)
+                2 -> getString(R.string.settings_grocery_delete_sp)
+                3 -> getString(R.string.settings_themes_sp)
+                4 -> getString(R.string.settings_hold_label_sp)
+                5 -> getString(R.string.settings_languages_sp)
+                else -> getString(R.string.settings_page_label_sp)
+            }
+        }
+        return "invalid"
     }
 
 }

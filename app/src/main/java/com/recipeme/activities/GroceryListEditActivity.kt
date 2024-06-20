@@ -40,6 +40,8 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_grocery_list_edit)
+        val sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
+        val languageString = sharedPreferences.getString("language", "english")
         _arrayIngredientNames = emptyList<String>().toMutableList()
         _ingredients = emptyList<Ingredient>().toMutableList()
         _listOfNames = emptyList<String>().toMutableList()
@@ -48,6 +50,7 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
         }
         val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.select_dialog_singlechoice, _arrayIngredientNames)
         _autoCompleteIngredientName = findViewById<AutoCompleteTextView>(R.id.etIngredientGroceryListEdit)
+        _autoCompleteIngredientName.hint = getMsg(6, languageString!!)
         _autoCompleteIngredientName.threshold = 1
         _autoCompleteIngredientName.setAdapter(arrayAdapter)
         _listName = intent.getStringExtra("ListName").toString()
@@ -57,9 +60,12 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
         _listNameWarningString.text = ""
         _ingredientWarningString.text = ""
         listNameText.text = _listName
+        listNameText.hint = getMsg(5, languageString!!)
 
         findViewById<ImageButton>(R.id.btnCancelGroceryListEdit).setOnClickListener(this)
-        findViewById<Button>(R.id.btnSaveGroceryListEdit).setOnClickListener(this)
+        val saveBtn = findViewById<Button>(R.id.btnSaveGroceryListEdit)
+        saveBtn.setOnClickListener(this)
+        saveBtn.text = getMsg(7, languageString!!)
         findViewById<ImageButton>(R.id.btnAddIngredientGroceryListEdit).setOnClickListener(this)
 
         val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "recipe-me-database").build()
@@ -95,14 +101,16 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
                     finish()
                 }
                 R.id.btnSaveGroceryListEdit->{
+                    val sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
+                    val languageString = sharedPreferences.getString("language", "english")
                     var newListName = findViewById<EditText>(R.id.etGListNameGroceryListEdit).text.toString()
                     var position = intent.getIntExtra("Position", 0)
                     if(newListName.length < 1) {
-                        _listNameWarningString.text = "Please enter a valid list name."
+                        _listNameWarningString.text = getMsg(0, languageString!!)
                     }else if(newListName.length > 20){
-                        _listNameWarningString.text = "Limit list name under 21 characters."
+                        _listNameWarningString.text = getMsg(1, languageString!!)
                     }else if(nameIsDuplicate(newListName, _listOfNames)){
-                        Toast.makeText(this, "A list of that name already exists!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, getMsg(2, languageString!!), Toast.LENGTH_SHORT).show()
                     }else{
                         _listNameWarningString.text = ""
                         val currentDate = DateFormat.getDateInstance().format(Date())
@@ -134,6 +142,8 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
                     }
                 }
                 R.id.btnAddIngredientGroceryListEdit->{
+                    val sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
+                    val languageString = sharedPreferences.getString("language", "english")
                     hideSoftKeyboard()
                     var isCustom = false
                     val ingredientName = findViewById<EditText>(R.id.etIngredientGroceryListEdit).text.toString()
@@ -142,9 +152,9 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
                     val duplicatePosition = isIngredientDuplicate(ingredientName)
                     if(ingredientQuantity.text.toString() == "") ingredientQuantity.setText("1")
                     if(ingredientQuantity.text.isEmpty()){
-                        _ingredientWarningString.text = "Please enter valid quantity."
+                        _ingredientWarningString.text = getMsg(3, languageString!!)
                     }else if(ingredientQuantity.text.toString().toDouble() > 99){
-                        _ingredientWarningString.text = "Max quantity exceeded."
+                        _ingredientWarningString.text = getMsg(4, languageString!!)
                     }else{
 //                        if(ingredientName.length < 1){
 //                            _ingredientWarningString.text = "Please enter valid ingredient."
@@ -223,5 +233,34 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
             val inputMethodManager = ContextCompat.getSystemService(this, InputMethodManager::class.java)!!
             inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
         }
+    }
+
+    private fun getMsg(msgCode: Int, lang: String): String{
+        if(lang == "english"){
+            return when(msgCode){
+                0 -> getString(R.string.grocery_edit_input_warning_1)
+                1 -> getString(R.string.grocery_edit_input_warning_2)
+                2 -> getString(R.string.grocery_edit_input_warning_3)
+                3 -> getString(R.string.grocery_edit_ingredient_warning_1)
+                4 -> getString(R.string.grocery_edit_ingredient_warning_2)
+                5 -> getString(R.string.grocery_edit_input_hint)
+                6 -> getString(R.string.grocery_edit_input_ingredient_hint)
+                7 -> getString(R.string.grocery_edit_save)
+                else -> getString(R.string.grocery_edit_input_warning_1)
+            }
+        }else if (lang == "spanish"){
+            return when(msgCode){
+                0 -> getString(R.string.grocery_edit_input_warning_1_sp)
+                1 -> getString(R.string.grocery_edit_input_warning_2_sp)
+                2 -> getString(R.string.grocery_edit_input_warning_3_sp)
+                3 -> getString(R.string.grocery_edit_ingredient_warning_1_sp)
+                4 -> getString(R.string.grocery_edit_ingredient_warning_2_sp)
+                5 -> getString(R.string.grocery_edit_input_hint_sp)
+                6 -> getString(R.string.grocery_edit_input_ingredient_hint_sp)
+                7 -> getString(R.string.grocery_edit_save_sp)
+                else -> getString(R.string.grocery_edit_input_warning_1_sp)
+            }
+        }
+        return "invalid"
     }
 }

@@ -62,20 +62,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
         val backgroundInt = sharedPreferences.getInt("background", R.drawable.recipe_me_plain)
         setBackground(backgroundInt)
 
-        //set english
-        val editor: SharedPreferences.Editor = sharedPreferences.edit()
-        editor.putString("language", "english")
-        editor.apply()
+//        //set english
+//        val editor: SharedPreferences.Editor = sharedPreferences.edit()
+//        editor.putString("language", "english")
+//        editor.apply()
 
         //testing
-        val languageString = sharedPreferences.getString("language", "default")
+        val languageString = sharedPreferences.getString("language", "english")
         Log.d("Language test", languageString.toString())
 
         viewPager.adapter = _adapter
 
         var tabIcon = listOf<Int>(R.drawable.ic_fridge, R.drawable.ic_grocery, R.drawable.ic_recipes)
 
-        var tabTitle = listOf<String>("Fridge", "Grocery", "Recipes")
+        var tabTitle = tabTitles(languageString!!)
 
         tabLayout.addOnTabSelectedListener(this)
         TabLayoutMediator(tabLayout, viewPager){
@@ -224,6 +224,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                 //Search
                 btnOne.setOnClickListener() {
                     if(isSpamClick())return@setOnClickListener
+                    var sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
+                    val languageString = sharedPreferences.getString("language", "english")
                     val f = supportFragmentManager.findFragmentByTag("f2") as RecipesFragment
                     if (f != null) {
                         // Check if the fragment is properly initialized and attached to the activity
@@ -231,7 +233,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                         pageReset(_pageNumber)
                         pagePreviousDisable()
                         f.pageReset()
-                        _textLabel.text = "Recipes"
+                        _textLabel.text = getMsg(0, languageString!!)
                         if(_pageDecrement.isInvisible && _pageNumber.text.toString().toInt() >= 2) {
                             pagePreviousEnable()
                         }else{
@@ -252,6 +254,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                 //toggle favorites/cache
                 btnTwo.setOnClickListener() {
                     if(isSpamClick())return@setOnClickListener
+                    var sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
+                    val languageString = sharedPreferences.getString("language", "english")
 
                     val f = supportFragmentManager.findFragmentByTag("f2") as RecipesFragment
                     if (f != null) {
@@ -262,12 +266,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                         if(f.isFavoriteTabActive()){
                             f.favoriteClickFragment("SAVED")
                             btnTwo.setImageResource(R.drawable.ic_favorite_filled_black)
-                            _textLabel.text = "Saved Recipes"
+                            _textLabel.text = getMsg(2, languageString!!)
                         }else{
 
                             f.favoriteClickFragment("FAVORITE")
                             btnTwo.setImageResource(R.drawable.ic_cached)
-                            _textLabel.text = "Favorite Recipes"
+                            _textLabel.text = getMsg(1, languageString!!)
                         }
                         pageReset(_pageNumber)
                         pagePreviousDisable()
@@ -375,6 +379,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
         p.text = "1"
     }
 
+    fun pageInvisible(){
+        _pageNumber.visibility = INVISIBLE
+    }
+
     override fun pageForwardDisable() {
         if(_pageIncrement.visibility == VISIBLE) {
             _pageIncrement.visibility = INVISIBLE
@@ -417,6 +425,38 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
         }
         _lastClickTime = SystemClock.elapsedRealtime().toDouble();
         return false
+    }
+
+    private fun tabTitles(lang: String): List<String>{
+        when(lang){
+            "english" -> {
+                return listOf<String>("Fridge", "Grocery", "Recipes")
+            }
+            "spanish"->{
+                return listOf<String>("Refrigerador", "Listas", "Recetas")
+            }
+        }
+        //default
+        return listOf<String>("Fridge", "Grocery", "Recipes")
+    }
+
+    private fun getMsg(msgCode: Int, lang: String): String{
+        if(lang == "english"){
+            return when(msgCode){
+                0 -> getString(R.string.main_page_label_recipes)
+                1 -> getString(R.string.main_page_label_favorite_recipes)
+                2 -> getString(R.string.main_page_label_saved_recipes)
+                else -> getString(R.string.main_page_label_recipes)
+            }
+        }else if (lang == "spanish"){
+            return when(msgCode){
+                0 -> getString(R.string.main_page_label_recipes_sp)
+                1 -> getString(R.string.main_page_label_favorite_recipes_sp)
+                2 -> getString(R.string.main_page_label_saved_recipes_sp)
+                else -> getString(R.string.main_page_label_recipes_sp)
+            }
+        }
+        return "invalid"
     }
 
 }

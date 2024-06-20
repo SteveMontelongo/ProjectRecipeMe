@@ -38,9 +38,9 @@
     <string name="info_label">Information</string>
     <string name="info_text_1">\nThank you for using RecipeMe!
     \nTo get started, you must create a grocery list in the Grocery tab.</string>
-    <string name="info_text_2">\nPress the add button to add a new grocery list.</string>
+    <string name="info_text_2">\nPress the + button to add a new grocery list.</string>
     <string name="info_text_3">Enter a list name on top, then add any ingredients to the list.
-Any ingredients listed in blue will be considered custom and will not affect your fridge; however,
+Any ingredients listed in blue will be considered custom and will not add to your fridge; however,
 they can still be tracked in your grocery list. Once you are done adding ingredients to your list,
 press the save button below to save your list.</string>
     <string name="info_text_4">\nTo delete a list, hold on the red button for 2 seconds.
@@ -51,6 +51,8 @@ When you want to confirm all the items you have in your cart, press on the confi
 To delete an item, hold the red button for 2 seconds. The recipe tab will bring up recipes based on the items in this fridge.</string>
     <string name="info_text_7">\nThis tab is the recipes tab. You can search up recipes by clicking the search button on top.
 You can also navigate through pages using the arrow buttons next to the page number. Each page will display up to 10 recipes.</string>
+    <string name="info_text_8">\nClick on the heart button to see your favorite recipes.</string>
+    <string name="info_text_9">\nWhen you check out a recipe you like, click on the heart to add it to your favorite recipes!</string>
     <!-- Recipe Confirmation Page - English -->
     <string name="recipe_confirmation_page_label">Have you used up any of these ingredients?</string>
     <string name="page_cancel_label">Cancel</string>
@@ -61,13 +63,76 @@ You can also navigate through pages using the arrow buttons next to the page num
     <!-- Settings Page - English -->
     <string name="settings_page_label">Settings</string>
     <string name="settings_themes">Themes</string>
+    <string name="settings_languages">Languages</string>
     <string name="settings_fridge_delete">DELETE FRIDGE</string>
     <string name="settings_grocery_delete">DELETE GROCERY</string>
     <string name="settings_hold_label">Press and hold to</string>
     <!-- Themes Page - English -->
     <string name="themes_label">Themes</string>
+    <!-- Languages Page - English -->
+    <string name="english_label">English</string>
+    <string name="spanish_label">Spanish</string>
 
-
+    <!-- Strings used for the application - Spanish -->
+    <string name="error_msg_empty_fridge_sp">Parece que tu refrigerador está vacío. Intente comprar para agregar ingredientes a su refrigerador.</string>
+    <string name="error_msg_empty_favorite_sp">Parece que no has marcado ninguna receta como favorita. Intenta agregar una receta a tus favoritos.</string>
+    <!-- Main Page - English -->
+    <string name="main_page_label_fridge_sp">Refrigerador</string>
+    <string name="main_page_label_grocery_sp">Listas</string>
+    <string name="main_page_label_recipes_sp">Recetas</string>
+    <string name="main_page_label_saved_recipes_sp">Recetas guardadas</string>
+    <string name="main_page_label_favorite_recipes_sp">Recetas favoritas</string>
+    <!-- Grocerylist Content Page - English -->
+    <string name="grocery_content_label_sp">Lista de compras</string>
+    <string name="grocery_content_update_sp">Actualizar</string>
+    <!-- Grocerylist Edit Page - English -->
+    <string name="grocery_edit_input_hint_sp">Nombre de la lista</string>
+    <string name="grocery_edit_input_warning_1_sp">Por favor ingrese un nombre de lista válido.</string>
+    <string name="grocery_edit_input_warning_2_sp">Limite el nombre de la lista a menos de 21 caracteres.</string>
+    <string name="grocery_edit_input_warning_3_sp">Ya existe una lista con ese nombre!</string>
+    <string name="grocery_edit_input_ingredient_hint_sp">Ingrediente</string>
+    <string name="grocery_edit_ingredient_warning_1_sp">Por favor ingrese una cantidad válida.</string>
+    <string name="grocery_edit_ingredient_warning_2_sp">Se superó la cantidad máxima.</string>
+    <string name="grocery_edit_quantity_label_sp">QTY.</string>
+    <string name="grocery_edit_save_sp">Ahorrar</string>
+    <!-- Info Page - English -->
+    <string name="info_label_sp">Información</string>
+    <string name="info_text_1_sp">\nGracias por usar RecipeMe!
+   \nPara comenzar, debe crear una lista de compras en la pestaña Comestibles.</string>
+    <string name="info_text_2_sp">\nPresione el botón + para agregar una nueva lista de compras.</string>
+    <string name="info_text_3_sp">Ingrese un nombre de lista en la parte superior, luego agregue los ingredientes a la lista.
+Todos los ingredientes enumerados en azul se considerarán personalizados y no se agregarán a su refrigerador; sin embargo,
+todavía se pueden rastrear en su lista de compras. Una vez que haya terminado de agregar ingredientes a su lista,
+presione el botón Guardar a continuación para guardar su lista.</string>
+    <string name="info_text_4_sp">\nPara eliminar una lista, mantenga presionado el botón rojo durante 2 segundos.
+Para editar una lista, haga clic en el botón amarillo. Para ver el contenido de una lista y agregarlo a su refrigerador, haga clic en el nombre de la lista.</string>
+    <string name="info_text_5_sp">\nPuede confirmar si tiene un artículo haciendo clic en el artículo del carrito. Si es verde se considera \'obtenido\'.
+Cuando quieras confirmar todos los artículos que tienes en tu carrito, presiona el botón confirmar y agregará todos los artículos a tu refrigerador.</string>
+    <string name="info_text_6_sp">\nEsta pestaña se llama refrigerador. Estos son los artículos que has obtenido en tu lista de compras.
+Para eliminar un elemento, mantenga presionado el botón rojo durante 2 segundos. La pestaña de recetas mostrará recetas basadas en los artículos de este refrigerador.</string>
+    <string name="info_text_7_sp">\nEsta pestaña es la pestaña de recetas. Puede buscar recetas haciendo clic en el botón de búsqueda en la parte superior.
+También puede navegar por las páginas utilizando los botones de flecha junto al número de página. Cada página mostrará hasta 10 recetas.</string>
+    <string name="info_text_8_sp">\nHaz clic en el botón del corazón para ver tus recetas favoritas.</string>
+    <string name="info_text_9_sp">Cuando veas una receta que te guste, haz clic en el corazón para agregarla a tus recetas favoritas.</string>
+    <!-- Recipe Confirmation Page - English -->
+    <string name="recipe_confirmation_page_label_sp">Has consumido alguno de estos ingredientes?</string>
+    <string name="page_cancel_label_sp">Cancelar</string>
+    <string name="page_update_label_sp">Actualizar</string>
+    <!-- Recipe Detail Page - English -->
+    <string name="recipe_detail_ingredients_label_sp">Ingredientes</string>
+    <string name="recipe_detail_steps_label_sp">Hagámoslo!</string>
+    <!-- Settings Page - English -->
+    <string name="settings_page_label_sp">Ajustes</string>
+    <string name="settings_themes_sp">Temas</string>
+    <string name="settings_languages_sp">Idiomas</string>
+    <string name="settings_fridge_delete_sp">BORRAR NEVERA</string>
+    <string name="settings_grocery_delete_sp">BORRAR COMESTIBLE</string>
+    <string name="settings_hold_label_sp">Mantenga presionado para</string>
+    <!-- Themes Page - English -->
+    <string name="themes_label_sp">Temas</string>
+    <!-- Languages Page - Spanish -->
+    <string name="english_label_sp">Inglés</string>
+    <string name="spanish_label_sp">Español</string>
 
 
 </resources>

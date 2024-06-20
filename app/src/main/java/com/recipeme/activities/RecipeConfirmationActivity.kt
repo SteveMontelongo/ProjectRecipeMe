@@ -8,6 +8,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
@@ -43,10 +44,17 @@ class RecipeConfirmationActivity : AppCompatActivity(), GroceryContentOnItemClic
         _ingredientsRecyclerView.layoutManager = LinearLayoutManager(this)
         _ids = intent.getIntArrayExtra("ingredientsUsedIds")!!
         _names = intent.getStringArrayExtra("ingredientUsedNames")!!
+        val sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
+        val languageString = sharedPreferences.getString("language", "english")
 
-
-        findViewById<Button>(R.id.btnCancelRecipeConfirmation).setOnClickListener(this)
-        findViewById<Button>(R.id.btnUpdateRecipeConfirmation).setOnClickListener(this)
+        var labelText = findViewById<TextView>(R.id.tvLabelRecipeConfirmation)
+        labelText.text = getMsg(0, languageString!!)
+        var cancelButton = findViewById<Button>(R.id.btnCancelRecipeConfirmation)
+        cancelButton.setOnClickListener(this)
+        cancelButton.text = getMsg(1, languageString!!)
+        var updateButton = findViewById<Button>(R.id.btnUpdateRecipeConfirmation)
+        updateButton.setOnClickListener(this)
+        updateButton.text == getMsg(2, languageString!!)
 
         GlobalScope.launch{
             this?.let {
@@ -88,6 +96,8 @@ class RecipeConfirmationActivity : AppCompatActivity(), GroceryContentOnItemClic
                             }
                         }
                         Handler(Looper.getMainLooper()).post{
+                            val intent = Intent()
+                            setResult(RESULT_OK, intent)
                             finish()
                         }
                     }
@@ -98,5 +108,24 @@ class RecipeConfirmationActivity : AppCompatActivity(), GroceryContentOnItemClic
                 }
             }
         }
+    }
+
+    private fun getMsg(msgCode: Int, lang: String): String{
+        if(lang == "english"){
+            return when(msgCode){
+                0 -> getString(R.string.recipe_confirmation_page_label)
+                1 -> getString(R.string.page_cancel_label)
+                2 -> getString(R.string.page_update_label)
+                else -> getString(R.string.grocery_edit_input_warning_1)
+            }
+        }else if (lang == "spanish"){
+            return when(msgCode){
+                0 -> getString(R.string.recipe_confirmation_page_label_sp)
+                1 -> getString(R.string.page_cancel_label_sp)
+                2 -> getString(R.string.page_update_label_sp)
+                else -> getString(R.string.recipe_confirmation_page_label_sp)
+            }
+        }
+        return "invalid"
     }
 }
