@@ -8,6 +8,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,6 +34,7 @@ class RecipeConfirmationActivity : AppCompatActivity(), GroceryContentOnItemClic
     private lateinit var _ids: IntArray
     private lateinit var _names: Array<String>
     private lateinit var _fridgeItems: MutableList<Ingredient>
+    private lateinit var _background: ImageView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipe_confirmation)
@@ -46,6 +48,9 @@ class RecipeConfirmationActivity : AppCompatActivity(), GroceryContentOnItemClic
         _names = intent.getStringArrayExtra("ingredientUsedNames")!!
         val sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
         val languageString = sharedPreferences.getString("language", "english")
+        _background = findViewById<ImageView>(R.id.backgroundAppRecipeConfirmation)
+        val backgroundInt = sharedPreferences.getInt("background", R.drawable.recipe_me_plain)
+        setBackground(backgroundInt)
 
         var labelText = findViewById<TextView>(R.id.tvLabelRecipeConfirmation)
         labelText.text = getMsg(0, languageString!!)
@@ -127,5 +132,9 @@ class RecipeConfirmationActivity : AppCompatActivity(), GroceryContentOnItemClic
             }
         }
         return "invalid"
+    }
+
+    private fun setBackground(resId: Int){
+        _background.setImageResource(resId)
     }
 }

@@ -32,6 +32,7 @@
     <string name="grocery_edit_input_ingredient_hint">Ingredient</string>
     <string name="grocery_edit_ingredient_warning_1">Please enter valid quantity.</string>
     <string name="grocery_edit_ingredient_warning_2">Max quantity exceeded.</string>
+    <string name="grocery_edit_ingredient_warning_3">Please enter a custom name or make a selection from the available ingredients.</string>
     <string name="grocery_edit_quantity_label">QTY.</string>
     <string name="grocery_edit_save">Save</string>
     <!-- Info Page - English -->
@@ -93,6 +94,7 @@ You can also navigate through pages using the arrow buttons next to the page num
     <string name="grocery_edit_input_ingredient_hint_sp">Ingrediente</string>
     <string name="grocery_edit_ingredient_warning_1_sp">Por favor ingrese una cantidad válida.</string>
     <string name="grocery_edit_ingredient_warning_2_sp">Se superó la cantidad máxima.</string>
+    <string name="grocery_edit_ingredient_warning_3_sp">Ingrese un nombre personalizado o haga una selección entre los ingredientes disponibles.</string>
     <string name="grocery_edit_quantity_label_sp">QTY.</string>
     <string name="grocery_edit_save_sp">Ahorrar</string>
     <!-- Info Page - English -->

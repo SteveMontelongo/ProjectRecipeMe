@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.ThemesActivity"
-    android:padding="8dp">
+    tools:context=".activities.ThemesActivity">
 
     <ImageView
         android:id="@+id/backgroundAppThemes"
@@ -152,6 +151,48 @@
             android:textColor="@color/black"
             android:background="#00000000"
             />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutDarkTheme"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/small_item_button_shape"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutFruityTheme"
+        android:weightSum="10"
+        android:layout_marginTop="20dp"
+        >
+
+        <ImageView
+            android:id="@+id/ivDarkTheme"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/recipe_me_dark"
+            android:scaleType="centerCrop"/>
+
+        <Button
+            android:id="@+id/btnDarkTheme"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:gravity="start|center_vertical"
+            android:maxLength="27"
+            android:maxLines="1"
+            android:layout_weight="9"
+            android:text="Dark"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:background="#00000000"
+            />
+
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

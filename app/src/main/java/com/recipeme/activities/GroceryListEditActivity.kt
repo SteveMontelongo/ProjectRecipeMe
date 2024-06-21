@@ -1,6 +1,5 @@
 package com.recipeme.activities
 
-import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -37,6 +36,7 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
     private lateinit var _oldList: GroceryList
     private lateinit var _arrayIngredientNames: MutableList<String>
     private lateinit var _autoCompleteIngredientName: AutoCompleteTextView
+    private lateinit var _background: ImageView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_grocery_list_edit)
@@ -45,6 +45,9 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
         _arrayIngredientNames = emptyList<String>().toMutableList()
         _ingredients = emptyList<Ingredient>().toMutableList()
         _listOfNames = emptyList<String>().toMutableList()
+        _background = findViewById<ImageView>(R.id.backgroundAppGroceryEdit)
+        val backgroundInt = sharedPreferences.getInt("background", R.drawable.recipe_me_plain)
+        setBackground(backgroundInt)
         for(ingredient in IngredientsData.map){
             _arrayIngredientNames.add(ingredient.value)
         }
@@ -54,18 +57,18 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
         _autoCompleteIngredientName.threshold = 1
         _autoCompleteIngredientName.setAdapter(arrayAdapter)
         _listName = intent.getStringExtra("ListName").toString()
-        var listNameText = findViewById<TextView>(R.id.etGListNameGroceryListEdit)
+        val listNameText = findViewById<TextView>(R.id.etGListNameGroceryListEdit)
         _listNameWarningString = findViewById<TextView>(R.id.tvListNameWarning)
         _ingredientWarningString = findViewById<TextView>(R.id.tvIngredientWarning)
         _listNameWarningString.text = ""
         _ingredientWarningString.text = ""
         listNameText.text = _listName
-        listNameText.hint = getMsg(5, languageString!!)
+        listNameText.hint = getMsg(5, languageString)
 
         findViewById<ImageButton>(R.id.btnCancelGroceryListEdit).setOnClickListener(this)
         val saveBtn = findViewById<Button>(R.id.btnSaveGroceryListEdit)
         saveBtn.setOnClickListener(this)
-        saveBtn.text = getMsg(7, languageString!!)
+        saveBtn.text = getMsg(7, languageString)
         findViewById<ImageButton>(R.id.btnAddIngredientGroceryListEdit).setOnClickListener(this)
 
         val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "recipe-me-database").build()
@@ -85,8 +88,6 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
                 Handler(Looper.getMainLooper()).post{
                     if(::_oldList.isInitialized){
                         _ingredients.addAll(_oldList.items)
-                    }else{
-
                     }
                     _recyclerView.adapter?.notifyDataSetChanged()
                 }
@@ -103,8 +104,8 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
                 R.id.btnSaveGroceryListEdit->{
                     val sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
                     val languageString = sharedPreferences.getString("language", "english")
-                    var newListName = findViewById<EditText>(R.id.etGListNameGroceryListEdit).text.toString()
-                    var position = intent.getIntExtra("Position", 0)
+                    val newListName = findViewById<EditText>(R.id.etGListNameGroceryListEdit).text.toString()
+                    val position = intent.getIntExtra("Position", 0)
                     if(newListName.length < 1) {
                         _listNameWarningString.text = getMsg(0, languageString!!)
                     }else if(newListName.length > 20){
@@ -116,7 +117,7 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
                         val currentDate = DateFormat.getDateInstance().format(Date())
                         if(_listName.compareTo(newListName) == 0){
                             GlobalScope.launch{
-                                this?.let{
+                                this.let{
                                     _oldList.timeCreated = currentDate
                                     _oldList.items.clear()
                                     _oldList.items.addAll(_ingredients)
@@ -126,7 +127,7 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
                         }else {
                             //edit for ingredients
                             GlobalScope.launch{
-                                this?.let{
+                                this.let{
                                     if(::_oldList.isInitialized) {
                                         _groceryListDao.delete(_oldList)
                                     }
@@ -147,7 +148,7 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
                     hideSoftKeyboard()
                     var isCustom = false
                     val ingredientName = findViewById<EditText>(R.id.etIngredientGroceryListEdit).text.toString()
-                    var ingredientQuantity = findViewById<EditText>(R.id.etIngredientUnitsGroceryListEdit)
+                    val ingredientQuantity = findViewById<EditText>(R.id.etIngredientUnitsGroceryListEdit)
                     val ingredientUnitLabel = findViewById<TextView>(R.id.etIngredientUnitLabelGroceryListEdit).text.toString()
                     val duplicatePosition = isIngredientDuplicate(ingredientName)
                     if(ingredientQuantity.text.toString() == "") ingredientQuantity.setText("1")
@@ -166,11 +167,8 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
                             isCustom = true
                         }
                         if(ingredientName.isEmpty()){
-                            _ingredientWarningString.text = "Please enter a custom name or make a selection from the available ingredients."
+                            _ingredientWarningString.text = getMsg(8, languageString!!)
                         }else if(duplicatePosition !=-1){
-                            if(isQuantityLabelSame(ingredientUnitLabel, duplicatePosition)){
-
-                            }
                             _ingredientWarningString.text = ""
                             _ingredients[duplicatePosition].amount += ingredientQuantity.text.toString().toDouble()
                             _recyclerView.adapter?.notifyDataSetChanged()
@@ -246,6 +244,7 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
                 5 -> getString(R.string.grocery_edit_input_hint)
                 6 -> getString(R.string.grocery_edit_input_ingredient_hint)
                 7 -> getString(R.string.grocery_edit_save)
+                8 -> getString(R.string.grocery_edit_ingredient_warning_3)
                 else -> getString(R.string.grocery_edit_input_warning_1)
             }
         }else if (lang == "spanish"){
@@ -258,9 +257,14 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
                 5 -> getString(R.string.grocery_edit_input_hint_sp)
                 6 -> getString(R.string.grocery_edit_input_ingredient_hint_sp)
                 7 -> getString(R.string.grocery_edit_save_sp)
+                8 -> getString(R.string.grocery_edit_ingredient_warning_3_sp)
                 else -> getString(R.string.grocery_edit_input_warning_1_sp)
             }
         }
         return "invalid"
+    }
+
+    private fun setBackground(resId: Int){
+        _background.setImageResource(resId)
     }
 }

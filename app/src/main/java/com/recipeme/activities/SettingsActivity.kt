@@ -8,10 +8,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.room.Room
 import com.recipeme.R
@@ -33,6 +30,7 @@ class SettingsActivity : AppCompatActivity(){
     private lateinit var _deleteGrocery: Button
     private lateinit var _themesBtn: Button
     private lateinit var _languagesBtn: Button
+    private lateinit var _background: ImageView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -42,6 +40,9 @@ class SettingsActivity : AppCompatActivity(){
 
         val sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
         val languageString = sharedPreferences.getString("language", "english")
+        _background = findViewById<ImageView>(R.id.backgroundAppSettings)
+        val backgroundInt = sharedPreferences.getInt("background", R.drawable.recipe_me_plain)
+        setBackground(backgroundInt)
 
         _pageLabel = findViewById<TextView>(R.id.settingsLabel)
         _pageLabel.text = getMsg(0, languageString!!)
@@ -102,10 +103,9 @@ class SettingsActivity : AppCompatActivity(){
     }
 
     private var resultSettingsLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+        val sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
         if(result.resultCode == Activity.RESULT_OK){
             val data:Intent? = result.data
-
-            val sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
             val languageString = sharedPreferences.getString("language", "english")
             _pageLabel.text = getMsg(0, languageString!!)
             _deleteFridge.text = getMsg(1, languageString!!)
@@ -115,6 +115,9 @@ class SettingsActivity : AppCompatActivity(){
             _themesBtn.text = getMsg(3, languageString!!)
             _languagesBtn.text = getMsg(5, languageString!!)
         }
+        val backgroundInt = sharedPreferences.getInt("background", R.drawable.recipe_me_plain)
+        Log.d("Theme Test", backgroundInt.toString())
+        setBackground(backgroundInt)
     }
 
     private fun getMsg(msgCode: Int, lang: String): String{
@@ -142,4 +145,7 @@ class SettingsActivity : AppCompatActivity(){
         return "invalid"
     }
 
+    private fun setBackground(resId: Int){
+        _background.setImageResource(resId)
+    }
 }

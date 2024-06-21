@@ -28,6 +28,7 @@ class ThemesActivity : AppCompatActivity(), OnClickListener {
         val plainBtn = findViewById<Button>(R.id.btnPainTheme).setOnClickListener(this)
         val iceBtn = findViewById<Button>(R.id.btnIcecubesTheme).setOnClickListener(this)
         val fruitBtn = findViewById<Button>(R.id.btnFruityTheme).setOnClickListener(this)
+        val darkBtn = findViewById<Button>(R.id.btnDarkTheme).setOnClickListener(this)
         _background = findViewById<ImageView>(R.id.backgroundAppThemes)
 
         val backgroundInt = _sharedPreferences.getInt("background", R.drawable.recipe_me_plain)
@@ -47,19 +48,25 @@ class ThemesActivity : AppCompatActivity(), OnClickListener {
                 R.id.btnPainTheme->{
                     val backgroundResId = R.drawable.recipe_me_plain
                     editor.putInt("background", backgroundResId)
-                    _background.setImageResource(R.drawable.recipe_me_plain)
+                    _background.setImageResource(backgroundResId)
                     editor.apply()
                 }
                 R.id.btnIcecubesTheme->{
                     val backgroundResId = R.drawable.recipe_me_icecubes
                     editor.putInt("background", backgroundResId)
-                    _background.setImageResource(R.drawable.recipe_me_icecubes)
+                    _background.setImageResource(backgroundResId)
                     editor.apply()
                 }
                 R.id.btnFruityTheme->{
                     val backgroundResId = R.drawable.recipe_me_fruity
                     editor.putInt("background", backgroundResId)
-                    _background.setImageResource(R.drawable.recipe_me_fruity)
+                    _background.setImageResource(backgroundResId)
+                    editor.apply()
+                }
+                R.id.btnDarkTheme->{
+                    val backgroundResId = R.drawable.recipe_me_dark
+                    editor.putInt("background", backgroundResId)
+                    _background.setImageResource(backgroundResId)
                     editor.apply()
                 }
             }

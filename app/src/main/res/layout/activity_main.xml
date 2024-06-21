@@ -128,13 +128,14 @@
         android:id="@+id/tvLabelMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
         android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
         android:text="Main Page"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/small_item_button_shape"/>
 
     <TextView
         android:id="@+id/tvPageMain"

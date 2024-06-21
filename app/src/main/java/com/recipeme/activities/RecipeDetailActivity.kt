@@ -38,6 +38,7 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
     private var _isFavorite: Boolean = false
     private var _recipeId: Int = 0
     private lateinit var _favoriteButton: ImageButton
+    private lateinit var _background: ImageView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipe_detail)
@@ -60,6 +61,9 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
 //        }
         val sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
         val languageString = sharedPreferences.getString("language", "english")
+        _background = findViewById<ImageView>(R.id.backgroundAppRecipeDetail)
+        val backgroundInt = sharedPreferences.getInt("background", R.drawable.recipe_me_plain)
+        setBackground(backgroundInt)
 
         var ingredientsLabel = findViewById<TextView>(R.id.tvRecipeIngredientsUsedLabelRecipeDetail)
         ingredientsLabel.text = getMsg(0, languageString!!)
@@ -131,6 +135,9 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
                             resultText += "${step.step}\n\n"
 
                         }
+                    }
+                    if(resultText == ""){
+                        resultText += "Instructions not available."
                     }
                     findViewById<TextView>(R.id.tvRecipeInstructionsRecipeDetail).text = resultText
                     Log.d("Recipe", "Instructions loaded by Cache")
@@ -244,6 +251,9 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
         Log.d("Recipe", "ResultText $resultText")
+        if(resultText == ""){
+            resultText += "Instructions not available."
+        }
         findViewById<TextView>(R.id.tvRecipeInstructionsRecipeDetail).text = resultText
     }
 
@@ -370,5 +380,9 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
         }
         return "invalid"
     }
+    private fun setBackground(resId: Int){
+        _background.setImageResource(resId)
+    }
+
 }
 

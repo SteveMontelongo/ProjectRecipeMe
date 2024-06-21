@@ -4,9 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp"
     tools:context=".activities.RecipeDetailActivity">
 
+    <ImageView
+        android:id="@+id/backgroundAppRecipeDetail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/recipe_me_plain"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvRecipeNameRecipeDetail"
@@ -17,7 +26,8 @@
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnBackRecipeDetail"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/small_item_button_shape"/>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -50,27 +60,38 @@
                 android:layout_gravity="end">
 
             </ImageButton>
-
-            <TextView
-                android:id="@+id/tvRecipeIngredientsUsedLabelRecipeDetail"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:isScrollContainer="true"
-                android:text="@string/recipe_detail_ingredients_label"
+                android:background="@drawable/small_item_button_shape"
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp">
+                <TextView
+                    android:id="@+id/tvRecipeIngredientsUsedLabelRecipeDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:isScrollContainer="true"
+                    android:text="@string/recipe_detail_ingredients_label"
 
-                />
-            <TextView
-                android:id="@+id/tvRecipeIngredientsUsedRecipeDetail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:isScrollContainer="true"
-                android:text="Ingredients Used"
+                    />
+                <TextView
+                    android:id="@+id/tvRecipeIngredientsUsedRecipeDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:isScrollContainer="true"
+                    android:text="Ingredients Used"
 
-                />
+                    />
+            </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/small_item_button_shape"
+            android:orientation="vertical">
             <TextView
                 android:id="@+id/tvRecipeInstructionsLabelRecipeDetail"
                 android:layout_width="wrap_content"
@@ -91,6 +112,7 @@
                 android:text="Instructions"
 
                 />
+        </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

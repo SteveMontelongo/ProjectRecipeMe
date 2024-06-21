@@ -4,16 +4,21 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import com.recipeme.R
 
 class InfoActivity : AppCompatActivity() {
+    private lateinit var _background: ImageView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_info)
         var sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
         val languageString = sharedPreferences.getString("language", "english")
         val cancelBtn = findViewById<ImageButton>(R.id.btnCancelInfo)
+        _background = findViewById<ImageView>(R.id.backgroundAppInfo)
+        val backgroundInt = sharedPreferences.getInt("background", R.drawable.recipe_me_plain)
+        setBackground(backgroundInt)
         cancelBtn.setOnClickListener(){
             val intent = Intent()
             setResult(RESULT_OK, intent)
@@ -73,5 +78,9 @@ class InfoActivity : AppCompatActivity() {
             }
         }
         return "invalid"
+    }
+
+    private fun setBackground(resId: Int){
+        _background.setImageResource(resId)
     }
 }

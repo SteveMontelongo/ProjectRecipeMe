@@ -11,6 +11,7 @@ import android.widget.TextView
 import com.recipeme.R
 
 class LanguagesActivity : AppCompatActivity() {
+    private lateinit var _background: ImageView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_languages)
@@ -24,6 +25,9 @@ class LanguagesActivity : AppCompatActivity() {
         englishBtn.text = getMsg(1, languageString!!)
         val spanishBtn = findViewById<Button>(R.id.btnSpanish)
         spanishBtn.text = getMsg(2, languageString!!)
+        _background = findViewById<ImageView>(R.id.backgroundAppLanguages)
+        val backgroundInt = sharedPreferences.getInt("background", R.drawable.recipe_me_plain)
+        setBackground(backgroundInt)
         englishBtn.setOnClickListener(){
             val editor: SharedPreferences.Editor = sharedPreferences.edit()
             editor.putString("language", "english")
@@ -66,4 +70,8 @@ class LanguagesActivity : AppCompatActivity() {
         }
         return "invalid"
     }
+    private fun setBackground(resId: Int){
+        _background.setImageResource(resId)
+    }
+
 }

@@ -18,11 +18,8 @@ import com.recipeme.databases.AppDatabase
 import com.recipeme.interfaces.GroceryContentOnItemClick
 import com.recipeme.models.GroceryList
 import com.recipeme.models.Ingredient
-import com.recipeme.utils.IngredientsData
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.text.DateFormat
-import java.util.*
 
 class GroceryListContentActivity : AppCompatActivity(), GroceryContentOnItemClick, View.OnClickListener {
     private lateinit var _ingredients: MutableList<Ingredient>
@@ -30,24 +27,28 @@ class GroceryListContentActivity : AppCompatActivity(), GroceryContentOnItemClic
     private lateinit var _fridgeDao: FridgeDao
     private lateinit var _groceryList: GroceryList
     private lateinit var _ingredientsRecyclerView: RecyclerView
+    private lateinit var _background: ImageView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_grocery_list_content)
         val sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
         val languageString = sharedPreferences.getString("language", "english")
-        var listNameTextView = findViewById<TextView>(R.id.tvGroceryListContentName)
-        var db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "recipe-me-database").build()
-        var listName = intent.getStringExtra("ListName").toString()
+        val listNameTextView = findViewById<TextView>(R.id.tvGroceryListContentName)
+        val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "recipe-me-database").build()
+        val listName = intent.getStringExtra("ListName").toString()
         listNameTextView.text = listName
         _ingredients = emptyList<Ingredient>().toMutableList()
         _groceryListDao = db.groceryListDao()
         _fridgeDao = db.fridgeDao()
-        var updateButton = findViewById<Button>(R.id.btnUpdateGroceryListContent)
+        val updateButton = findViewById<Button>(R.id.btnUpdateGroceryListContent)
         updateButton.setOnClickListener(this)
         updateButton.text = getMsg(1, languageString!!)
+        _background = findViewById(R.id.backgroundAppGroceryContent)
+        val backgroundInt = sharedPreferences.getInt("background", R.drawable.recipe_me_plain)
+        setBackground(backgroundInt)
         findViewById<ImageButton>(R.id.btnCancelGroceryListContent).setOnClickListener(this)
         GlobalScope.launch{
-            this?.let {
+            this.let {
                 _groceryList = _groceryListDao.getListFromName(listName)
             }
             Handler(Looper.getMainLooper()).post{
@@ -84,12 +85,12 @@ class GroceryListContentActivity : AppCompatActivity(), GroceryContentOnItemClic
                         }
                     }
                     GlobalScope.launch {
-                        this?.let {
+                        this.let {
                             ingredientIdsFromFridge = _fridgeDao.getAllIds()
                             //clears up duplicates
                             Log.d("GroceryList", "Fridge $ingredientIdsFromFridge")
                             Log.d("GroceryList", "Updating $ingredientsToUpdate")
-                            ingredientsToUpdate?.removeAll { ingredientIdsFromFridge.contains(it.id) }
+                            ingredientsToUpdate.removeAll { ingredientIdsFromFridge.contains(it.id) }
 //                            var ingredientIndexes = emptyList<Int>().toMutableList()
 //                            for((i, ingredient) in ingredientsToUpdate.withIndex()){
 //                                if(ingredientIdsFromFridge.contains(ingredient.id)){
@@ -128,7 +129,7 @@ class GroceryListContentActivity : AppCompatActivity(), GroceryContentOnItemClic
         _groceryList.items.clear()
         _groceryList.items.addAll(_ingredients)
         GlobalScope.launch{
-            this?.let {
+            this.let {
                 _groceryListDao.update(_groceryList)
                 Handler(Looper.getMainLooper()).post{
                     _ingredientsRecyclerView.adapter?.notifyDataSetChanged()
@@ -152,5 +153,9 @@ class GroceryListContentActivity : AppCompatActivity(), GroceryContentOnItemClic
             }
         }
         return "invalid"
+    }
+
+    private fun setBackground(resId: Int){
+        _background.setImageResource(resId)
     }
 }

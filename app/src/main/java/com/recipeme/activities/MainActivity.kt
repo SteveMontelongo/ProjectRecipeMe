@@ -1,12 +1,7 @@
 package com.recipeme.activities
 
 import android.app.Activity
-import android.app.Fragment
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
-import android.content.res.Resources
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
@@ -18,7 +13,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isInvisible
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
@@ -42,11 +36,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
     private lateinit var _pageNumber: TextView
     private lateinit var _background: ImageView
     private var _lastClickTime = 0.0
+    private lateinit var _tabLayout: TabLayout
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         var viewPager = findViewById<ViewPager2>(R.id.viewPager)
-        var tabLayout = findViewById<TabLayout>(R.id.tabLayout)
+        _tabLayout = findViewById<TabLayout>(R.id.tabLayout)
         findViewById<ImageButton>(R.id.ibMoreMain).setOnClickListener(this)
         _pageIncrement= findViewById<ImageButton>(R.id.ibPageIncrementMain)
         _pageIncrement.setOnClickListener(this)
@@ -77,8 +73,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
 
         var tabTitle = tabTitles(languageString!!)
 
-        tabLayout.addOnTabSelectedListener(this)
-        TabLayoutMediator(tabLayout, viewPager){
+        _tabLayout.addOnTabSelectedListener(this)
+        TabLayoutMediator(_tabLayout, viewPager){
             tab, position ->
             tab.setIcon(tabIcon[position])
             tab.text = tabTitle[position]
@@ -338,12 +334,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
             }catch(e: Exception){
                 Log.e("Error", e.toString())
             }
-
-            val sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
-            val backgroundInt = sharedPreferences.getInt("background", R.drawable.recipe_me_plain)
-            Log.d("Theme Test", backgroundInt.toString())
-            setBackground(backgroundInt)
         }
+        val sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
+        val backgroundInt = sharedPreferences.getInt("background", R.drawable.recipe_me_plain)
+        Log.d("Theme Test", backgroundInt.toString())
+        setBackground(backgroundInt)
     }
 
     private var resultHelpLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
@@ -416,6 +411,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
 
     private fun setBackground(resId: Int){
         _background.setImageResource(resId)
+        if(resId == R.drawable.recipe_me_dark){
+            _tabLayout.setBackgroundColor(resources.getColor(R.color.dark, theme))
+        }else{
+            _tabLayout.setBackgroundColor(resources.getColor(R.color.white, theme))
+        }
     }
 
     private fun isSpamClick(): Boolean{
