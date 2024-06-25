@@ -16,19 +16,19 @@ class LanguagesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_languages)
 
-        var sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
         val languageString = sharedPreferences.getString("language", "english")
-        var pageLabel = findViewById<TextView>(R.id.languagesLabel)
+        val pageLabel = findViewById<TextView>(R.id.languagesLabel)
         pageLabel.text = getMsg(0, languageString!!)
         val cancelBtn = findViewById<ImageButton>(R.id.btnCancelLanguages)
         val englishBtn = findViewById<Button>(R.id.btnEnglish)
-        englishBtn.text = getMsg(1, languageString!!)
+        englishBtn.text = getMsg(1, languageString)
         val spanishBtn = findViewById<Button>(R.id.btnSpanish)
-        spanishBtn.text = getMsg(2, languageString!!)
-        _background = findViewById<ImageView>(R.id.backgroundAppLanguages)
+        spanishBtn.text = getMsg(2, languageString)
+        _background = findViewById(R.id.backgroundAppLanguages)
         val backgroundInt = sharedPreferences.getInt("background", R.drawable.recipe_me_plain)
         setBackground(backgroundInt)
-        englishBtn.setOnClickListener(){
+        englishBtn.setOnClickListener{
             val editor: SharedPreferences.Editor = sharedPreferences.edit()
             editor.putString("language", "english")
             editor.apply()
@@ -36,7 +36,7 @@ class LanguagesActivity : AppCompatActivity() {
             englishBtn.text = getMsg(1, "english")
             spanishBtn.text = getMsg(2, "english")
         }
-        spanishBtn.setOnClickListener(){
+        spanishBtn.setOnClickListener{
             val editor: SharedPreferences.Editor = sharedPreferences.edit()
             editor.putString("language", "spanish")
             editor.apply()

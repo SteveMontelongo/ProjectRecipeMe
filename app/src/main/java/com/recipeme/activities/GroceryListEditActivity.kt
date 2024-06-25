@@ -226,7 +226,7 @@ class GroceryListEditActivity : AppCompatActivity(), View.OnClickListener, Groce
         return list.contains(name)
     }
 
-    fun hideSoftKeyboard() {
+    private fun hideSoftKeyboard() {
         currentFocus?.let {
             val inputMethodManager = ContextCompat.getSystemService(this, InputMethodManager::class.java)!!
             inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)

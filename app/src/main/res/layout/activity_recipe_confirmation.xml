@@ -45,14 +45,15 @@
 
     <TextView
         android:id="@+id/tvLabelRecipeConfirmation"
-        android:layout_width="224dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/recipe_confirmation_page_label"
         android:textAlignment="center"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/small_item_button_shape"/>
 
     <Button
         android:id="@+id/btnCancelRecipeConfirmation"

@@ -31,7 +31,7 @@ class FridgeAdapter(var ingredients: MutableList<Ingredient>, private var listen
     }
 
     override fun onBindViewHolder(holder: FridgeIngredientViewHolder, position: Int) {
-        val ingredient: Ingredient = ingredients.get(holder.absoluteAdapterPosition)
+        val ingredient: Ingredient = ingredients[holder.absoluteAdapterPosition]
         if(ingredient.image == "NULL"){
             Glide.with(context).load(R.mipmap.ic_fruit).apply(
                 RequestOptions().override(100, 100).fitCenter().transform(

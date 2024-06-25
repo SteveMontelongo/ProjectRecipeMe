@@ -3,8 +3,6 @@ package com.recipeme.adapters
 import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.recipeme.fragments.FridgeFragment
 import com.recipeme.fragments.GroceryListFragment

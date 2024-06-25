@@ -13,8 +13,8 @@ import com.recipeme.models.Ingredient
 class RecipeConfirmationAdapter(private var ingredients: MutableList<Ingredient>, private var listener: GroceryContentOnItemClick) : RecyclerView.Adapter<RecipeConfirmationAdapter.RecipeConfirmationViewHolder>(){
 
     inner class RecipeConfirmationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val nameTextView: TextView = itemView.findViewById<TextView>(R.id.tvItemRecipeConfirmation)
-        val statusButton: ImageButton = itemView.findViewById<ImageButton>(R.id.ibItemRecipeConfirmationStatus)
+        val nameTextView: TextView = itemView.findViewById(R.id.tvItemRecipeConfirmation)
+        val statusButton: ImageButton = itemView.findViewById(R.id.ibItemRecipeConfirmationStatus)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeConfirmationAdapter.RecipeConfirmationViewHolder {
@@ -25,7 +25,7 @@ class RecipeConfirmationAdapter(private var ingredients: MutableList<Ingredient>
     }
 
     override fun onBindViewHolder(holder: RecipeConfirmationViewHolder, position: Int) {
-        val ingredient: Ingredient = ingredients.get(holder.absoluteAdapterPosition)
+        val ingredient: Ingredient = ingredients[holder.absoluteAdapterPosition]
         holder.nameTextView.text = ingredient.name
         holder.statusButton.setImageResource(
             if(ingredients[holder.absoluteAdapterPosition].obtained) R.drawable.ic_confirm_checked else R.drawable.roundstyle)

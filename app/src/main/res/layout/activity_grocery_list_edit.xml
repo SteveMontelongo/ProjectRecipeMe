@@ -27,6 +27,7 @@
         android:inputType="textPersonName"
         android:text=""
         android:textSize="20sp"
+        android:background="@drawable/small_item_button_shape"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -51,7 +52,8 @@
         app:layout_constraintTop_toBottomOf="@+id/tvListNameWarning"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1"
-        app:layout_constraintVertical_bias="0">
+        app:layout_constraintVertical_bias="0"
+        android:background="@drawable/small_item_button_shape">
 
         <TextView
             android:id="@+id/etIngredientUnitLabelGroceryListEdit"
@@ -129,7 +131,9 @@
         android:weightSum="10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        android:background="@drawable/small_item_button_shape"
+        android:layout_marginTop="4dp">
 
         <AutoCompleteTextView
             android:id="@+id/etIngredientGroceryListEdit"
@@ -143,7 +147,8 @@
             android:hint="Ingredient"
             android:inputType="textAutoComplete"
             android:text=""
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            />
 
         <ImageButton
             android:id="@+id/btnAddIngredientGroceryListEdit"

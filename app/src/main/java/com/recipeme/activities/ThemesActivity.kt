@@ -29,7 +29,7 @@ class ThemesActivity : AppCompatActivity(), OnClickListener {
         val iceBtn = findViewById<Button>(R.id.btnIcecubesTheme).setOnClickListener(this)
         val fruitBtn = findViewById<Button>(R.id.btnFruityTheme).setOnClickListener(this)
         val darkBtn = findViewById<Button>(R.id.btnDarkTheme).setOnClickListener(this)
-        _background = findViewById<ImageView>(R.id.backgroundAppThemes)
+        _background = findViewById(R.id.backgroundAppThemes)
 
         val backgroundInt = _sharedPreferences.getInt("background", R.drawable.recipe_me_plain)
         setBackground(backgroundInt)

@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.provider.ContactsContract.CommonDataKinds.Im
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -42,18 +41,18 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipe_detail)
-        var db  :AppDatabase = Room.databaseBuilder(this, AppDatabase::class.java, "recipe-me-database").build()
+        val db  :AppDatabase = Room.databaseBuilder(this, AppDatabase::class.java, "recipe-me-database").build()
         _recipeViewModel = RecipeViewModel()
         _recipeDao = db.recipeDao()
         _iconDao = db.iconDao()
 
-        var recipeId = intent.getIntExtra("recipeId", 0)
+        val recipeId = intent.getIntExtra("recipeId", 0)
         _recipeId = recipeId
         _ids = intent.getIntArrayExtra("ingredientsUsedIds")!!
         _filteredIds = IntArray(_ids.size)
-        _filteredImageStrings = Array<String>(_ids.size){""}
-        _filteredStrings = Array<String>(_ids.size){""}
-        _recipeCache = Recipe(0, emptyList(), "", "", mutableListOf<Instructions>() as MutableList<Instructions>, "UNSAVED")
+        _filteredImageStrings = Array(_ids.size){""}
+        _filteredStrings = Array(_ids.size){""}
+        _recipeCache = Recipe(0, emptyList(), "", "", mutableListOf(), "UNSAVED")
 //        for(_recipe in RecipeCache.recipeCache){
 //            if(recipeId == _recipe.id){
 //                _recipeCache = _recipe
@@ -61,19 +60,19 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
 //        }
         val sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
         val languageString = sharedPreferences.getString("language", "english")
-        _background = findViewById<ImageView>(R.id.backgroundAppRecipeDetail)
+        _background = findViewById(R.id.backgroundAppRecipeDetail)
         val backgroundInt = sharedPreferences.getInt("background", R.drawable.recipe_me_plain)
         setBackground(backgroundInt)
 
-        var ingredientsLabel = findViewById<TextView>(R.id.tvRecipeIngredientsUsedLabelRecipeDetail)
+        val ingredientsLabel = findViewById<TextView>(R.id.tvRecipeIngredientsUsedLabelRecipeDetail)
         ingredientsLabel.text = getMsg(0, languageString!!)
-        var stepsLabel = findViewById<TextView>(R.id.tvRecipeInstructionsLabelRecipeDetail)
-        stepsLabel.text = getMsg(1, languageString!!)
-        _favoriteButton = findViewById<ImageButton>(R.id.btnFavoriteRecipeDetail)
+        val stepsLabel = findViewById<TextView>(R.id.tvRecipeInstructionsLabelRecipeDetail)
+        stepsLabel.text = getMsg(1, languageString)
+        _favoriteButton = findViewById(R.id.btnFavoriteRecipeDetail)
         _favoriteButton.setOnClickListener(this)
         GlobalScope.launch {
-            var recipesCache = _recipeDao.getFromCache()
-            var recipesFavorite = _recipeDao.getFromFavorite()
+            val recipesCache = _recipeDao.getFromCache()
+            val recipesFavorite = _recipeDao.getFromFavorite()
             Handler(Looper.getMainLooper()).post{
                 for(_recipe in recipesCache){
                     if(recipeId == _recipe.id){
@@ -91,7 +90,7 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
                 if (_recipeCache.id != 0){
                     Log.d("Recipe", "Recipe loaded by Cache")
                     findViewById<TextView>(R.id.tvRecipeNameRecipeDetail).text = _recipeCache.name
-                    Glide.with(this@RecipeDetailActivity).load(_recipeCache.image).into(findViewById<ImageView>(R.id.ivRecipeImageRecipeDetail))
+                    Glide.with(this@RecipeDetailActivity).load(_recipeCache.image).into(findViewById(R.id.ivRecipeImageRecipeDetail))
                     var ingredientsFormattedString = ""
                     if(_recipeCache.usedIngredients.isNotEmpty() ){
                         var i = 0
@@ -146,10 +145,10 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
 
-        var confirmButton = findViewById<Button>(R.id.btnConfirmRecipeDetail)
+        val confirmButton = findViewById<Button>(R.id.btnConfirmRecipeDetail)
         confirmButton.setOnClickListener(this)
-        confirmButton.text = getMsg(2, languageString!!)
-        var cancelButton = findViewById<ImageButton>(R.id.btnBackRecipeDetail)
+        confirmButton.text = getMsg(2, languageString)
+        val cancelButton = findViewById<ImageButton>(R.id.btnBackRecipeDetail)
         cancelButton.setOnClickListener(this)
     }
 
@@ -173,7 +172,7 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
     private fun setResultText(recipeData: RecipeResponse) {
         Log.d("Response BY ID", "Response Received")
         findViewById<TextView>(R.id.tvRecipeNameRecipeDetail).text = recipeData.title
-        Glide.with(this).load(recipeData.image).into(findViewById<ImageView>(R.id.ivRecipeImageRecipeDetail))
+        Glide.with(this).load(recipeData.image).into(findViewById(R.id.ivRecipeImageRecipeDetail))
         var ingredientsFormattedString = ""
         var ingredientsUnique = emptySet<UsedIngredientsItem>().toMutableSet()
         if(recipeData.extendedIngredients !=null){
@@ -226,21 +225,13 @@ class RecipeDetailActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
         GlobalScope.launch {
-            var instructionsItem: MutableList<Instructions> = mutableListOf<Instructions>() as MutableList<Instructions>
-            var stepsItem: MutableList<Steps> = mutableListOf<Steps>() as MutableList<Steps>
+            val instructionsItem: MutableList<Instructions> = mutableListOf()
             Log.d("Recipe", "Id " + _recipeId)
             recipe  = _recipeDao.getFromId(_recipeId)
             Log.d("Recipe", "Retrieved " + recipe.toString())
             Handler(Looper.getMainLooper()).post{
-                var j = 0
                 for( instruction in recipeData){
-//                    for(step in instruction.steps) {
-//                        Log.d("Recipe", "Data: " + step.ingredients.toString() +  step.number.toString() +  step.step)
-//                        stepsItem.add(Steps(step.ingredients, step.number, step.step))
-//                    }
-                    //Log.d("Recipe", "Test " + stepsItem.toString() + instruction.name)
                     instructionsItem.add(Instructions(instruction.steps, instruction.name))
-                    //stepsItem.clear()
                 }
                 Log.d("Recipe", "instructions data " + instructionsItem.toString())
                 recipe.instructions.addAll(instructionsItem)

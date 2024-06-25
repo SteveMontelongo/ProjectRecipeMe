@@ -1,6 +1,5 @@
 package com.recipeme.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,11 +13,11 @@ import com.recipeme.models.GroceryList
 class GroceryListsListAdapter(private var groceryLists: List<GroceryList>, private var clickListener: GroceryListOnItemClick) : RecyclerView.Adapter<GroceryListsListAdapter.GroceryListsListViewHolder>(){
 
     inner class GroceryListsListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val nameTextView: TextView = itemView.findViewById<TextView>(R.id.tvGroceryListsList)
-        val dateTextView: TextView = itemView.findViewById<TextView>(R.id.tvGroceryListsListDate)
-        val deleteButton: ImageButton = itemView.findViewById<ImageButton>(R.id.ibDeleteGroceryListsList)
-        val editButton: ImageButton = itemView.findViewById<ImageButton>(R.id.ibEditGroceryListsList)
-        val launchButton: ImageButton = itemView.findViewById<ImageButton>(R.id.ibLaunchGroceryListsList)
+        val nameTextView: TextView = itemView.findViewById(R.id.tvGroceryListsList)
+        val dateTextView: TextView = itemView.findViewById(R.id.tvGroceryListsListDate)
+        val deleteButton: ImageButton = itemView.findViewById(R.id.ibDeleteGroceryListsList)
+        val editButton: ImageButton = itemView.findViewById(R.id.ibEditGroceryListsList)
+        val launchButton: ImageButton = itemView.findViewById(R.id.ibLaunchGroceryListsList)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroceryListsListAdapter.GroceryListsListViewHolder {

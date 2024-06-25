@@ -1,16 +1,12 @@
 package com.recipeme.adapters
 
 import android.content.Context
-import android.content.res.Resources
-import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.recipeme.R
 import com.recipeme.interfaces.GroceryIngredientOnQuantityClick
@@ -19,11 +15,11 @@ import com.recipeme.models.Ingredient
 class GroceryListIngredientAdapter(private var ingredients: List<Ingredient>, private val listener: GroceryIngredientOnQuantityClick, private val context: Context) : RecyclerView.Adapter<GroceryListIngredientAdapter.GroceryListIngredientViewHolder>(){
 
     inner class GroceryListIngredientViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val nameTextView: TextView = itemView.findViewById<TextView>(R.id.tvIngredientNameGroceryList)
-        val quantityTextView: TextView = itemView.findViewById<TextView>(R.id.tvIngredientQuantityItemGroceryList)
-        val unitLabelTextView: TextView = itemView.findViewById<TextView>(R.id.tvIngredientUnitItemGroceryList)
-        val decrementButton: ImageButton = itemView.findViewById<ImageButton>(R.id.ibDecrementGroceryList)
-        val incrementButton: ImageButton = itemView.findViewById<ImageButton>(R.id.ibIncrementGroceryList)
+        val nameTextView: TextView = itemView.findViewById(R.id.tvIngredientNameGroceryList)
+        val quantityTextView: TextView = itemView.findViewById(R.id.tvIngredientQuantityItemGroceryList)
+        val unitLabelTextView: TextView = itemView.findViewById(R.id.tvIngredientUnitItemGroceryList)
+        val decrementButton: ImageButton = itemView.findViewById(R.id.ibDecrementGroceryList)
+        val incrementButton: ImageButton = itemView.findViewById(R.id.ibIncrementGroceryList)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroceryListIngredientAdapter.GroceryListIngredientViewHolder {

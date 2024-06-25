@@ -1,14 +1,12 @@
 package com.recipeme.adapters
 
 import android.content.Context
-import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.recipeme.R
 import com.recipeme.interfaces.GroceryContentOnItemClick
@@ -30,7 +28,7 @@ class GroceryListContentAdapter(private var ingredients: MutableList<Ingredient>
     }
 
     override fun onBindViewHolder(holder: GroceryListContentIngredientViewHolder, position: Int) {
-        val ingredient: Ingredient = ingredients.get(holder.absoluteAdapterPosition)
+        val ingredient: Ingredient = ingredients[holder.absoluteAdapterPosition]
         holder.nameTextView.text = ingredient.name
         if(ingredient.obtained){
             holder.nameTextView.setTextColor(ContextCompat.getColor(context, R.color.cart_item_checked))

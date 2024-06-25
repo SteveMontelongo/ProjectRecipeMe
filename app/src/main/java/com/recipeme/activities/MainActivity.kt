@@ -41,17 +41,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        var viewPager = findViewById<ViewPager2>(R.id.viewPager)
-        _tabLayout = findViewById<TabLayout>(R.id.tabLayout)
+        val viewPager = findViewById<ViewPager2>(R.id.viewPager)
+        _tabLayout = findViewById(R.id.tabLayout)
         findViewById<ImageButton>(R.id.ibMoreMain).setOnClickListener(this)
-        _pageIncrement= findViewById<ImageButton>(R.id.ibPageIncrementMain)
+        _pageIncrement= findViewById(R.id.ibPageIncrementMain)
         _pageIncrement.setOnClickListener(this)
-        _pageDecrement = findViewById<ImageButton>(R.id.ibPageDecrementMain)
+        _pageDecrement = findViewById(R.id.ibPageDecrementMain)
         _pageDecrement.setOnClickListener(this)
-        _pageNumber = findViewById<TextView>(R.id.tvPageMain)
-        _textLabel = findViewById<TextView>(R.id.tvLabelMain)
+        _pageNumber = findViewById(R.id.tvPageMain)
+        _textLabel = findViewById(R.id.tvLabelMain)
         _adapter = FragmentAdapter(this)
-        _background = findViewById<ImageView>(R.id.backgroundApp)
+        _background = findViewById(R.id.backgroundApp)
 
 
         val sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
@@ -69,9 +69,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
 
         viewPager.adapter = _adapter
 
-        var tabIcon = listOf<Int>(R.drawable.ic_fridge, R.drawable.ic_grocery, R.drawable.ic_recipes)
+        val tabIcon = listOf(R.drawable.ic_fridge, R.drawable.ic_grocery, R.drawable.ic_recipes)
 
-        var tabTitle = tabTitles(languageString!!)
+        val tabTitle = tabTitles(languageString!!)
 
         _tabLayout.addOnTabSelectedListener(this)
         TabLayoutMediator(_tabLayout, viewPager){
@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
         reader.readLine()
         var line: String?
         while (reader.readLine().also { line = it } != null) {
-            var lineSplit = line!!.split(";")
+            val lineSplit = line!!.split(";")
             data.map[lineSplit[1].toInt()] = lineSplit[0]
         }
     }
@@ -103,7 +103,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
 
         when(tab?.position){
             0 ->{
-                Log.d("Fragment Position", "0");
+                Log.d("Fragment Position", "0")
                 setButton(btnOne, R.drawable.ic_refresh, VISIBLE)
                 setButton(btnTwo, R.drawable.ic_help, VISIBLE)
                 if(!_pageIncrement.isInvisible) {
@@ -135,7 +135,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                     Log.e("Error", e.toString())
                 }
                 //manualRefresh
-                findViewById<ImageButton>(R.id.ibOneMain).setOnClickListener() {
+                findViewById<ImageButton>(R.id.ibOneMain).setOnClickListener {
                     if(isSpamClick())return@setOnClickListener
                     val f = supportFragmentManager.findFragmentByTag("f0") as FridgeFragment
                     if (f != null) {
@@ -150,14 +150,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                     }
                 }
 
-                btnTwo.setOnClickListener() {
+                btnTwo.setOnClickListener {
                     if(isSpamClick())return@setOnClickListener
-                    var intent = Intent(this, InfoActivity::class.java)
+                    val intent = Intent(this, InfoActivity::class.java)
                     resultHelpLauncher.launch(intent)
                 }
             }
             1 ->{
-                Log.d("Fragment Position", "1");
+                Log.d("Fragment Position", "1")
                 setButton(btnOne, R.drawable.ic_increment, VISIBLE)
                 setButton(btnTwo, R.drawable.ic_help, VISIBLE)
                 if(!_pageIncrement.isInvisible) {
@@ -169,7 +169,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                 if(!_pageNumber.isInvisible) {
                     _pageNumber.visibility = INVISIBLE
                 }
-                btnOne.setOnClickListener() {
+                btnOne.setOnClickListener {
                     if(isSpamClick())return@setOnClickListener
                     val f =
                         supportFragmentManager.findFragmentByTag("f1") as GroceryListFragment
@@ -186,14 +186,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                     }
                 }
 
-                btnTwo.setOnClickListener() {
+                btnTwo.setOnClickListener {
                     if(isSpamClick())return@setOnClickListener
-                    var intent = Intent(this, InfoActivity::class.java)
+                    val intent = Intent(this, InfoActivity::class.java)
                     resultHelpLauncher.launch(intent)
                 }
             }
             2 ->{
-                Log.d("Fragment Position", "2");
+                Log.d("Fragment Position", "2")
                 setButton(btnOne, R.drawable.ic_search, VISIBLE)
                 try {
                     val f = supportFragmentManager.findFragmentByTag("f2") as RecipesFragment
@@ -218,9 +218,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                 }
 
                 //Search
-                btnOne.setOnClickListener() {
+                btnOne.setOnClickListener {
                     if(isSpamClick())return@setOnClickListener
-                    var sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
+                    val sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
                     val languageString = sharedPreferences.getString("language", "english")
                     val f = supportFragmentManager.findFragmentByTag("f2") as RecipesFragment
                     if (f != null) {
@@ -248,9 +248,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
                 }
 
                 //toggle favorites/cache
-                btnTwo.setOnClickListener() {
+                btnTwo.setOnClickListener{
                     if(isSpamClick())return@setOnClickListener
-                    var sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
+                    val sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
                     val languageString = sharedPreferences.getString("language", "english")
 
                     val f = supportFragmentManager.findFragmentByTag("f2") as RecipesFragment
@@ -419,25 +419,25 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
     }
 
     private fun isSpamClick(): Boolean{
-        if (SystemClock.elapsedRealtime() -_lastClickTime < 2000){
+        if (SystemClock.elapsedRealtime() -_lastClickTime < 1000){
             Log.d("Click", "Too fast")
             return true
         }
-        _lastClickTime = SystemClock.elapsedRealtime().toDouble();
+        _lastClickTime = SystemClock.elapsedRealtime().toDouble()
         return false
     }
 
     private fun tabTitles(lang: String): List<String>{
         when(lang){
             "english" -> {
-                return listOf<String>("Fridge", "Grocery", "Recipes")
+                return listOf("Fridge", "Grocery", "Recipes")
             }
             "spanish"->{
-                return listOf<String>("Refrigerador", "Listas", "Recetas")
+                return listOf("Refrigerador", "Listas", "Recetas")
             }
         }
         //default
-        return listOf<String>("Fridge", "Grocery", "Recipes")
+        return listOf("Fridge", "Grocery", "Recipes")
     }
 
     private fun getMsg(msgCode: Int, lang: String): String{

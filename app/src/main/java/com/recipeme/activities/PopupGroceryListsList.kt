@@ -3,9 +3,6 @@ package com.recipeme.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.provider.ContactsContract.RawContacts.Data
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
@@ -18,7 +15,6 @@ import com.recipeme.models.GroceryList
 import com.recipeme.models.Ingredient
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.processNextEventInCurrentThread
 import java.text.DateFormat
 import java.util.*
 
@@ -36,18 +32,18 @@ class PopupGroceryListsList : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
         val languageString = sharedPreferences.getString("language", "english")
         Log.d("Language test", languageString.toString())
-        var listOfNames = emptyList<String>().toMutableList()
+        val listOfNames = emptyList<String>().toMutableList()
         GlobalScope.launch {
-            this?.let {
+            this.let {
                 listOfNames.addAll(_groceryListDao.getAllNames())
             }
         }
 
-        cancelButton.setOnClickListener(){
+        cancelButton.setOnClickListener{
             finish()
         }
 
-        confirmButton.setOnClickListener(){
+        confirmButton.setOnClickListener{
             if(name.text.toString().isEmpty()){
                 Toast.makeText(this, getMsg(0, languageString!!), Toast.LENGTH_SHORT).show()
             }else if(name.text.toString().length > 20) {
@@ -60,7 +56,7 @@ class PopupGroceryListsList : AppCompatActivity() {
                 val currentDate = DateFormat.getDateInstance().format(Date())
 
                 GlobalScope.launch{
-                    this?.let{
+                    this.let{
                         _groceryListDao.insertAll(GroceryList(name.text.toString(), currentDate, emptyList<Ingredient>().toMutableList()))
                     }
                 }

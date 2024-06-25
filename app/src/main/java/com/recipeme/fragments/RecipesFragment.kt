@@ -305,27 +305,14 @@ class RecipesFragment : Fragment(), View.OnClickListener, RecipeOnClickItem, Mai
                         for ((i, ingredient) in _ingredients.withIndex()) {
                             _ids[i] = ingredient.id
                         }
-                        if (recipesToUpdate.isNotEmpty()) {
-                            errorMsg(getMsg(0, languageString!!),false)
-                            Log.d("Recipe", "Data pulled from favorite.")
-                            for(recipe in recipesToUpdate){
-                                Log.d("RecipeFavorite", recipe.name)
-                            }
-                            _recipes.clear()
-                            _recipes.addAll(recipesToUpdate)
-                            _recyclerView.adapter?.notifyDataSetChanged()
-                        } else {
-                            /*if (ingredientsFromFridge.isNotEmpty()) {
-                                isFridgeEmptyMsg(false)
-                                _recipeViewModel.getRecipeData(
-                                    ingredientsFromFridge,
-                                    (_page - 1) * 10
-                                )
-                            } else {*/
-                                errorMsg(getMsg(0, languageString!!),true)
-                                Log.d("Recipe", "No recipes were favorited.")
-
+                        errorMsg(getMsg(0, languageString!!),false)
+                        Log.d("Recipe", "Data pulled from favorite.")
+                        for(recipe in recipesToUpdate){
+                            Log.d("RecipeFavorite", recipe.name)
                         }
+                        _recipes.clear()
+                        _recipes.addAll(recipesToUpdate)
+                        _recyclerView.adapter?.notifyDataSetChanged()
                     }
                 }
             }
