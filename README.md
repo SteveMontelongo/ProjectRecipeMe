@@ -45,7 +45,9 @@ Here's a walkthrough of implemented user stories:
 (https://github.com/SteveMontelongo/ProjectRecipeMe/blob/main/RecipeApp.gif)
 
 Here's a walkthrough of implemented themes:
+
 (https://github.com/SteveMontelongo/ProjectRecipeMe/blob/main/RecipeAppThemes.gif)
+
 GIFs created with LICEcap  
 
 ## Notes
