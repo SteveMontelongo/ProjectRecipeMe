@@ -9,7 +9,7 @@ The full application will involve several steps to accurately track available re
 3. The user will then refresh the recipes screen, and the recipes based on the available ingredients in the user's online fridge will update.
 4. The user will then click on a recipe, confirm to the application that the recipe will be made, and then the application will deduct the required ingredients from the user's online fridge if selected.
 
-Time spent: 48 hours spent in total
+Time spent: 4 weeks spent in total
 
 ## Required Features
 
@@ -29,9 +29,13 @@ The following **required** functionality is completed:
 
 The following **optional** features are implemented:
 
-- [ ] **Grocery List can be customized by themes 🎨customized🎨**
-- [ ] **Recipes can be bookmarked for later use**
-- [ ] **Users will be able to adjust settings by the 'more' button**
+- [x] **Grocery List can be customized by themes 🎨customized🎨**
+- [x] **Recipes can be bookmarked for later use**
+- [x] **Users will be able to adjust settings by the 'more' button**
+- [x] **Users will be able to switch between favorited and saved recipes**
+- [x] **Icons for ingredients can be displayed if they are used in recipes**
+- [x] **Users will be able to see information about the app by the help button**
+- [x] **Users will be able to switch between supported languages [english, spanish]**
 - [ ] **Users will be able to login to create a backup of the grocery lists and fridge**
 
 ## Video Walkthrough
@@ -43,7 +47,8 @@ GIF created with LICEcap
 
 ## Notes
 
-TO BE DONE ******************
+This is my passion project in which I implemented the Android knowledge I've learned throughout the years. This project started as an attempt to create a solution to a problem
+my family had with grocery shopping organization and meal planning. Working on this project has been a rewarding experience and I've learned through the many roadblocks and obstacles.
 
 ## License
 
