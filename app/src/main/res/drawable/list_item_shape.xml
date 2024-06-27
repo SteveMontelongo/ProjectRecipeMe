@@ -3,7 +3,7 @@
     <item android:state_pressed="true">
         <shape>
             <solid
-                android:color="?attr/itemFillColor"/>
+                android:color="?attr/itemActiveIndicatorStyle"/>
             <corners
                 android:radius="12dp"/>
             <padding

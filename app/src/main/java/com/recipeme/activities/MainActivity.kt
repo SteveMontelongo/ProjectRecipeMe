@@ -54,6 +54,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
         _background = findViewById(R.id.backgroundApp)
 
 
+
         val sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE)
         val backgroundInt = sharedPreferences.getInt("background", R.drawable.recipe_me_plain)
         setBackground(backgroundInt)

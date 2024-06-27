@@ -5,7 +5,7 @@
         <item name="colorPrimary">@color/teal_200</item>
         <item name="colorPrimaryVariant">@color/teal_700</item>
         <item name="colorOnPrimary">@color/white</item>
-        <item name="itemFillColor">@color/list_item</item>
+
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/purple_200</item>
         <item name="colorSecondaryVariant">@color/purple_500</item>
@@ -13,6 +13,9 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="itemFillColor">@color/list_item</item>
+        <item name="itemActiveIndicatorStyle">@color/list_item_pressed</item>
+        <item name="background">@drawable/recipe_me_plain</item>
     </style>
 
     <style name="Theme.RecipeMe.NoActionBar">
