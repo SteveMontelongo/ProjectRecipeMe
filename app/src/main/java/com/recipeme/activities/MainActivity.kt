@@ -412,11 +412,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TabLayout.OnTabS
 
     private fun setBackground(resId: Int){
         _background.setImageResource(resId)
-        if(resId == R.drawable.recipe_me_dark){
-            _tabLayout.setBackgroundColor(resources.getColor(R.color.dark, theme))
-        }else{
-            _tabLayout.setBackgroundColor(resources.getColor(R.color.white, theme))
-        }
     }
 
     private fun isSpamClick(): Boolean{
